@@ -1,0 +1,262 @@
+/* --- Variables & Reset --- */
+
+:root {
+    --dark-green: #14532D;
+    --light-green: #22C55E;
+    --beige: #F5F5DC;
+    --white: #FFFFFF;
+    --dark-text: #1f2937;
+    --glass: rgba(255,255,255,0.15);
+    --transition: all 0.3s ease;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    background:var(--white);
+    color:var(--dark-text);
+}
+
+/* Container */
+
+.container{
+    width:90%;
+    max-width:1200px;
+    margin:auto;
+}
+
+/* HEADER */
+
+header{
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    top:0;
+    width:100%;
+    z-index:1000;
+    box-shadow:0 4px 20px rgba(0,0,0,0.05);
+}
+
+/* HEADER FLEX */
+
+.header-container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:70px;
+}
+
+/* LOGO */
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.logo img{
+    width:40px;
+}
+
+.logo h2{
+    font-size:1.4rem;
+    color:var(--dark-green);
+}
+
+.logo span{
+    color:var(--light-green);
+    margin-left:6px;
+    font-weight:600;
+}
+
+#logo {
+    height: 60px;
+    width: 60px;
+}
+
+/* NAVIGATION */
+
+nav ul{
+    display:flex;
+    list-style:none;
+    gap:25px;
+}
+
+nav a{
+    text-decoration:none;
+    color:var(--dark-text);
+    font-weight:500;
+    transition:var(--transition);
+}
+
+nav a:hover{
+    color:var(--light-green);
+}
+
+/* LOGIN BUTTON */
+
+.btn-login{
+    background:var(--dark-green);
+    color:var(--white);
+    padding:9px 22px;
+    border-radius:50px;
+    text-decoration:none;
+    font-weight:600;
+    transition:var(--transition);
+}
+
+.btn-login:hover{
+    background:var(--light-green);
+    transform:scale(1.05);
+}
+
+/* HAMBURGER */
+
+.hamburger{
+    display:none;
+    font-size:1.6rem;
+    cursor:pointer;
+    color:var(--dark-green);
+}
+
+
+
+/* ======================= */
+/* RESPONSIVE MOBILE */
+/* ======================= */
+
+@media (max-width:768px){
+
+/* MENU MOBILE */
+
+nav{
+    position:fixed;
+    top:0;
+    right:-260px; /* caché hors écran */
+    height:100vh;
+    width:260px;
+    background:white;
+    box-shadow:-5px 0 20px rgba(0,0,0,0.1);
+    transition:0.35s ease;
+    padding-top:90px;
+}
+
+/* quand le menu est actif */
+
+nav.active{
+    right:0;
+}
+
+/* liste */
+
+nav ul{
+    flex-direction:column;
+    gap:20px;
+    padding:0 25px;
+}
+
+/* liens */
+
+nav ul li{
+    border-bottom:1px solid #eee;
+    padding-bottom:12px;
+}
+
+/* bouton login caché */
+
+.auth-buttons{
+    display:none;
+}
+
+/* hamburger visible */
+
+.hamburger{
+    display:block;
+    font-size:1.8rem;
+    cursor:pointer;
+    z-index:1100;
+}
+
+.menu-overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.4);
+opacity:0;
+pointer-events:none;
+transition:0.3s;
+}
+
+.menu-overlay.active{
+opacity:1;
+pointer-events:auto;
+}
+
+#logo {
+    height: 50px;
+    width: 50px;
+}
+
+}
+
+/* --- Hero Section --- */
+.hero {
+    height: 80vh;
+    background: linear-gradient(rgba(20, 83, 45, 0.6), rgba(20, 83, 45, 0.6)), 
+                url('images/ma_photo.webp');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--white);
+    padding: 0 20px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+/* --- Boutons --- */
+.btn {
+    padding: 12px 25px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: var(--transition);
+    display: inline-block;
+}
+
+.btn-primary {
+    background-color: var(--light-green);
+    color: var(--white);
+}
+
+.btn-secondary {
+    background-color: var(--beige);
+    color: var(--dark-green);
+    margin-left: 10px;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+
