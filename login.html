@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion | GreenNest Realty</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="auth-page">
+
+    <header>
+        <div class="logo">🌿 GreenNest</div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="register.html" class="btn-login">S'inscrire</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="auth-container">
+        <div class="auth-card">
+            <h2>Bon retour !</h2>
+            <p>Connectez-vous pour accéder aux meilleures offres immobilières.</p>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="exemple@mail.com" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="loginPassword">Mot de passe</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-auth">Se connecter</button>
+            </form>
+
+            <p class="auth-footer">
+                Pas encore de compte ? <a href="register.html">Créez-en un ici</a>
+            </p>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

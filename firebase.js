@@ -1,0 +1,130 @@
+/////////////////////////////////////////////
+// INITIALISATION DE FIREBASE
+/////////////////////////////////////////////
+
+import { initializeApp } from "firebase/app";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
+
+// Configuration Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDb7y807LAXmV2ST_EdA_L-LdBcbc6SKN8",
+  authDomain: "green-nest-realty-immobilier.firebaseapp.com",
+  projectId: "green-nest-realty-immobilier",
+  storageBucket: "green-nest-realty-immobilier.firebasestorage.app",
+  messagingSenderId: "1037762102556",
+  appId: "1:1037762102556:web:f78e8d720783bbbdf426d9"
+};
+
+// Init Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
+
+/////////////////////////////////////////////
+// INSCRIPTION
+/////////////////////////////////////////////
+const registerForm = document.getElementById("registerForm");
+if(registerForm){
+  registerForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const fullname = document.getElementById("fullname").value;
+    const email = document.getElementById("email").value;
+    const phone = document.getElementById("phone").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if(password !== confirmPassword){
+      alert("Les mots de passe ne correspondent pas !");
+      return;
+    }
+
+    try {
+      // Créer l'utilisateur
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Ajouter dans Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        fullname,
+        email,
+        phone,
+        role: "user",
+        favorites: [],
+        createdAt: serverTimestamp()
+      });
+
+      alert("Compte créé avec succès !");
+      registerForm.reset();
+      // Rediriger vers login
+      window.location.href = "login.html";
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  });
+}
+
+/////////////////////////////////////////////
+// LOGIN EMAIL/PASSWORD
+/////////////////////////////////////////////
+const loginForm = document.getElementById("loginForm");
+if(loginForm){
+  loginForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("loginEmail").value;
+    const password = document.getElementById("loginPassword").value;
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      alert("Connexion réussie !");
+      // Redirection après login
+      window.location.href = "dashboard.html"; // ou page d'accueil
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  });
+}
+
+/////////////////////////////////////////////
+// LOGIN GOOGLE
+/////////////////////////////////////////////
+const googleBtn = document.getElementById("googleSignIn");
+if(googleBtn){
+  googleBtn.addEventListener("click", async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+
+      // Vérifier si l'utilisateur existe déjà dans Firestore
+      const userRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(userRef);
+
+      if(!docSnap.exists()){
+        // Ajouter l'utilisateur dans Firestore
+        await setDoc(userRef, {
+          uid: user.uid,
+          fullname: user.displayName || "",
+          email: user.email,
+          phone: user.phoneNumber || "",
+          role: "user",
+          favorites: [],
+          createdAt: serverTimestamp()
+        });
+      }
+
+      alert("Connexion Google réussie !");
+      window.location.href = "dashboard.html"; // redirection
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  });
+}
