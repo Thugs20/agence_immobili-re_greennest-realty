@@ -1,3 +1,63 @@
+window.addEventListener("scroll", function(){
+
+  const header = document.querySelector("header");
+
+  if(window.scrollY > 50){
+    header.classList.add("scrolled");
+  }else{
+    header.classList.remove("scrolled");
+  }
+
+});
+
+const counters = document.querySelectorAll(".counter");
+
+const startCounter = (counter) => {
+
+  const target = +counter.getAttribute("data-target");
+  let count = 0;
+
+  const increment = target / 200;
+
+  const updateCounter = () => {
+
+    count += increment;
+
+    if(count < target){
+      counter.innerText = Math.ceil(count);
+      requestAnimationFrame(updateCounter);
+    }else{
+      counter.innerText = target + "+";
+    }
+
+  };
+
+  updateCounter();
+
+};
+
+
+/* Observer pour déclencher l'animation */
+
+const observer = new IntersectionObserver(entries => {
+
+  entries.forEach(entry => {
+
+    if(entry.isIntersecting){
+
+      startCounter(entry.target);
+      observer.unobserve(entry.target);
+
+    }
+
+  });
+
+});
+
+counters.forEach(counter => {
+  observer.observe(counter);
+});
+
 /* ======================================
    MENU HAMBURGER
 ====================================== */

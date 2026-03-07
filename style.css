@@ -33,13 +33,20 @@ body{
 /* HEADER */
 
 header{
-    background: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.50);
     backdrop-filter: blur(10px);
     position: fixed;
     top:0;
     width:100%;
     z-index:1000;
     box-shadow:0 4px 20px rgba(0,0,0,0.05);
+    transition:0.3s;
+}
+
+header.scrolled{
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(8px);
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
 
 /* HEADER FLEX */
@@ -206,57 +213,343 @@ pointer-events:auto;
 
 }
 
-/* --- Hero Section --- */
-.hero {
-    height: 80vh;
-    background: linear-gradient(rgba(20, 83, 45, 0.6), rgba(20, 83, 45, 0.6)), 
-                url('images/ma_photo.webp');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: var(--white);
-    padding: 0 20px;
+/* --------- --------- */
+/* Début section HERO */
+/* -------- -------- */
+
+.hero{
+  position:relative;
+  height:120vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:0 20px;
+  overflow:hidden;
 }
 
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+/* IMAGE BACKGROUND */
+
+.hero-bg{
+  position:absolute;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  top:0;
+  left:0;
+  z-index:1;
+
+  animation:heroZoom 20s ease-in-out infinite alternate;
 }
 
-.hero p {
-    font-size: 1.2rem;
-    max-width: 600px;
-    margin-bottom: 2rem;
+/* ZOOM LENT CINEMATIC */
+
+@keyframes heroZoom{
+  from{
+    transform:scale(1.5);
+  }
+  to{
+    transform:scale(1);
+  }
 }
 
-/* --- Boutons --- */
-.btn {
-    padding: 12px 25px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: var(--transition);
-    display: inline-block;
+/* OVERLAY */
+
+.hero-overlay{
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  background:linear-gradient(
+    rgba(20,83,45,0.65),
+    rgba(20,83,45,0.75)
+  );
+  z-index:2;
 }
 
-.btn-primary {
-    background-color: var(--light-green);
-    color: var(--white);
+/* CONTENU */
+
+.hero-content{
+  position:relative;
+  z-index:3;
+  color:var(--white);
+  max-width:700px;
 }
 
-.btn-secondary {
-    background-color: var(--beige);
-    color: var(--dark-green);
-    margin-left: 10px;
+/* TITRE */
+
+.hero-title{
+  font-size:3rem;
+  margin-bottom:1rem;
+  line-height:1.2;
+  animation:fadeUp 1s ease forwards;
+
 }
 
-.btn:hover {
-    opacity: 0.9;
-    transform: translateY(-2px);
+/* TEXTE */
+
+.hero-text{
+  font-size:1.2rem;
+  margin-bottom:2rem;
+  opacity:0;
+  animation:fadeUp 1s ease forwards;
+  animation-delay:0.4s;
 }
 
+/* BOUTONS */
 
+.hero-btns{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  opacity:0;
+  animation:fadeUp 1s ease forwards;
+  animation-delay:0.8s;
+}
+
+/* STYLE BOUTONS */
+
+.btn{
+
+  padding:12px 25px;
+  border-radius:8px;
+  text-decoration:none;
+  font-weight:bold;
+
+  backdrop-filter:blur(10px);
+
+  border:1px solid rgba(255,255,255,0.2);
+
+  transition:0.3s;
+}
+
+.btn-primary{
+  background:rgba(74,222,128,0.9);
+  color:white;
+}
+
+.btn-secondary{
+  background:rgba(255,255,255,0.85);
+  color:var(--dark-green);
+}
+
+.btn:hover{
+  transform:translateY(-4px) scale(1.03);
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* ANIMATION TEXTE */
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+}
+
+/* SCROLL INDICATOR */
+
+.scroll-indicator{
+  position:absolute;
+  bottom:30px;
+  width:26px;
+  height:42px;
+  border:2px solid white;
+  border-radius:20px;
+  z-index:3;
+  margin-bottom: 0px;
+}
+
+.scroll-indicator::after{
+  content:"";
+  width:4px;
+  height:8px;
+  background:white;
+  position:absolute;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  animation:scrollAnim 1.6s infinite;
+}
+
+@keyframes scrollAnim{
+
+  0%{
+    opacity:0;
+    transform:translate(-50%,0);
+  }
+
+  50%{
+    opacity:1;
+  }
+
+  100%{
+    opacity:0;
+    transform:translate(-50%,12px);
+  }
+
+}
+
+/* RESPONSIVE */
+
+@media (max-width:768px){
+
+  .hero-title{
+    font-size:2.2rem;
+  }
+
+  .hero-text{
+    font-size:1.05rem;
+  }
+
+}
+
+@media (max-width:480px){
+
+  .hero-title{
+    font-size:1.8rem;
+  }
+
+  .hero-text{
+    font-size:0.95rem;
+  }
+
+}
+
+/* STATS HERO */
+
+.hero-stats{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-top:40px;
+  flex-wrap:wrap;
+}
+
+/* carte */
+
+.stat{
+
+  background:rgba(255,255,255,0.15);
+
+  backdrop-filter:blur(10px);
+
+  padding:18px 28px;
+
+  border-radius:10px;
+
+  border:1px solid rgba(255,255,255,0.2);
+
+  text-align:center;
+
+  color:white;
+
+  min-width:120px;
+
+  transition:0.3s;
+
+}
+
+/* nombre */
+
+.stat h3{
+  font-size:1.8rem;
+  margin-bottom:5px;
+}
+
+/* texte */
+
+.stat p{
+  font-size:0.9rem;
+  opacity:0.9;
+}
+
+/* hover */
+
+.stat:hover{
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+@media (max-width:600px){
+
+  .hero-stats{
+    gap:15px;
+  }
+
+  .stat{
+    padding:14px 18px;
+  }
+
+  .stat h3{
+    font-size:1.4rem;
+  }
+
+}
+
+/* --------- --------- */
+/* fin css section hero */
+/* --------- --------- */
+
+
+
+/* --------- --------- */
+/* Début css section A propos */
+/* --------- --------- */
+.about{
+  padding:100px 20px;
+  background:var(--beige);
+}
+
+.about-container{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+}
+
+/* IMAGE */
+
+.about-image img{
+  width:100%;
+  border-radius:12px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.1);
+}
+
+/* TEXTE */
+
+.about-content h2{
+  font-size:2.2rem;
+  color:var(--dark-green);
+  margin-bottom:20px;
+}
+
+.about-content p{
+  margin-bottom:18px;
+  line-height:1.7;
+  color:#444;
+}
+
+.about-content .btn{
+  margin-top:10px;
+}
+
+@media (max-width:900px){
+
+  .about-container{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+
+}
