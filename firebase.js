@@ -4,7 +4,7 @@
 
 import { initializeApp } from "firebase/app";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 
 // Configuration Firebase
 const firebaseConfig = {
@@ -128,3 +128,43 @@ if(googleBtn){
     }
   });
 }
+
+function requireAuth(redirectPage){
+  const user = auth.currentUser;
+
+  if(user){
+    window.location.href = redirectPage;
+  }else{
+    alert("Veuillez vous connecter pour accéder à cette page.");
+    window.location.href = "login.html";
+  }
+}
+
+// Vérification Firebase pour accéder aux pages protégées
+const protectedLinks = [
+  {id: "linkProperties", url: "properties.html"},
+  {id: "linkBuy", url: "properties.html#buy"},
+  {id: "linkRent", url: "properties.html#to_rent_out"},
+  {id: "linkContact", url: "contact.html"}
+];
+
+protectedLinks.forEach(link => {
+  const element = document.getElementById(link.id);
+  if(element){
+    element.addEventListener("click", (e) => {
+      e.preventDefault();
+
+      const user = auth.currentUser;
+
+      if(user){
+        // utilisateur connecté
+        window.location.href = link.url;
+      }else{
+        // utilisateur non connecté
+        alert("Veuillez vous connecter pour accéder à cette page.");
+        window.location.href = "register.html";
+      }
+
+    });
+  }
+});

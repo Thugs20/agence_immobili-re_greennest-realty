@@ -693,7 +693,7 @@ pointer-events:auto;
 /* HEADER */
 .about-header{
   background-color:#ffffff;
-  padding:30px 40px;
+  padding:20px 40px;
   box-shadow:0 2px 8px rgba(0,0,0,0.05);
 }
 
@@ -1048,15 +1048,16 @@ pointer-events:auto;
     background-size: cover;
     background-position: center;
     min-height: 100vh;
+
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column; /* important */
 }
 
 .auth-container {
-    padding: 100px 20px 40px; /* Padding top pour compenser le header fixe */
+    padding: 40px 20px;
     width: 100%;
     max-width: 500px;
+    margin: auto;
 }
 
 .auth-card {
@@ -1134,4 +1135,81 @@ pointer-events:auto;
     color: var(--light-green);
     text-decoration: none;
     font-weight: 600;
+}
+
+@keyframes floatingBg {
+    0%{
+        background-size: 100%;
+        background-position: center;
+    }
+    50%{
+        background-size: 105%;
+        background-position: top;
+    }
+    100%{
+        background-size: 110%;
+        background-position: bottom;
+    }
+}
+
+.auth-page{
+    animation: floatingBg 25s infinite alternate ease-in-out;
+}
+
+.google-auth{
+    margin-bottom:25px;
+}
+
+.btn-google{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #e5e5e5;
+    background:#fff;
+    cursor:pointer;
+
+    font-size:0.95rem;
+    font-weight:600;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+
+    transition:all 0.3s ease;
+    box-shadow:0 3px 10px rgba(0,0,0,0.05);
+}
+
+.btn-google i{
+    font-size:1.2rem;   /* icône plus grande */
+    color:#DB4437;
+}
+
+.btn-google:hover{
+    background:#fafafa;
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(0,0,0,0.1);
+}
+
+.btn-google:active{
+    transform:scale(0.98);
+}
+
+.auth-divider{
+    display:flex;
+    align-items:center;
+    margin:25px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after{
+    content:"";
+    flex:1;
+    border-bottom:1px solid #e5e5e5;
+}
+
+.auth-divider span{
+    padding:0 12px;
+    font-size:0.8rem;
+    color:#888;
 }
