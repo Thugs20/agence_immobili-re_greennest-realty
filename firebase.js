@@ -8,7 +8,7 @@ import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "firebase/fir
 
 // Configuration Firebase
 const firebaseConfig = {
-  apiKey: "",
+  apiKey: "AIzaSyDb7y807LAXmV2ST_EdA_L-LdBcbc6SKN8",
   authDomain: "green-nest-realty-immobilier.firebaseapp.com",
   projectId: "green-nest-realty-immobilier",
   storageBucket: "green-nest-realty-immobilier.firebasestorage.app",
