@@ -207,3 +207,7 @@ onAuthStateChanged(auth, (user) => {
         authLi.outerHTML = `<li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>`;
     }
 });
+
+
+
+

@@ -259,12 +259,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Page Contact //
+  // Gestion du formulaire de contact
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert("Merci ! Votre message a bien été envoyé. Notre équipe vous recontactera sous 24h.");
+        contactForm.reset();
+    });
+}
+
+
+
+ // animation faqs avant footer page index
   const faqItems = document.querySelectorAll('.faq-item');
 faqItems.forEach(item => {
   item.addEventListener('click', () => {
     item.classList.toggle('active');
   });
 });
+
+
 
 });
 
