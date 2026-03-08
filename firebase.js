@@ -8,7 +8,7 @@ import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "firebase/fir
 
 // Configuration Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyDb7y807LAXmV2ST_EdA_L-LdBcbc6SKN8",
+  apiKey: "",
   authDomain: "green-nest-realty-immobilier.firebaseapp.com",
   projectId: "green-nest-realty-immobilier",
   storageBucket: "green-nest-realty-immobilier.firebasestorage.app",
@@ -208,6 +208,13 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword, 
+  GoogleAuthProvider, 
+  signInWithPopup,
+  onAuthStateChanged
+} from "firebase/auth";
 
 
