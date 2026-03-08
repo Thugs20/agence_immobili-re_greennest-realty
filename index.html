@@ -17,7 +17,7 @@
 
         <!-- LOGO -->
         <div class="logo">
-            <img id="logo" src="images/logo.jpg" alt="Logo">
+            <img id="logo" src="images/Logo.webp" alt="Logo" loading="lazy">
             <h2>🌿 GreenNest <span>Realty</span></h2>
         </div>
 
@@ -25,18 +25,15 @@
         <nav id="nav-menu">
             <ul>
                 <li><a href="#hero"><i class="fas fa-home"></i> Accueil</a></li>
-                <li><a href="#" id="linkProperties"><i class="fas fa-building"></i> Propriétés</a></li>
-                <li><a href="#" id="linkBuy"><i class="fas fa-key"></i> Acheter</a></li>
-                <li><a href="#" id="linkRent"><i class="fas fa-house"></i> Louer</a></li>
+                <li><a href="property.html" id="linkProperties"><i class="fas fa-building"></i> Propriétés</a></li>
+                <li><a href="property.html?status=acheter" id="linkBuy"><i class="fas fa-key"></i> Acheter</a></li>
+                <li><a href="property.html?status=louer" id="linkRent"><i class="fas fa-sign"></i> Louer</a></li>
+                <li><a href="property.html?type=villa"><i class="fas fa-house-user"></i> Villas</a></li>
                 <li><a href="#about"><i class="fas fa-info-circle"></i> À propos</a></li>
-                <li><a href="#" id="linkContact"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="contact.html" id="linkContact"><i class="fas fa-envelope"></i> Contact</a></li>
+                <li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>
             </ul>
         </nav>
-
-        <!-- LOGIN -->
-        <div class="auth-buttons">
-            <a href="login.html" class="btn-login">Connexion</a>
-        </div>
 
         <!-- HAMBURGER -->
         <div class="hamburger" id="hamburger">
@@ -47,9 +44,9 @@
 </header>
 
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero" id="hero">
 
-  <img src="images/hero.webp" alt="Maison moderne écologique" class="hero-bg">
+  <img src="images/appartement20.webp" alt="Maison moderne écologique" class="hero-bg" loading="lazy">
 
   <div class="hero-overlay"></div>
 
@@ -94,12 +91,12 @@
 </section>
 
     <!-- About -->
-    <section class="about">
+    <section class="about" id="about">
 
   <div class="about-container">
 
     <div class="about-image">
-      <img src="images/hero.webp" alt="Maison écologique moderne">
+      <img src="images/appartement20.webp" alt="Maison écologique moderne" loading="lazy">
       <!-- petites cartes flottantes -->
       <div class="about-card stat-card">
         <h3>500+</h3>
@@ -147,7 +144,7 @@
 
       <!-- Carte propriété 1 -->
       <div class="property-card">
-        <img src="images/propriete1.jpg" alt="Maison moderne à Paris">
+        <img src="images/appartement13.webp" alt="Maison moderne à Paris" loading="lazy">
         <div class="property-info">
           <h3>Maison moderne</h3>
           <p>Paris, France</p>
@@ -157,7 +154,7 @@
 
       <!-- Carte propriété 2 -->
       <div class="property-card">
-        <img src="images/appartement11.jpg" alt="Appartement lumineux à Lyon">
+        <img src="images/appartement11.webp" alt="Appartement lumineux à Lyon" loading="lazy">
         <div class="property-info">
           <h3>Appartement lumineux</h3>
           <p>Lyon, France</p>
@@ -167,7 +164,7 @@
 
       <!-- Carte propriété 3 -->
       <div class="property-card">
-        <img src="images/proprietes2.jpg" alt="Villa écologique à Bordeaux">
+        <img src="images/appartement2.webp" alt="Villa écologique à Bordeaux" loading="lazy">
         <div class="property-info">
           <h3>Villa écologique</h3>
           <p>Bordeaux, France</p>
@@ -178,40 +175,128 @@
     </div>
     <br>
     <div class="btn-container">
-      <a href="properties.html" class="btn btn-primary">Voir toutes les propriétés</a>
+      <a href="property.html" class="btn btn-primary">Voir toutes les propriétés</a>
     </div>
 
   </div>
 </section>
 
+    <!-- ================= Testimonials / Avis Clients ================= -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <h2>Ce que disent nos clients</h2>
+    <div class="testimonial-cards">
+      <div class="testimonial-card">
+        <img src="https://i.pravatar.cc/100?img=32" alt="Marie L." loading="lazy">
+        <p>“GreenNest m’a aidé à trouver la maison parfaite, tout en respectant mes valeurs écologiques.”</p>
+        <h4>Marie L.</h4>
+        <p class="stars">⭐⭐⭐⭐⭐</p>
+      </div>
+      <div class="testimonial-card">
+        <img src="https://i.pravatar.cc/100?img=12" alt="Julien P." loading="lazy">
+        <p>“Service rapide et efficace. Je recommande vivement cette agence !”</p>
+        <h4>Julien P.</h4>
+        <p class="stars">⭐⭐⭐⭐⭐</p>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- ================= Team / Équipe ================= -->
+<section class="team" id="team">
+  <div class="container">
+    <h2>Notre équipe</h2>
+    <div class="team-cards">
+      <div class="team-card">
+        <img src="images/agent1.webp" alt="Alice Dupont" loading="lazy">
+        <h4>Alice Dupont</h4>
+        <p>Conseillère en vente</p>
+      </div>
+      <div class="team-card">
+        <img src="images/agent2.webp" alt="Marc Lefevre" loading="lazy">
+        <h4>Marc Lefevre</h4>
+        <p>Expert en location</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <section class="creator" style="padding: 50px 5%; background: var(--beige); text-align: center;">
-        <h2>Développé par HOUETO Fabrice</h2>
-        <div class="creator-content" style="display: flex; align-items: center; justify-content: center; gap: 30px; margin-top: 20px;">
-            <img src="images/ma_" alt="Ma Photo" style="border-radius: 50%; border: 5px solid var(--light-green);">
-            <p style="max-width: 100px; text-align: left;">Passionné par le développement web, j'ai conçu <strong>GreenNest Realty</strong> pour démontrer mes compétences en gestion de données locales et en design UI/UX moderne.</p>
-        </div>
-    </section>
+<!-- ================= Section créateur================= -->
+<section class="creator" style="padding: 60px 5%; background: var(--beige); text-align: center;">
+  <h2 style="color: var(--dark-green); margin-bottom: 40px;">Développé par HOUETO Fabrice</h2>
+  
+  <div class="creator-card" style="display: inline-block; background: var(--white); border-radius: 20px; padding: 30px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); transition: var(--transition);">
+    
+    <div class="creator-photo-wrapper" style="position: relative; width: 180px; height: 180px; margin: 0 auto 20px;">
+      <img src="images/ma_photo.webp" alt="HOUETO Fabrice" loading="lazy" 
+           style="width: 100%; height: 100%; border-radius: 50%; border: 5px solid var(--light-green); object-fit: cover; display: block;">
+      <!-- Halo / overlay lumineux -->
+      <div style="position: absolute; top: -10px; left: -10px; width: 200px; height: 200px; border-radius: 50%; background: var(--light-green); opacity: 0.2; z-index: -1;"></div>
+    </div>
+    
+    <p style="max-width: 320px; margin: 0 auto; color: var(--dark-text); font-size: 1rem; line-height: 1.5;">
+      Passionné par le développement web, j'ai conçu <strong>GreenNest Realty</strong> pour démontrer mes compétences en gestion de données locales et en design UI/UX moderne.
+    </p>
+    
+  </div>
+</section>
 
-    <footer style="background: var(--dark-green); color: white; padding: 40px 5%; margin-top: 50px;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
-            <div>
-                <h3>GreenNest Realty</h3>
-                <p>L'immobilier durable pour un futur serein.</p>
-            </div>
-            <div>
-                <h4>Liens Rapides</h4>
-                <p>Aide & FAQ</p>
-                <p>Politique de confidentialité</p>
-            </div>
-            <div>
-                <h4>Contact</h4>
-                <p><i class="fas fa-envelope"></i> contact@greennest.com</p>
-                <p><i class="fas fa-phone"></i> +33 1 23 45 67 89</p>
-            </div>
-        </div>
-    </footer>
+<!-- ================= Call-To-Action ================= -->
+<section class="cta">
+  <div class="container">
+    <h2>Prêt à trouver votre maison idéale ?</h2>
+    <p>Contactez-nous dès aujourd'hui pour une estimation gratuite ou une visite.</p>
+    <a href="contact.html" class="btn">Contactez-nous</a>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section class="faq" id="faq">
+  <div class="container">
+    <h2>Questions fréquentes</h2>
+    <div class="faq-items">
+      <div class="faq-item">
+        <h4>Comment puis-je acheter une propriété avec GreenNest ?</h4>
+        <p>Vous pouvez nous contacter directement via le formulaire ou prendre rendez-vous avec un de nos agents.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Proposez-vous des propriétés écologiques ?</h4>
+        <p>Oui, toutes nos propriétés sélectionnées respectent des critères de durabilité et d’efficacité énergétique.</p>
+      </div>
+      <div class="faq-item">
+        <h4>Est-ce que vous accompagnez dans le financement ?</h4>
+        <p>Oui, nous vous conseillons sur les meilleures options de financement adaptées à votre projet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= Footer ================= -->
+<footer>
+  <div class="container footer-container">
+    <div class="footer-section">
+      <h4>GreenNest Realty</h4>
+      <p>Agence immobilière spécialisée dans les biens durables et modernes.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: contact@greennest.com</p>
+      <p>Téléphone: +33 1 23 45 67 89</p>
+      <p>Adresse: 12 Rue Verte, Paris, France</p>
+    </div>
+    <div class="footer-section">
+      <h4>Suivez-nous</h4>
+      <p>
+        <a >Facebook</a>
+        <a >Instagram</a>
+        <a >LinkedIn</a>
+      </p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 GreenNest Realty. Tous droits réservés.</p>
+  </div>
+</footer>
 
     <script src="script.js"></script>
 </body>

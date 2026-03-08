@@ -168,3 +168,42 @@ protectedLinks.forEach(link => {
     });
   }
 });
+
+// ================================
+// BOUTON CONNEXION / DECONNEXION DYNAMIQUE
+// ================================
+
+// Cibler le <li> ou <a> du menu pour Connexion
+const authLi = document.getElementById("btnLogin");
+
+onAuthStateChanged(auth, (user) => {
+    if(user){
+        // Utilisateur connecté → afficher Nom + Déconnexion
+        const displayName = user.displayName || user.email;
+
+        authLi.outerHTML = `
+            <li id="authLi">
+                <span class="user-name">${displayName}</span>
+                <button id="btnLogout" class="btn-logout">Déconnexion</button>
+            </li>
+        `;
+
+        // Ajouter l'événement Déconnexion
+        const btnLogout = document.getElementById("btnLogout");
+        btnLogout.addEventListener("click", async () => {
+            try{
+                await auth.signOut();
+                // Recréer le bouton Connexion
+                const authLiContainer = document.getElementById("authLi");
+                authLiContainer.outerHTML = `<li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>`;
+            }catch(error){
+                console.error(error);
+                alert("Erreur lors de la déconnexion.");
+            }
+        });
+
+    }else{
+        // Utilisateur non connecté → bouton Connexion visible
+        authLi.outerHTML = `<li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>`;
+    }
+});

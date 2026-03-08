@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Propriétés | GreenNest Realty</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-light">
+
+    <section class="about-header">
+    <div class="about-header-container">
+      <a class="logo">
+        <h2>🌿 GreenNest <span>Realty</span></h2>
+      </a>
+      <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
+    </div>
+  </section>
+
+    <main class="properties-container">
+        <section class="filter-section">
+            <h1>Découvrez nos propriétés les plus exclusives</h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Rechercher par ville ou titre...">
+                <input type="number" id="minPrice" placeholder="Prix min">
+                <input type="number" id="maxPrice" placeholder="Prix max">
+                <select id="typeFilter">
+                    <option value="all">Tous les types</option>
+                    <option value="villa">Villa</option>
+                    <option value="appartement">Appartement</option>
+                    <option value="bureau">Bureau</option>
+                    <option value="studio">Studio</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="all">Statut</option>
+                    <option value="acheter">À Acheter</option>
+                    <option value="louer">À Louer</option>
+                </select>
+            </div>
+        </section>
+
+        <div class="properties-grid" id="propertiesGrid">
+            </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
