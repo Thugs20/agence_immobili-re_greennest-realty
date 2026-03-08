@@ -291,7 +291,26 @@ faqItems.forEach(item => {
   });
 });
 
+const favBtn = document.querySelector(".btn-fav-detail");
+const propertyId = favBtn.dataset.id;
 
+let favoris = JSON.parse(localStorage.getItem("favoris")) || [];
+
+if (favoris.includes(propertyId)) {
+    favBtn.classList.add("active");
+}
+
+favBtn.addEventListener("click", () => {
+    if (favoris.includes(propertyId)) {
+        favoris = favoris.filter(id => id !== propertyId);
+        favBtn.classList.remove("active");
+    } else {
+        favoris.push(propertyId);
+        favBtn.classList.add("active");
+    }
+
+    localStorage.setItem("favoris", JSON.stringify(favoris));
+});
 
 });
 

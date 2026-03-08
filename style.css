@@ -1678,6 +1678,93 @@ footer a:hover {
 .btn-visit-main { background: var(--light-green); color: white; }
 .btn-fav-detail { background: white; color: var(--dark-green); }
 
+.btn-fav-detail.active {
+    background: var(--light-green);
+    color: white;
+    transform: scale(1.05);
+}
+
+.btn-fav-detail.active i {
+    color: white;
+}
+
+.btn-fav-detail {
+    transition: all 0.3s ease;
+}
+
+.btn-fav-detail.active {
+    animation: favPop 0.3s ease;
+}
+
+@keyframes favPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1.05); }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+
+    .details-container {
+        padding: 100px 5% 40px;
+    }
+
+    .gallery-container {
+        height: 250px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+    }
+
+    .details-grid-layout {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .info-card {
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .features-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .feature-box {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .feature-box i {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+
+    .sidebar-contact {
+        position: static;
+        padding: 20px;
+        border-radius: 15px;
+    }
+
+    .btn-action-detail {
+        padding: 14px;
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .features-list {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-container {
+        height: 200px;
+    }
+
+}
+
 
 /* Page Contact */
 .contact-container { padding: 120px 8% 50px; max-width: 1200px; margin: 0 auto; }
