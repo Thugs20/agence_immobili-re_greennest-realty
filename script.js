@@ -53,6 +53,17 @@ document.addEventListener("DOMContentLoaded", () => {
     filterNow();
   }
 
+  // À l'intérieur de DOMContentLoaded
+window.toggleFavorite = function(id){
+  if(favorites.includes(id)){
+    favorites = favorites.filter(favId=>favId!==id);
+  }else{
+    favorites.push(id);
+  }
+  localStorage.setItem('favs', JSON.stringify(favorites));
+  filterNow();
+};
+
   // --- Affichage Propriétés ---
   const grid = document.getElementById('propertiesGrid');
   function renderProperties(data){
