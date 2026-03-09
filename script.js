@@ -17,22 +17,55 @@ document.addEventListener("DOMContentLoaded", () => {
     bureau:["Bureau Professionnel","Espace de Coworking","Bureau Moderne"],
     boutique:["Boutique Commerciale","Local Commercial","Magasin Centre Ville"]
   };
-  const myProperties = [];
+  let myProperties = JSON.parse(localStorage.getItem("properties"));
+
+if(!myProperties){
+
+  const cities = ["Cotonou","Abidjan","Dakar","Lomé","Accra","Lagos","Ouagadougou","Casablanca","Rabat","Douala"];
+
+  const propertyTypes = {
+    villa:["Villa Moderne","Villa Luxe","Villa avec Piscine","Villa Jardin"],
+    maison:["Maison Familiale","Maison Moderne","Maison de Ville"],
+    appartement:["Appartement Moderne","Appartement Vue Ville","Appartement Terrasse"],
+    studio:["Studio Étudiant","Studio Urbain","Studio Moderne"],
+    duplex:["Duplex Élégant","Duplex Terrasse","Duplex Moderne"],
+    loft:["Loft Industriel","Loft Design","Loft Artistique"],
+    terrain:["Terrain Constructible","Terrain Résidentiel","Terrain Commercial"],
+    bureau:["Bureau Professionnel","Espace de Coworking","Bureau Moderne"],
+    boutique:["Boutique Commerciale","Local Commercial","Magasin Centre Ville"]
+  };
+
+  myProperties = [];
   let id = 1;
 
   Object.keys(propertyTypes).forEach(type => {
+
     for(let i=0;i<11;i++){
+
       const city = cities[Math.floor(Math.random()*cities.length)];
       const titles = propertyTypes[type];
       const title = titles[Math.floor(Math.random()*titles.length)];
-      const status = Math.random() > 0.5 ? "acheter":"louer";
+
+      const status = Math.random() > 0.5 ? "acheter" : "louer";
+
       let price;
-      if(status==="louer"){ price = Math.floor(Math.random()*900+100); }
-      else {
-        if(type==="terrain"){ price = Math.floor(Math.random()*70000+10000);}
-        else if(type==="villa"){ price = Math.floor(Math.random()*800000+200000);}
-        else{ price = Math.floor(Math.random()*300000+50000);}
+
+      if(status==="louer"){
+        price = Math.floor(Math.random()*900+100);
+      } else {
+
+        if(type==="terrain"){
+          price = Math.floor(Math.random()*70000+10000);
+        }
+        else if(type==="villa"){
+          price = Math.floor(Math.random()*800000+200000);
+        }
+        else{
+          price = Math.floor(Math.random()*300000+50000);
+        }
+
       }
+
       myProperties.push({
         id:id++,
         title:title,
@@ -44,8 +77,14 @@ document.addEventListener("DOMContentLoaded", () => {
         rooms: Math.floor(Math.random()*5)+1,
         surface: Math.floor(Math.random()*220)+30
       });
+
     }
+
   });
+
+  localStorage.setItem("properties", JSON.stringify(myProperties));
+
+}
 
   // --- Favoris ---
   let favorites = JSON.parse(localStorage.getItem('favs')) || [];
@@ -142,16 +181,79 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Page détails ---
   function initDetailsPage(){
-    const wrapper = document.getElementById('detailsWrapper');
-    if(!wrapper) return;
-    const params = new URLSearchParams(window.location.search);
-    const propId = parseInt(params.get('id'));
-    const property = myProperties.find(p=>p.id===propId);
-    if(property){
-      const isFav = favorites.includes(property.id);
-      wrapper.innerHTML=` ... `;
-    } else { wrapper.innerHTML="<h1>Oups ! Propriété introuvable.</h1>"; }
+
+  const wrapper = document.getElementById("detailsWrapper");
+
+  if(!wrapper) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const propId = parseInt(params.get("id"));
+
+  const property = myProperties.find(p => p.id === propId);
+
+  if(!property){
+    wrapper.innerHTML="<h2>Propriété introuvable</h2>";
+    return;
   }
+
+  const isFav = favorites.includes(property.id);
+
+  wrapper.innerHTML = `
+<div class="details-container">
+
+  <!-- IMAGE PRINCIPALE AVEC BADGE -->
+  <div class="main-image-container">
+    <img src="${property.image}" alt="${property.title}" class="main-image" id="mainImage">
+    <span class="badge-status">${property.status === "louer" ? "À Louer" : "À Vendre"}</span>
+  </div>
+
+  <!-- INFO EN DESSOUS -->
+  <div class="info-card">
+    <h1>${property.title}</h1>
+    <p class="details-price">
+      ${property.price.toLocaleString()} €
+      ${property.status === "louer" ? "/mois" : ""}
+    </p>
+    <p><i class="fas fa-map-marker-alt"></i> ${property.city}</p>
+
+    <div class="features-list">
+      <div class="feature-box"><i class="fas fa-bed"></i><span>${property.rooms} Pièces</span></div>
+      <div class="feature-box"><i class="fas fa-ruler-combined"></i><span>${property.surface} m²</span></div>
+      <div class="feature-box"><i class="fas fa-home"></i><span>${property.type}</span></div>
+      <div class="feature-box"><i class="fas fa-dollar-sign"></i><span>${property.status}</span></div>
+    </div>
+
+    <div class="btn-group">
+      <button id="btnFav" class="btn-fav-detail ${isFav ? "active" : ""}">
+        <i class="fas fa-heart"></i> Favoris
+      </button>
+      <button class="btn-action-detail btn-visit-main">
+        Contacter l'agent
+      </button>
+    </div>
+  </div>
+
+</div>
+`;
+// Favoris pop
+const btnFav = document.getElementById("btnFav");
+btnFav?.addEventListener("click", () => {
+    if(favorites.includes(property.id)){
+        favorites = favorites.filter(id => id !== property.id);
+        btnFav.classList.remove("active");
+    } else {
+        favorites.push(property.id);
+        btnFav.classList.add("active");
+        btnFav.animate([
+            { transform: 'scale(1)' },
+            { transform: 'scale(1.3)' },
+            { transform: 'scale(1.1)' }
+        ], { duration: 300 });
+    }
+    localStorage.setItem("favs", JSON.stringify(favorites));
+});
+
+}
 
   if(window.location.pathname.includes('property-details.html')){
     initDetailsPage();
