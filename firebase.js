@@ -1,12 +1,26 @@
 /////////////////////////////////////////////
 // INITIALISATION DE FIREBASE
 /////////////////////////////////////////////
+// Configuration Firebase
 
 import { initializeApp } from "firebase/app";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
-
-// Configuration Firebase
+import { 
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut
+} from "firebase/auth";
+import { 
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp
+} from "firebase/firestore";
+ 
 const firebaseConfig = {
   apiKey: "AIzaSyDb7y807LAXmV2ST_EdA_L-LdBcbc6SKN8",
   authDomain: "green-nest-realty-immobilier.firebaseapp.com",
@@ -192,7 +206,7 @@ onAuthStateChanged(auth, (user) => {
         const btnLogout = document.getElementById("btnLogout");
         btnLogout.addEventListener("click", async () => {
             try{
-                await auth.signOut();
+                await signOut(auth);
                 // Recréer le bouton Connexion
                 const authLiContainer = document.getElementById("authLi");
                 authLiContainer.outerHTML = `<li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>`;
@@ -208,13 +222,5 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  GoogleAuthProvider, 
-  signInWithPopup,
-  onAuthStateChanged
-} from "firebase/auth";
 
 

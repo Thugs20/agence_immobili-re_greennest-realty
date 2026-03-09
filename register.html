@@ -82,7 +82,6 @@
   </div>
 </main>
 
-<script type="module" src="firebase.js"></script>
 
 <!-- Script pour voir/masquer le mot de passe -->
 <script>
@@ -102,6 +101,87 @@ togglePasswordIcons.forEach(icon => {
     }
   });
 });
+</script>
+
+<!-- Firebase -->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// CONFIG FIREBASE (remplace par ta config si nécessaire)
+const firebaseConfig = {
+  apiKey: "AIzaSyDb7y807LAXmV2ST_EdA_L-LdBcbc6SKN8",
+  authDomain: "green-nest-realty-immobilier.firebaseapp.com",
+  projectId: "green-nest-realty-immobilier",
+  storageBucket: "green-nest-realty-immobilier.firebasestorage.app",
+  messagingSenderId: "1037762102556",
+  appId: "1:1037762102556:web:f78e8d720783bbbdf426d9"
+};
+
+
+// INITIALISATION
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+// FORMULAIRE INSCRIPTION
+const registerForm = document.getElementById("registerForm");
+
+registerForm.addEventListener("submit", async (e) => {
+
+  e.preventDefault();
+
+  const fullname = document.getElementById("fullname").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
+
+
+  // Vérification mot de passe
+  if(password !== confirmPassword){
+    alert("Les mots de passe ne correspondent pas");
+    return;
+  }
+
+
+  try{
+
+    // Création utilisateur Firebase Auth
+    const userCredential = await createUserWithEmailAndPassword(auth,email,password);
+    const user = userCredential.user;
+
+
+    // Enregistrement dans Firestore
+    await addDoc(collection(db,"users"),{
+
+      fullname: fullname,
+      email: email,
+      phone: phone,
+      uid: user.uid,
+      favorites: [],
+      createdAt: serverTimestamp()
+
+    });
+
+
+    alert("Compte créé avec succès 🎉");
+
+    window.location.href="login.html";
+
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+});
+
 </script>
 
 </body>
