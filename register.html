@@ -129,58 +129,111 @@ const db = getFirestore(app);
 
 
 // FORMULAIRE INSCRIPTION
-const registerForm = document.getElementById("registerForm");
+const btn=document.querySelector(".btn-auth");
 
-registerForm.addEventListener("submit", async (e) => {
+registerForm.addEventListener("submit",async(e)=>{
 
-  e.preventDefault();
+e.preventDefault();
 
-  const fullname = document.getElementById("fullname").value;
-  const email = document.getElementById("email").value;
-  const phone = document.getElementById("phone").value;
-  const password = document.getElementById("password").value;
-  const confirmPassword = document.getElementById("confirmPassword").value;
+btn.classList.add("loading");
+btn.innerHTML='<span class="spinner"></span>';
 
+const fullname=document.getElementById("fullname").value;
+const email=document.getElementById("email").value;
+const phone=document.getElementById("phone").value;
+const password=document.getElementById("password").value;
+const confirmPassword=document.getElementById("confirmPassword").value;
 
-  // Vérification mot de passe
-  if(password !== confirmPassword){
-    alert("Les mots de passe ne correspondent pas");
-    return;
-  }
+if(password!==confirmPassword){
 
+showToast("Les mots de passe ne correspondent pas","#e53935");
 
-  try{
+btn.classList.remove("loading");
+btn.innerHTML="Créer un compte";
+return;
 
-    // Création utilisateur Firebase Auth
-    const userCredential = await createUserWithEmailAndPassword(auth,email,password);
-    const user = userCredential.user;
+}
 
+try{
 
-    // Enregistrement dans Firestore
-    await addDoc(collection(db,"users"),{
+const userCredential=await createUserWithEmailAndPassword(auth,email,password);
+const user=userCredential.user;
 
-      fullname: fullname,
-      email: email,
-      phone: phone,
-      uid: user.uid,
-      favorites: [],
-      createdAt: serverTimestamp()
+await addDoc(collection(db,"users"),{
+fullname,
+email,
+phone,
+uid:user.uid,
+favorites:[],
+createdAt:serverTimestamp()
+});
 
-    });
+showToast("Inscription réussie 🎉");
 
+setTimeout(()=>{
+window.location.href="login.html";
+},1500);
 
-    alert("Compte créé avec succès 🎉");
+}catch(error){
 
-    window.location.href="login.html";
+showToast("Erreur : "+error.message,"#e53935");
 
+}
 
-  }catch(error){
-
-    alert(error.message);
-
-  }
+btn.classList.remove("loading");
+btn.innerHTML="Créer un compte";
 
 });
+
+// connexion en 1 clic
+import { GoogleAuthProvider, signInWithPopup } from 
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const provider=new GoogleAuthProvider();
+
+const googleBtn=document.getElementById("googleSignIn");
+
+googleBtn.addEventListener("click",async()=>{
+
+try{
+
+const result=await signInWithPopup(auth,provider);
+const user=result.user;
+
+showToast("Connexion Google réussie 🎉");
+
+setTimeout(()=>{
+window.location.href="index.html";
+},1500);
+
+}catch(error){
+
+showToast("Erreur Google","#e53935");
+
+}
+
+});
+
+</script>
+
+<div id="toast"></div>
+
+<script>
+
+function showToast(message,color="#2e7d32"){
+
+const toast=document.getElementById("toast");
+
+toast.textContent=message;
+toast.style.background=color;
+
+toast.classList.add("show");
+
+setTimeout(()=>{
+toast.classList.remove("show");
+},3000);
+
+}
 
 </script>
 
