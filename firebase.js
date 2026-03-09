@@ -1,226 +1,70 @@
-/////////////////////////////////////////////
-// INITIALISATION DE FIREBASE
-/////////////////////////////////////////////
-// Configuration Firebase
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-import { initializeApp } from "firebase/app";
-import { 
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-  onAuthStateChanged,
-  signOut
-} from "firebase/auth";
-import { 
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc,
-  serverTimestamp
-} from "firebase/firestore";
- 
-const firebaseConfig = {
-  apiKey: "AIzaSyDb7y807LAXmV2ST_EdA_L-LdBcbc6SKN8",
-  authDomain: "green-nest-realty-immobilier.firebaseapp.com",
-  projectId: "green-nest-realty-immobilier",
-  storageBucket: "green-nest-realty-immobilier.firebasestorage.app",
-  messagingSenderId: "1037762102556",
-  appId: "1:1037762102556:web:f78e8d720783bbbdf426d9"
-};
+// Initialise Firebase Auth
+const auth = getAuth();
 
-// Init Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const googleProvider = new GoogleAuthProvider();
-
-/////////////////////////////////////////////
-// INSCRIPTION
-/////////////////////////////////////////////
-const registerForm = document.getElementById("registerForm");
-if(registerForm){
-  registerForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const fullname = document.getElementById("fullname").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
-    const password = document.getElementById("password").value;
-    const confirmPassword = document.getElementById("confirmPassword").value;
-
-    if(password !== confirmPassword){
-      alert("Les mots de passe ne correspondent pas !");
-      return;
-    }
-
-    try {
-      // Créer l'utilisateur
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // Ajouter dans Firestore
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        fullname,
-        email,
-        phone,
-        role: "user",
-        favorites: [],
-        createdAt: serverTimestamp()
-      });
-
-      alert("Compte créé avec succès !");
-      registerForm.reset();
-      // Rediriger vers login
-      window.location.href = "login.html";
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-  });
-}
-
-/////////////////////////////////////////////
-// LOGIN EMAIL/PASSWORD
-/////////////////////////////////////////////
-const loginForm = document.getElementById("loginForm");
-if(loginForm){
-  loginForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const email = document.getElementById("loginEmail").value;
-    const password = document.getElementById("loginPassword").value;
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      alert("Connexion réussie !");
-      // Redirection après login
-      window.location.href = "dashboard.html"; // ou page d'accueil
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-  });
-}
-
-/////////////////////////////////////////////
-// LOGIN GOOGLE
-/////////////////////////////////////////////
-const googleBtn = document.getElementById("googleSignIn");
-if(googleBtn){
-  googleBtn.addEventListener("click", async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-
-      // Vérifier si l'utilisateur existe déjà dans Firestore
-      const userRef = doc(db, "users", user.uid);
-      const docSnap = await getDoc(userRef);
-
-      if(!docSnap.exists()){
-        // Ajouter l'utilisateur dans Firestore
-        await setDoc(userRef, {
-          uid: user.uid,
-          fullname: user.displayName || "",
-          email: user.email,
-          phone: user.phoneNumber || "",
-          role: "user",
-          favorites: [],
-          createdAt: serverTimestamp()
-        });
-      }
-
-      alert("Connexion Google réussie !");
-      window.location.href = "dashboard.html"; // redirection
-    } catch (error) {
-      console.error(error);
-      alert(error.message);
-    }
-  });
-}
-
-function requireAuth(redirectPage){
-  const user = auth.currentUser;
-
-  if(user){
-    window.location.href = redirectPage;
-  }else{
-    alert("Veuillez vous connecter pour accéder à cette page.");
-    window.location.href = "login.html";
-  }
-}
-
-// Vérification Firebase pour accéder aux pages protégées
+// Sélection des liens protégés
 const protectedLinks = [
-  {id: "linkProperties", url: "properties.html"},
-  {id: "linkBuy", url: "properties.html#buy"},
-  {id: "linkRent", url: "properties.html#to_rent_out"},
-  {id: "linkContact", url: "contact.html"}
+  document.getElementById("navProperties"),
+  document.getElementById("heroProperties"),
+  document.getElementById("allPropertiesBtn"),
+  document.getElementById("linkBuy"),
+  document.getElementById("linkRent"),
+  document.getElementById("linkVillas")
 ];
 
-protectedLinks.forEach(link => {
-  const element = document.getElementById(link.id);
-  if(element){
-    element.addEventListener("click", (e) => {
+// Bouton Connexion / Déconnexion
+const btnLogin = document.getElementById("btnLogin");
+
+// Surveille l'état de connexion
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // Utilisateur connecté → bouton Déconnexion
+    btnLogin.textContent = "Déconnexion";
+    btnLogin.href = "#"; // plus de redirection
+    btnLogin.classList.add("btn-logout");
+
+    btnLogin.onclick = async (e) => {
       e.preventDefault();
+      await signOut(auth);
+      showToast("Déconnecté avec succès", "#2e7d32");
+      // Le bouton redeviendra Connexion automatiquement grâce à onAuthStateChanged
+    };
 
-      const user = auth.currentUser;
+    // Sécurisation des liens
+    protectedLinks.forEach((link) => {
+      if (!link) return;
+      link.onclick = null; // Si connecté, les liens fonctionnent normalement
+    });
 
-      if(user){
-        // utilisateur connecté
-        window.location.href = link.url;
-      }else{
-        // utilisateur non connecté
-        alert("Veuillez vous connecter pour accéder à cette page.");
-        window.location.href = "register.html";
-      }
+  } else {
+    // Aucun utilisateur → bouton Connexion
+    btnLogin.textContent = "Connexion";
+    btnLogin.href = "login.html";
+    btnLogin.classList.remove("btn-logout");
+    btnLogin.onclick = null;
 
+    // Sécurisation des liens
+    protectedLinks.forEach((link) => {
+      if (!link) return;
+      link.onclick = (e) => {
+        e.preventDefault();
+        showToast("Veuillez vous connecter ou créer un compte pour accéder à cette page", "#e53935");
+      };
     });
   }
 });
 
-// ================================
-// BOUTON CONNEXION / DECONNEXION DYNAMIQUE
-// ================================
-
-// Cibler le <li> ou <a> du menu pour Connexion
-const authLi = document.getElementById("btnLogin");
-
-onAuthStateChanged(auth, (user) => {
-    if(user){
-        // Utilisateur connecté → afficher Nom + Déconnexion
-        const displayName = user.displayName || user.email;
-
-        authLi.outerHTML = `
-            <li id="authLi">
-                <span class="user-name">${displayName}</span>
-                <button id="btnLogout" class="btn-logout">Déconnexion</button>
-            </li>
-        `;
-
-        // Ajouter l'événement Déconnexion
-        const btnLogout = document.getElementById("btnLogout");
-        btnLogout.addEventListener("click", async () => {
-            try{
-                await signOut(auth);
-                // Recréer le bouton Connexion
-                const authLiContainer = document.getElementById("authLi");
-                authLiContainer.outerHTML = `<li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>`;
-            }catch(error){
-                console.error(error);
-                alert("Erreur lors de la déconnexion.");
-            }
-        });
-
-    }else{
-        // Utilisateur non connecté → bouton Connexion visible
-        authLi.outerHTML = `<li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>`;
-    }
-});
-
-
-
+// Fonction showToast
+function showToast(message, color = "#2e7d32") {
+  let toast = document.getElementById("toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.style.background = color;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 3000);
+}

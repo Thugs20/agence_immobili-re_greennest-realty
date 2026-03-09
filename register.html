@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body class="auth-page">
@@ -68,6 +68,8 @@
         <input type="password" id="confirmPassword" placeholder="••••••••" required>
         <span class="toggle-password" data-target="confirmPassword"><i class="fas fa-eye"></i></span>
       </div>
+
+      <div class="g-recaptcha" data-sitekey="6Lfaj4QsAAAAAGbOfQACu1N_oBn34_q8g0pROxtD"></div><br>
 
       <button type="submit" class="btn-auth">
         Créer un compte
@@ -131,58 +133,77 @@ const db = getFirestore(app);
 // FORMULAIRE INSCRIPTION
 const btn=document.querySelector(".btn-auth");
 
-registerForm.addEventListener("submit",async(e)=>{
+registerForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-e.preventDefault();
+  btn.classList.add("loading");
+  btn.innerHTML = '<span class="spinner"></span>';
 
-btn.classList.add("loading");
-btn.innerHTML='<span class="spinner"></span>';
+  // ✅ Vérification reCAPTCHA avec try/catch
+  let recaptchaResponse = "";
+  try {
+    recaptchaResponse = grecaptcha.getResponse();
+  } catch (err) {
+    console.error("reCAPTCHA non chargé", err);
+    showToast("Erreur reCAPTCHA, veuillez réessayer", "#e53935");
+    btn.classList.remove("loading");
+    btn.innerHTML = "Créer un compte";
+    return;
+  }
 
-const fullname=document.getElementById("fullname").value;
-const email=document.getElementById("email").value;
-const phone=document.getElementById("phone").value;
-const password=document.getElementById("password").value;
-const confirmPassword=document.getElementById("confirmPassword").value;
+  if (recaptchaResponse.length === 0) {
+    showToast("Veuillez confirmer que vous n'êtes pas un robot 🤖", "#e53935");
+    btn.classList.remove("loading");
+    btn.innerHTML = "Créer un compte";
+    return;
+  }
 
-if(password!==confirmPassword){
+  const fullname = document.getElementById("fullname").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
+  const password = document.getElementById("password").value;
+  const confirmPassword = document.getElementById("confirmPassword").value;
 
-showToast("Les mots de passe ne correspondent pas","#e53935");
+  if (password !== confirmPassword) {
+    showToast("Les mots de passe ne correspondent pas", "#e53935");
+    btn.classList.remove("loading");
+    btn.innerHTML = "Créer un compte";
+    return;
+  }
 
-btn.classList.remove("loading");
-btn.innerHTML="Créer un compte";
-return;
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-}
+    await addDoc(collection(db, "users"), {
+      fullname,
+      email,
+      phone,
+      uid: user.uid,
+      favorites: [],
+      createdAt: serverTimestamp()
+    });
 
-try{
+    showToast("Inscription réussie 🎉");
+    setTimeout(() => {
+      window.location.href = "login.html";
+    }, 1500);
 
-const userCredential=await createUserWithEmailAndPassword(auth,email,password);
-const user=userCredential.user;
-
-await addDoc(collection(db,"users"),{
-fullname,
-email,
-phone,
-uid:user.uid,
-favorites:[],
-createdAt:serverTimestamp()
-});
-
-showToast("Inscription réussie 🎉");
-
-setTimeout(()=>{
-window.location.href="login.html";
-},1500);
-
-}catch(error){
-
-showToast("Erreur : "+error.message,"#e53935");
-
-}
-
-btn.classList.remove("loading");
-btn.innerHTML="Créer un compte";
-
+  } catch (error) {
+    // ✅ Ton error cash personnalisé pour email existant
+    if (error.code === "auth/email-already-in-use") {
+      showToast(
+        "Oups 😅… cet email existe déjà ! Essayez de vous connecter ou utilisez un autre email.",
+        "#e53935"
+      );
+    } else {
+      showToast("Erreur : " + error.message, "#e53935");
+    }
+  } finally {
+    // Toujours réinitialiser le bouton
+    btn.classList.remove("loading");
+    btn.innerHTML = "Créer un compte";
+  }
 });
 
 // connexion en 1 clic
@@ -206,10 +227,17 @@ setTimeout(()=>{
 window.location.href="index.html";
 },1500);
 
-}catch(error){
-
-showToast("Erreur Google","#e53935");
-
+}catch(error) {
+  if (error.code === "auth/email-already-in-use") {
+    showToast(
+      "Cet email est déjà lié à un compte Google. Cliquez simplement sur le bouton Google pour vous connecter.",
+      "#e53935"
+    );
+  } else if (error.code === "auth/popup-closed-by-user") {
+    showToast("La fenêtre Google a été fermée avant la connexion. Réessayez.", "#e53935");
+  } else {
+    showToast("Erreur : " + error.message, "#e53935");
+  }
 }
 
 });

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="auth-page">
+    <div id="toast"></div>
 
 <section class="about-header">
     <div class="about-header-container">
@@ -38,6 +39,17 @@
             <button type="submit" class="btn-auth">Se connecter</button>
         </form>
 
+        <div class="auth-divider">
+      <span>ou</span>
+    </div>
+
+        <div class="google-auth">
+        <button type="button" id="googleSignIn" class="btn-google">
+        <i class="fab fa-google"></i>
+        Continuer avec Google
+        </button>
+        </div>
+
         <p class="auth-footer">
             Pas encore de compte ? <a href="register.html">Créez-en un ici</a>
         </p>
@@ -67,10 +79,9 @@ togglePasswordIcons.forEach(icon => {
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-
-// CONFIG FIREBASE (mets la même configuration que dans register.html)
+// CONFIG FIREBASE
 const firebaseConfig = {
   apiKey: "AIzaSyDb7y807LAXmV2ST_EdA_L-LdBcbc6SKN8",
   authDomain: "green-nest-realty-immobilier.firebaseapp.com",
@@ -80,58 +91,68 @@ const firebaseConfig = {
   appId: "1:1037762102556:web:f78e8d720783bbbdf426d9"
 };
 
-
 // INITIALISATION
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-
-// FORMULAIRE DE CONNEXION
+// SELECTEURS
 const loginForm = document.getElementById("loginForm");
+const btn = loginForm.querySelector(".btn-auth");
+const googleBtn = document.getElementById("googleSignIn");
 
+// Fonction toast
+function showToast(message,color="#2e7d32"){
+  const toast=document.getElementById("toast");
+  toast.textContent=message;
+  toast.style.background=color;
+  toast.classList.add("show");
+  setTimeout(()=>{toast.classList.remove("show");},3000);
+}
+
+// Connexion Email/Password avec bouton en chargement
 loginForm.addEventListener("submit", async (e) => {
-
   e.preventDefault();
+
+  btn.classList.add("loading");
+  btn.innerHTML='<span class="spinner"></span>';
 
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
-  try{
-
+  try {
     await signInWithEmailAndPassword(auth,email,password);
 
-    alert("Connexion réussie 🎉");
+    showToast("Connexion réussie 🎉");
 
-    window.location.href="index.html";
-
-  }catch(error){
-
-    alert("Email ou mot de passe incorrect");
-
+    setTimeout(()=>{window.location.href="index.html";},1500);
+  } catch(error) {
+    showToast("Email ou mot de passe incorrect","#e53935");
   }
 
+  btn.classList.remove("loading");
+  btn.innerHTML="Se connecter";
 });
 
-</script>
+// Connexion Google
+const provider = new GoogleAuthProvider();
+googleBtn.addEventListener("click", async () => {
+  googleBtn.classList.add("loading");
+  googleBtn.innerHTML='<span class="spinner"></span>';
 
-<div id="toast"></div>
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
 
-<script>
+    showToast("Connexion Google réussie 🎉");
 
-function showToast(message,color="#2e7d32"){
+    setTimeout(()=>{window.location.href="index.html";},1500);
+  } catch(error) {
+    showToast("Erreur Google","#e53935");
+  }
 
-const toast=document.getElementById("toast");
-
-toast.textContent=message;
-toast.style.background=color;
-
-toast.classList.add("show");
-
-setTimeout(()=>{
-toast.classList.remove("show");
-},3000);
-
-}
+  googleBtn.classList.remove("loading");
+  googleBtn.innerHTML='<i class="fab fa-google"></i> Continuer avec Google';
+});
 
 </script>
 

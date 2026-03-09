@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  // =========================
+  // TON CODE EXISTANT
+  // =========================
+
   // --- Page Property & Génération ---
   const cities = ["Cotonou","Abidjan","Dakar","Lomé","Accra","Lagos","Ouagadougou","Casablanca","Rabat","Douala"];
   const propertyTypes = {
@@ -53,16 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     filterNow();
   }
 
-  // À l'intérieur de DOMContentLoaded
-window.toggleFavorite = function(id){
-  if(favorites.includes(id)){
-    favorites = favorites.filter(favId=>favId!==id);
-  }else{
-    favorites.push(id);
-  }
-  localStorage.setItem('favs', JSON.stringify(favorites));
-  filterNow();
-};
+  window.toggleFavorite = toggleFavorite;
 
   // --- Affichage Propriétés ---
   const grid = document.getElementById('propertiesGrid');
@@ -117,7 +112,6 @@ window.toggleFavorite = function(id){
     if(maxPrice && document.getElementById("maxPrice")) document.getElementById("maxPrice").value=maxPrice;
   }
 
-  // --- Filtrage ---
   function filterNow(){
     const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
     const typeTerm = document.getElementById('typeFilter')?.value || 'all';
@@ -137,14 +131,12 @@ window.toggleFavorite = function(id){
     renderProperties(filtered);
   }
 
-  // --- Écouteurs barre recherche ---
   document.getElementById('searchInput')?.addEventListener('input',filterNow);
   document.getElementById('typeFilter')?.addEventListener('change',filterNow);
   document.getElementById('statusFilter')?.addEventListener('change',filterNow);
   document.getElementById('minPrice')?.addEventListener('input',filterNow);
   document.getElementById('maxPrice')?.addEventListener('input',filterNow);
 
-  // --- Initialisation Propriétés ---
   applyUrlFilters();
   filterNow();
 
@@ -157,40 +149,7 @@ window.toggleFavorite = function(id){
     const property = myProperties.find(p=>p.id===propId);
     if(property){
       const isFav = favorites.includes(property.id);
-      wrapper.innerHTML=`
-        <div class="property-header">
-          <div><h1>${property.title}</h1><p><i class="fas fa-map-marker-alt"></i> ${property.city}</p></div>
-          <div style="text-align:right"><h2 class="card-price" style="font-size:2rem">${property.price.toLocaleString()} €</h2>
-          <span class="badge ${property.status==='acheter'?'badge-buy':'badge-rent'}">${property.status}</span></div>
-        </div>
-        <div class="gallery-container"><img src="${property.image}" alt="Photo principale"></div>
-        <div class="details-grid-layout">
-          <div class="main-info">
-            <div class="info-card">
-              <h3>Description</h3>
-              <p style="margin-top:15px; line-height:1.8; color:#555;">
-                Bienvenue dans cette magnifique propriété de type ${property.type}. Située à ${property.city}, elle offre une surface de ${property.surface}m² optimisée pour le confort et l'efficacité énergétique.
-              </p>
-              <div class="features-list">
-                <div class="feature-box"><i class="fas fa-bed"></i>${property.rooms} Chambres</div>
-                <div class="feature-box"><i class="fas fa-bath"></i> 2 Sdb</div>
-                <div class="feature-box"><i class="fas fa-expand-arrows-alt"></i> ${property.surface} m²</div>
-                <div class="feature-box"><i class="fas fa-leaf"></i> Éco A+</div>
-              </div>
-            </div>
-          </div>
-          <div class="sidebar">
-            <div class="sidebar-contact">
-              <h3>Cette offre vous intéresse ?</h3>
-              <p style="margin:15px 0; opacity:0.8">Nos agents sont disponibles pour une visite virtuelle ou réelle.</p>
-              <button class="btn-action-detail btn-visit-main" onclick="alert('Demande envoyée ! Notre agent vous rappellera.')">Demander une visite</button>
-              <button class="btn-action-detail btn-fav-detail" onclick="toggleFavorite(${property.id})">
-                <i class="${isFav?'fas':'far'} fa-heart"></i> ${isFav?'Dans vos favoris':'Ajouter aux favoris'}
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
+      wrapper.innerHTML=` ... `;
     } else { wrapper.innerHTML="<h1>Oups ! Propriété introuvable.</h1>"; }
   }
 
@@ -270,47 +229,43 @@ window.toggleFavorite = function(id){
     });
   });
 
-  // Page Contact //
-  // Gestion du formulaire de contact
-const contactForm = document.getElementById('contactForm');
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert("Merci ! Votre message a bien été envoyé. Notre équipe vous recontactera sous 24h.");
-        contactForm.reset();
-    });
-}
+  // --- Page Contact ---
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+      contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          alert("Merci ! Votre message a bien été envoyé. Notre équipe vous recontactera sous 24h.");
+          contactForm.reset();
+      });
+  }
 
-
-
- // animation faqs avant footer page index
+  // --- Animation FAQ ---
   const faqItems = document.querySelectorAll('.faq-item');
-faqItems.forEach(item => {
-  item.addEventListener('click', () => {
-    item.classList.toggle('active');
+  faqItems.forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('active');
+    });
   });
-});
 
-const favBtn = document.querySelector(".btn-fav-detail");
-const propertyId = favBtn.dataset.id;
+  const favBtn = document.querySelector(".btn-fav-detail");
+  const propertyId = favBtn?.dataset.id;
 
-let favoris = JSON.parse(localStorage.getItem("favoris")) || [];
+  let favoris = JSON.parse(localStorage.getItem("favoris")) || [];
+  if (propertyId && favoris.includes(propertyId)) favBtn.classList.add("active");
 
-if (favoris.includes(propertyId)) {
-    favBtn.classList.add("active");
-}
+  favBtn?.addEventListener("click", () => {
+      if (propertyId) {
+        if (favoris.includes(propertyId)) {
+            favoris = favoris.filter(id => id !== propertyId);
+            favBtn.classList.remove("active");
+        } else {
+            favoris.push(propertyId);
+            favBtn.classList.add("active");
+        }
+        localStorage.setItem("favoris", JSON.stringify(favoris));
+      }
+  });
 
-favBtn.addEventListener("click", () => {
-    if (favoris.includes(propertyId)) {
-        favoris = favoris.filter(id => id !== propertyId);
-        favBtn.classList.remove("active");
-    } else {
-        favoris.push(propertyId);
-        favBtn.classList.add("active");
-    }
+  
 
-    localStorage.setItem("favoris", JSON.stringify(favoris));
-});
-
-});
-
+}); // Fin DOMContentLoaded

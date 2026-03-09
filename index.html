@@ -25,10 +25,10 @@
         <nav id="nav-menu">
             <ul>
                 <li><a href="#hero"><i class="fas fa-home"></i> Accueil</a></li>
-                <li><a href="property.html" id="linkProperties"><i class="fas fa-building"></i> Propriétés</a></li>
+                <li><a href="property.html" id="navProperties"><i class="fas fa-building"></i> Propriétés</a></li>
                 <li><a href="property.html?status=acheter" id="linkBuy"><i class="fas fa-key"></i> Acheter</a></li>
                 <li><a href="property.html?status=louer" id="linkRent"><i class="fas fa-sign"></i> Louer</a></li>
-                <li><a href="property.html?type=villa"><i class="fas fa-house-user"></i> Villas</a></li>
+                <li><a href="property.html?type=villa" id="linkVillas"><i class="fas fa-house-user"></i> Villas</a></li>
                 <li><a href="#about"><i class="fas fa-info-circle"></i> À propos</a></li>
                 <li><a href="contact.html" id="linkContact"><i class="fas fa-envelope"></i> Contact</a></li>
                 <li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>
@@ -62,7 +62,7 @@
     <br>
     <div class="hero-btns">
       <a href="contact.html" class="btn btn-primary">Contact</a>&nbsp;&nbsp;
-      <a href="property.html" class="btn btn-secondary">Propriétés</a>
+      <a href="property.html" class="btn btn-secondary" id="heroProperties">Propriétés</a>
     </div>
 
     <div class="hero-stats">
@@ -175,7 +175,7 @@
     </div>
     <br>
     <div class="btn-container">
-      <a href="property.html" class="btn btn-primary">Voir toutes les propriétés</a>
+      <a href="property.html" class="btn btn-primary" id="allPropertiesBtn">Voir toutes les propriétés</a>
     </div>
 
   </div>
@@ -299,7 +299,63 @@
 </footer>
 
     <script src="script.js"></script>
-    <script type="module" src="firebase.js"></script>
+
+    <script type="module">
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  const auth = getAuth();
+
+  const protectedLinks = [
+    document.getElementById("navProperties"),
+    document.getElementById("linkBuy"),
+    document.getElementById("linkRent"),
+    document.getElementById("linkVillas")
+  ];
+
+  const btnLogin = document.getElementById("btnLogin");
+
+  function showToast(message, color="#2e7d32"){
+    let toast = document.getElementById("toast");
+    if(!toast){
+      toast = document.createElement("div");
+      toast.id = "toast";
+      document.body.appendChild(toast);
+    }
+    toast.textContent = message;
+    toast.style.background = color;
+    toast.classList.add("show");
+    setTimeout(()=>toast.classList.remove("show"),3000);
+  }
+
+  onAuthStateChanged(auth, (user)=>{
+    if(user){
+      btnLogin.textContent = "Déconnexion";
+      btnLogin.href = "#";
+      btnLogin.classList.add("btn-logout");
+      btnLogin.onclick = async (e)=>{
+        e.preventDefault();
+        await signOut(auth);
+        showToast("Déconnecté avec succès","#2e7d32");
+      };
+      protectedLinks.forEach(link=>{
+        if(!link) return;
+        link.onclick = null;
+      });
+    } else {
+      btnLogin.textContent = "Connexion";
+      btnLogin.href = "login.html";
+      btnLogin.classList.remove("btn-logout");
+      btnLogin.onclick = null;
+      protectedLinks.forEach(link=>{
+        if(!link) return;
+        link.onclick = (e)=>{
+          e.preventDefault();
+          showToast("Veuillez vous connecter ou créer un compte pour accéder à cette page","#e53935");
+        };
+      });
+    }
+  });
+</script>
 </body>
 </html>
 
