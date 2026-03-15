@@ -42,49 +42,56 @@ function showToast(message, color="#2e7d32"){
 }
 
 // === Vérification de l'état de connexion ===
-onAuthStateChanged(auth, (user)=>{
-    if(user){
-        // Utilisateur connecté
-        if(btnLogin){
+onAuthStateChanged(auth, (user) => {
+    const currentPage = window.location.pathname;
+    
+    // On vérifie si on est sur la page propriété OU la page détails
+    const isProtectedPage = currentPage.includes("property.html") || currentPage.includes("details.html");
+
+    if (user) {
+        // --- CONNECTÉ : On affiche la page ---
+        document.body.style.opacity = "1";
+
+        if (btnLogin) {
             btnLogin.textContent = "Déconnexion";
             btnLogin.href = "#";
             btnLogin.classList.add("btn-logout");
-            btnLogin.onclick = async (e)=>{
+            btnLogin.onclick = async (e) => {
                 e.preventDefault();
                 await signOut(auth);
-                showToast("Déconnecté avec succès","#2e7d32");
-                window.location.reload(); // recharge pour mettre à jour la page
+                showToast("Déconnecté avec succès", "#2e7d32");
+                setTimeout(() => window.location.href = "index.html", 1000);
             };
         }
 
-        // Les liens protégés sont accessibles
-        protectedLinks.forEach(link=>{
-            if(link) link.onclick = null;
+        protectedLinks.forEach(link => {
+            if (link) link.onclick = null;
         });
 
     } else {
-        // Utilisateur NON connecté
-        if(btnLogin){
+        // --- NON CONNECTÉ ---
+        if (btnLogin) {
             btnLogin.textContent = "Connexion";
             btnLogin.href = "login.html";
             btnLogin.classList.remove("btn-logout");
             btnLogin.onclick = null;
         }
 
-        // Bloquer l'accès aux liens protégés
-        protectedLinks.forEach(link=>{
-            if(!link) return;
-            link.onclick = (e)=>{
+        protectedLinks.forEach(link => {
+            if (!link) return;
+            link.onclick = (e) => {
                 e.preventDefault();
-                showToast("Veuillez vous connecter ou créer un compte pour accéder à cette page","#e53935");
+                showToast("Veuillez vous connecter pour accéder à cette page", "#e53935");
+                setTimeout(() => window.location.href = "login.html", 2000);
             };
         });
 
-        // Bloquer l'accès aux pages protégées
-        const protectedPages = ["property.html"];
-        const currentPage = window.location.pathname.split("/").pop();
-        if(protectedPages.includes(currentPage)){
-            window.location.href = "login.html";
+        // Bloquer l'accès direct aux pages sensibles
+        if (isProtectedPage) {
+            window.location.replace("login.html");
+        } else {
+            // Afficher l'index si on n'est pas connecté
+            document.body.style.opacity = "1";
         }
     }
 });
