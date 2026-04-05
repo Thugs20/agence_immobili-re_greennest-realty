@@ -1,311 +1,767 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GreenNest Realty | Trouvez votre maison écologique</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== SEO LOCAL COTONOU / BÉNIN ===== -->
+  <title>GreenNest Realty | Agence Immobilière Haut de Gamme – Cotonou, Bénin</title>
+  <meta name="description" content="GreenNest Realty : votre expert en immobilier durable et haut de gamme à Cotonou, Bénin. Villas, appartements, terrains à acheter ou louer. 500+ propriétés disponibles.">
+  <meta name="keywords" content="immobilier Cotonou, agence immobilière Bénin, villa Cotonou, appartement Cotonou, acheter maison Bénin, louer appartement Cotonou, GreenNest Realty">
+    <meta name="robots" content="noindex, nofollow">
+  <meta name="author" content="HOUETO Fabrice">
+  <meta property="og:title" content="GreenNest Realty | Immobilier Haut de Gamme – Cotonou">
+  <meta property="og:description" content="Trouvez votre propriété de rêve à Cotonou et dans tout le Bénin avec GreenNest Realty.">
+  <meta property="og:image" content="images/appartement20.webp">
+  <meta name="geo.region" content="BJ-LI">
+  <meta name="geo.placename" content="Cotonou">
+
+  <!-- ===== FONTS PREMIUM ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- ===== ICONS ===== -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- ===== STYLES ===== -->
+  <link rel="stylesheet" href="style-new.css">
+  <link rel="stylesheet" href="style-home.css">
+<style>
+/* ===== BANDEAU PORTFOLIO ===== */
+.portfolio-banner{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:99999;
+  background:rgba(13,61,31,0.96);
+  backdrop-filter:blur(10px);
+  color:rgba(255,255,255,0.9);
+  font-size:0.78rem;
+  padding:0.6rem 1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1.5rem;
+  text-align:center;
+  font-family:'DM Sans',system-ui,sans-serif;
+  letter-spacing:0.02em;
+}
+.portfolio-banner strong{color:#4ade80;}
+.portfolio-banner button{
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.25);
+  color:#fff;
+  border-radius:50%;
+  width:22px;
+  height:22px;
+  font-size:0.75rem;
+  cursor:pointer;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background 0.2s;
+}
+.portfolio-banner button:hover{background:rgba(255,255,255,0.3);}
+@media(max-width:600px){
+  .portfolio-banner{flex-direction:column;gap:0.4rem;padding:0.75rem 1rem;}
+}
+</style>
 </head>
 
-<body>
-    
-    <!-- ================= HEADER ================= -->
-<header>
-    <div class="menu-overlay" id="overlay"></div>
-    <div class="container header-container">
-
-        <!-- LOGO -->
-        <div class="logo">
-            <img id="logo" src="images/Logo.webp" alt="Logo" loading="lazy">
-            <h2>🌿 GreenNest <span>Realty</span></h2>
-        </div>
-
-        <!-- NAVIGATION -->
-        <nav id="nav-menu">
-            <ul>
-                <li><a href="#hero"><i class="fas fa-home"></i> Accueil</a></li>
-                <li><a href="property.html" id="navProperties"><i class="fas fa-building"></i> Propriétés</a></li>
-                <li><a href="property.html?status=acheter" id="linkBuy"><i class="fas fa-key"></i> Acheter</a></li>
-                <li><a href="property.html?status=louer" id="linkRent"><i class="fas fa-sign"></i> Louer</a></li>
-                <li><a href="property.html?type=villa" id="linkVillas"><i class="fas fa-house-user"></i> Villas</a></li>
-                <li><a href="#about"><i class="fas fa-info-circle"></i> À propos</a></li>
-                <li><a href="contact.html" id="linkContact"><i class="fas fa-envelope"></i> Contact</a></li>
-                <li><a href="login.html" class="btn-login" id="btnLogin">Connexion</a></li>
-            </ul>
-        </nav>
-
-        <!-- HAMBURGER -->
-        <div class="hamburger" id="hamburger">
-            <i class="fas fa-bars"></i>
-        </div>
-
-    </div>
-</header>
-
-    <!-- Hero -->
-    <section class="hero" id="hero">
-
-  <img src="images/appartement20.webp" alt="Maison moderne écologique" class="hero-bg" loading="lazy">
-
-  <div class="hero-overlay"></div>
-
-  <div class="hero-content">
-    <br>
-    <h1 class="hero-title">Trouvez la maison de vos rêves</h1>
-
-    <p class="hero-text">
-      Découvrez une sélection de propriétés modernes alliant confort et respect
-      de l'environnement. Expert en immobilier durable. Nous vous aidons à
-      trouver un foyer qui correspond à vos valeurs et à votre confort.
-    </p>
-    <br>
-    <div class="hero-btns">
-      <a href="contact.html" class="btn btn-primary">Contact</a>&nbsp;&nbsp;
-      <a href="property.html" class="btn btn-secondary" id="heroProperties">Propriétés</a>
-    </div>
-
-    <div class="hero-stats">
-
-  <div class="stat">
-    <h3 class="counter" data-target="500">0</h3>
-    <p>Propriétés</p>
-  </div>
-
-  <div class="stat">
-    <h3 class="counter" data-target="1200">0</h3>
-    <p>Clients satisfaits</p>
-  </div>
-
-  <div class="stat">
-    <h3 class="counter" data-target="15">0</h3>
-    <p>Ans d'expérience</p>
-  </div>
-
+<body class="light-mode">
+<!-- ====================================================
+     BANDEAU PORTFOLIO — Projet de démonstration
+     À retirer si le projet devient un vrai site
+==================================================== -->
+<div class="portfolio-banner" id="portfolioBanner">
+  <span>🎓 Projet de portfolio · Les données (propriétés, prix, agents) sont <strong>entièrement fictives</strong></span>
+  <button onclick="this.parentElement.style.display='none'" aria-label="Fermer">✕</button>
 </div>
 
+
+<!-- ===================== CURSEUR PERSONNALISÉ ===================== -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-follower" id="cursorFollower"></div>
+
+<!-- ===================== LOADER ===================== -->
+<div class="page-loader" id="pageLoader">
+  <div class="loader-logo">
+    <span class="loader-leaf">🌿</span>
+    <span>GreenNest</span>
+  </div>
+  <div class="loader-bar"><div class="loader-progress"></div></div>
+</div>
+
+<!-- ===================== BOUTON MODE SOMBRE ===================== -->
+<button class="theme-toggle" id="themeToggle" title="Changer le thème">
+  <i class="fas fa-moon" id="themeIcon"></i>
+</button>
+
+<!-- ===================== HEADER ===================== -->
+<header id="mainHeader">
+  <div class="header-inner">
+
+    <!-- LOGO -->
+    <a href="index.html" class="logo-link">
+      <div class="logo">
+        <div class="logo-icon">🌿</div>
+        <div class="logo-text">
+          <span class="logo-main">GreenNest</span>
+          <span class="logo-sub">Realty</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- NAVIGATION DESKTOP -->
+    <nav class="nav-desktop" id="navDesktop">
+      <a href="index.html" class="nav-link active">Accueil</a>
+      <a href="property.html" class="nav-link">Propriétés</a>
+      <a href="property.html?status=acheter" class="nav-link">Acheter</a>
+      <a href="property.html?status=louer" class="nav-link">Louer</a>
+      <a href="property.html?type=villa" class="nav-link">Villas</a>
+      <a href="about.html" class="nav-link">À propos</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </nav>
+
+    <!-- ACTIONS HEADER -->
+    <div class="header-actions">
+      <a href="login.html" class="btn-cta" id="btnLogin">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <!-- Bouton hamburger mobile -->
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
   </div>
 
-  <div class="scroll-indicator"></div>
+  <!-- MENU MOBILE -->
+  <div class="mobile-menu" id="mobileMenu">
+    <nav class="mobile-nav">
+      <a href="index.html" class="mobile-link">Accueil</a>
+      <a href="property.html" class="mobile-link">Propriétés</a>
+      <a href="property.html?status=acheter" class="mobile-link">Acheter</a>
+      <a href="property.html?status=louer" class="mobile-link">Louer</a>
+      <a href="property.html?type=villa" class="mobile-link">Villas</a>
+      <a href="about.html" class="mobile-link">À propos</a>
+      <a href="contact.html" class="mobile-link">Contact</a>
+      <a href="login.html" class="mobile-link mobile-cta">Connexion</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===================== HERO SECTION ===================== -->
+<section class="hero" id="hero">
+
+  <!-- Image de fond avec effet parallaxe -->
+  <div class="hero-bg-wrap">
+    <img src="images/appartement20.webp" alt="Propriété de luxe à Cotonou" class="hero-bg" id="heroBg">
+  </div>
+
+  <!-- Overlay dégradé -->
+  <div class="hero-overlay"></div>
+
+  <!-- Particules décoratives -->
+  <div class="hero-particles">
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+  </div>
+
+  <!-- Contenu Hero -->
+  <div class="hero-content">
+
+    <!-- Étiquette premium -->
+    <div class="hero-badge reveal-up" style="--delay:0s">
+      <span class="badge-dot"></span>
+      Immobilier Haut de Gamme · Cotonou, Bénin
+    </div>
+
+    <!-- Titre principal -->
+    <h1 class="hero-title reveal-up" style="--delay:0.15s">
+      Votre propriété<br>
+      <em>de rêve</em> vous attend
+    </h1>
+
+    <!-- Sous-titre -->
+    <p class="hero-subtitle reveal-up" style="--delay:0.3s">
+      Expert en immobilier durable et haut de gamme au Bénin. Nous sélectionnons les plus belles propriétés pour vous offrir un cadre de vie exceptionnel.
+    </p>
+
+    <!-- Boutons CTA -->
+    <div class="hero-cta reveal-up" style="--delay:0.45s">
+      <a href="property.html" class="btn-hero-primary">
+        <i class="fas fa-search"></i>
+        Explorer les propriétés
+      </a>
+      <a href="contact.html" class="btn-hero-ghost">
+        Parler à un expert
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- Statistiques -->
+    <div class="hero-stats reveal-up" style="--delay:0.6s">
+      <div class="stat-pill">
+        <strong class="counter" data-target="500">0</strong>
+        <span>Propriétés</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-pill">
+        <strong class="counter" data-target="1200">0</strong>
+        <span>Clients satisfaits</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-pill">
+        <strong class="counter" data-target="15">0</strong>
+        <span>Ans d'expérience</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll-down">
+    <div class="scroll-mouse">
+      <div class="scroll-wheel"></div>
+    </div>
+    <span>Découvrir</span>
+  </div>
 
 </section>
 
-    <!-- About -->
-    <section class="about" id="about">
-
-  <div class="about-container">
-
-    <div class="about-image">
-      <img src="images/appartement20.webp" alt="Maison écologique moderne" loading="lazy">
-      <!-- petites cartes flottantes -->
-      <div class="about-card stat-card">
-        <h3>500+</h3>
-        <p>Propriétés</p>
+<!-- ===================== BARRE DE RECHERCHE RAPIDE ===================== -->
+<section class="search-bar-section">
+  <div class="search-bar-card">
+    <div class="search-tabs">
+      <button class="search-tab active" data-status="all">Tous</button>
+      <button class="search-tab" data-status="acheter">Acheter</button>
+      <button class="search-tab" data-status="louer">Louer</button>
+    </div>
+    <div class="search-fields">
+      <div class="search-field">
+        <i class="fas fa-map-marker-alt"></i>
+        <input type="text" placeholder="Cotonou, Abidjan, Lomé..." id="quickSearch">
       </div>
-      <div class="about-card stat-card">
-        <h3>1200+</h3>
+      <div class="search-field">
+        <i class="fas fa-home"></i>
+        <select id="quickType">
+          <option value="all">Type de bien</option>
+          <option value="villa">Villa</option>
+          <option value="appartement">Appartement</option>
+          <option value="maison">Maison</option>
+          <option value="studio">Studio</option>
+          <option value="bureau">Bureau</option>
+        </select>
+      </div>
+      <a href="property.html" class="search-btn" id="quickSearchBtn">
+        <i class="fas fa-search"></i>
+        <span>Rechercher</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== SERVICES ===================== -->
+<section class="services-section" id="services">
+  <div class="section-wrap">
+
+    <div class="section-header reveal-up">
+      <p class="section-eyebrow">Nos expertises</p>
+      <h2 class="section-title">Un accompagnement<br><em>complet</em> pour votre projet</h2>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card reveal-up" style="--delay:0.1s">
+        <div class="service-icon">
+          <i class="fas fa-key"></i>
+        </div>
+        <h3>Achat Immobilier</h3>
+        <p>Trouvez la propriété idéale parmi notre sélection exclusive de biens à Cotonou et dans tout le Bénin.</p>
+        <a href="property.html?status=acheter" class="service-link">Voir les biens <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="service-card reveal-up" style="--delay:0.2s">
+        <div class="service-icon">
+          <i class="fas fa-sign"></i>
+        </div>
+        <h3>Location Premium</h3>
+        <p>Des appartements et villas de standing en location, avec toutes les commodités modernes.</p>
+        <a href="property.html?status=louer" class="service-link">Voir les locations <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="service-card reveal-up" style="--delay:0.3s">
+        <div class="service-icon">
+          <i class="fas fa-leaf"></i>
+        </div>
+        <h3>Immobilier Durable</h3>
+        <p>Nous privilégions les constructions écologiques et les biens respectueux de l'environnement.</p>
+        <a href="about.html" class="service-link">Notre approche <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+      <div class="service-card reveal-up" style="--delay:0.4s">
+        <div class="service-icon">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <h3>Investissement</h3>
+        <p>Conseil et accompagnement pour vos projets d'investissement immobilier rentables au Bénin.</p>
+        <a href="contact.html" class="service-link">Nous contacter <i class="fas fa-arrow-right"></i></a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROPRIÉTÉS EN VEDETTE ===================== -->
+<section class="featured-section" id="properties">
+  <div class="section-wrap">
+
+    <div class="section-header-row reveal-up">
+      <div>
+        <p class="section-eyebrow">Sélection exclusive</p>
+        <h2 class="section-title">Propriétés en <em>vedette</em></h2>
+      </div>
+      <a href="property.html" class="btn-outline">Voir tout <i class="fas fa-arrow-right"></i></a>
+    </div>
+
+    <!-- Grille de propriétés -->
+    <div class="featured-grid">
+
+      <!-- Carte 1 – Grande -->
+      <div class="feat-card feat-card-large reveal-up" style="--delay:0.1s">
+        <div class="feat-img-wrap">
+          <img src="images/appartement13.webp" alt="Villa de luxe Cotonou" loading="lazy">
+          <div class="feat-overlay"></div>
+          <span class="feat-badge">À Vendre</span>
+          <button class="feat-heart"><i class="far fa-heart"></i></button>
+        </div>
+        <div class="feat-info">
+          <div class="feat-meta">
+            <span><i class="fas fa-map-marker-alt"></i> Cotonou, Bénin</span>
+            <span><i class="fas fa-bed"></i> 5 pièces</span>
+            <span><i class="fas fa-ruler-combined"></i> 280 m²</span>
+          </div>
+          <h3>Villa Moderne avec Piscine</h3>
+          <div class="feat-bottom">
+            <span class="feat-price">180 000 000 FCFA</span>
+            <a href="property.html" class="feat-btn">Voir détails</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carte 2 -->
+      <div class="feat-card reveal-up" style="--delay:0.2s">
+        <div class="feat-img-wrap">
+          <img src="images/appartement11.webp" alt="Appartement Cotonou" loading="lazy">
+          <div class="feat-overlay"></div>
+          <span class="feat-badge feat-badge-rent">À Louer</span>
+          <button class="feat-heart"><i class="far fa-heart"></i></button>
+        </div>
+        <div class="feat-info">
+          <div class="feat-meta">
+            <span><i class="fas fa-map-marker-alt"></i> Cotonou</span>
+            <span><i class="fas fa-bed"></i> 3 pièces</span>
+          </div>
+          <h3>Appartement Terrasse Vue Mer</h3>
+          <div class="feat-bottom">
+            <span class="feat-price">850 000 FCFA<small>/mois</small></span>
+            <a href="property.html" class="feat-btn">Voir</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carte 3 -->
+      <div class="feat-card reveal-up" style="--delay:0.3s">
+        <div class="feat-img-wrap">
+          <img src="images/appartement2.webp" alt="Villa Abidjan" loading="lazy">
+          <div class="feat-overlay"></div>
+          <span class="feat-badge">À Vendre</span>
+          <button class="feat-heart"><i class="far fa-heart"></i></button>
+        </div>
+        <div class="feat-info">
+          <div class="feat-meta">
+            <span><i class="fas fa-map-marker-alt"></i> Lomé</span>
+            <span><i class="fas fa-ruler-combined"></i> 320 m²</span>
+          </div>
+          <h3>Villa Jardin Écologique</h3>
+          <div class="feat-bottom">
+            <span class="feat-price">260 000 000 FCFA</span>
+            <a href="property.html" class="feat-btn">Voir</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== À PROPOS SECTION ===================== -->
+<section class="about-section" id="about">
+  <div class="section-wrap">
+    <div class="about-grid">
+
+      <!-- Image avec cartes flottantes -->
+      <div class="about-visual reveal-left">
+        <div class="about-img-frame">
+          <img src="images/appartement20.webp" alt="GreenNest Realty Cotonou Bénin" loading="lazy">
+          <!-- Badge flottant 1 -->
+          <div class="floating-badge fb-top">
+            <div class="fb-icon"><i class="fas fa-award"></i></div>
+            <div>
+              <strong>500+</strong>
+              <span>Propriétés</span>
+            </div>
+          </div>
+          <!-- Badge flottant 2 -->
+          <div class="floating-badge fb-bottom">
+            <div class="fb-icon"><i class="fas fa-smile"></i></div>
+            <div>
+              <strong>1200+</strong>
+              <span>Clients satisfaits</span>
+            </div>
+          </div>
+          <!-- Élément déco -->
+          <div class="about-deco-circle"></div>
+        </div>
+      </div>
+
+      <!-- Contenu textuel -->
+      <div class="about-content reveal-right">
+        <p class="section-eyebrow">Notre histoire</p>
+        <h2 class="section-title">Votre expert en<br>immobilier <em>durable</em></h2>
+        <p class="about-text">
+          Depuis 15 ans, <strong>GreenNest Realty</strong> accompagne ses clients dans la recherche de propriétés modernes, confortables et respectueuses de l'environnement au Bénin et en Afrique de l'Ouest.
+        </p>
+        <p class="about-text">
+          Notre mission est simple : vous aider à trouver un foyer qui correspond à vos valeurs et à votre style de vie, tout en valorisant un immobilier durable et de qualité supérieure à Cotonou.
+        </p>
+
+        <!-- Points clés -->
+        <div class="about-points">
+          <div class="about-point">
+            <div class="point-icon"><i class="fas fa-check"></i></div>
+            <span>Sélection rigoureuse de biens haut de gamme</span>
+          </div>
+          <div class="about-point">
+            <div class="point-icon"><i class="fas fa-check"></i></div>
+            <span>Accompagnement personnalisé de A à Z</span>
+          </div>
+          <div class="about-point">
+            <div class="point-icon"><i class="fas fa-check"></i></div>
+            <span>Critères écologiques et durabilité garantis</span>
+          </div>
+        </div>
+
+        <div class="about-actions">
+          <a href="about.html" class="btn-primary-green">En savoir plus</a>
+          <a href="contact.html" class="btn-ghost-green">Nous contacter</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHIFFRES CLÉS ===================== -->
+<section class="numbers-section">
+  <div class="numbers-bg"></div>
+  <div class="section-wrap">
+    <div class="numbers-grid">
+      <div class="number-item reveal-up" style="--delay:0.1s">
+        <span class="number-val counter" data-target="500">0</span>
+        <span class="number-plus">+</span>
+        <p>Propriétés disponibles</p>
+      </div>
+      <div class="number-item reveal-up" style="--delay:0.2s">
+        <span class="number-val counter" data-target="1200">0</span>
+        <span class="number-plus">+</span>
+        <p>Familles logées</p>
+      </div>
+      <div class="number-item reveal-up" style="--delay:0.3s">
+        <span class="number-val counter" data-target="15">0</span>
+        <span class="number-plus"></span>
+        <p>Années d'expérience</p>
+      </div>
+      <div class="number-item reveal-up" style="--delay:0.4s">
+        <span class="number-val counter" data-target="98">0</span>
+        <span class="number-plus">%</span>
         <p>Clients satisfaits</p>
       </div>
     </div>
-
-    <div class="about-content">
-      <h2 class="fade-up">Votre expert en immobilier durable</h2>
-
-      <p class="fade-up" style="animation-delay:0.3s">
-        Nous vous accompagnons dans la recherche de propriétés modernes,
-        confortables et respectueuses de l'environnement. Notre mission
-        est de vous aider à trouver une maison qui correspond à vos besoins
-        tout en valorisant un mode de vie durable.
-      </p>
-
-      <p class="fade-up" style="animation-delay:0.5s">
-        Grâce à notre expertise et à une sélection rigoureuse de biens,
-        nous vous proposons des propriétés alliant qualité, innovation
-        et bien-être.
-      </p>
-
-      <a href="about.html" class="btn btn-primary fade-up" style="animation-delay:0.7s">
-        En savoir plus
-      </a>
-
-    </div>
-
   </div>
-
 </section>
 
-    <!-- Properties -->
-    <section class="featured-properties">
-  <div class="container">
-    <h2 class="section-title">Propriétés en vedette</h2>
-    <p class="section-subtitle">Découvrez une sélection exclusive de maisons et appartements modernes, alliant confort et durabilité.</p>
+<!-- ===================== TÉMOIGNAGES ===================== -->
+<section class="testimonials-section" id="testimonials">
+  <div class="section-wrap">
+    <div class="section-header reveal-up">
+      <p class="section-eyebrow">Ils nous font confiance</p>
+      <h2 class="section-title">Ce que disent<br>nos <em>clients</em></h2>
+    </div>
 
-    <div class="property-cards">
+    <div class="testimonials-grid">
 
-      <!-- Carte propriété 1 -->
-      <div class="property-card">
-        <img src="images/appartement13.webp" alt="Maison moderne à Paris" loading="lazy">
-        <div class="property-info">
-          <h3>Maison moderne</h3>
-          <p>Paris, France</p>
-          <span class="price">€450,000</span>
+      <div class="testi-card reveal-up" style="--delay:0.1s">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"GreenNest m'a aidé à trouver la maison parfaite à Cotonou, tout en respectant mes valeurs écologiques. Un service exceptionnel !"</p>
+        <div class="testi-author">
+          <img src="https://i.pravatar.cc/100?img=32" alt="Marie L.">
+          <div>
+            <strong>Marie L.</strong>
+            <span>Cliente · Cotonou</span>
+          </div>
         </div>
       </div>
 
-      <!-- Carte propriété 2 -->
-      <div class="property-card">
-        <img src="images/appartement11.webp" alt="Appartement lumineux à Lyon" loading="lazy">
-        <div class="property-info">
-          <h3>Appartement lumineux</h3>
-          <p>Lyon, France</p>
-          <span class="price">€320,000</span>
+      <div class="testi-card testi-card-featured reveal-up" style="--delay:0.2s">
+        <div class="testi-quote"><i class="fas fa-quote-left"></i></div>
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Service rapide, professionnel et efficace. Je recommande vivement cette agence pour tout projet immobilier au Bénin. L'équipe est à l'écoute et très compétente."</p>
+        <div class="testi-author">
+          <img src="https://i.pravatar.cc/100?img=12" alt="Julien P.">
+          <div>
+            <strong>Julien P.</strong>
+            <span>Investisseur · Lomé</span>
+          </div>
         </div>
       </div>
 
-      <!-- Carte propriété 3 -->
-      <div class="property-card">
-        <img src="images/appartement2.webp" alt="Villa écologique à Bordeaux" loading="lazy">
-        <div class="property-info">
-          <h3>Villa écologique</h3>
-          <p>Bordeaux, France</p>
-          <span class="price">€780,000</span>
+      <div class="testi-card reveal-up" style="--delay:0.3s">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Grâce à GreenNest, j'ai trouvé mon bureau idéal à Cotonou en moins de 2 semaines. Un accompagnement irréprochable du début à la fin."</p>
+        <div class="testi-author">
+          <img src="https://i.pravatar.cc/100?img=45" alt="Ahmed K.">
+          <div>
+            <strong>Ahmed K.</strong>
+            <span>Entrepreneur · Cotonou</span>
+          </div>
         </div>
       </div>
 
     </div>
-    <br>
-    <div class="btn-container">
-      <a href="property.html" class="btn btn-primary" id="allPropertiesBtn">Voir toutes les propriétés</a>
+  </div>
+</section>
+
+<!-- ===================== ÉQUIPE ===================== -->
+<section class="team-section" id="team">
+  <div class="section-wrap">
+    <div class="section-header reveal-up">
+      <p class="section-eyebrow">Les experts</p>
+      <h2 class="section-title">Notre <em>équipe</em> dédiée</h2>
     </div>
 
-  </div>
-</section>
+    <div class="team-grid">
 
-    <!-- ================= Testimonials / Avis Clients ================= -->
-<section class="testimonials" id="testimonials">
-  <div class="container">
-    <h2>Ce que disent nos clients</h2>
-    <div class="testimonial-cards">
-      <div class="testimonial-card">
-        <img src="https://i.pravatar.cc/100?img=32" alt="Marie L." loading="lazy">
-        <p>“GreenNest m’a aidé à trouver la maison parfaite, tout en respectant mes valeurs écologiques.”</p>
-        <h4>Marie L.</h4>
-        <p class="stars">⭐⭐⭐⭐⭐</p>
+      <div class="team-card reveal-up" style="--delay:0.1s">
+        <div class="team-photo">
+          <img src="images/agent1.webp" alt="Alice Dupont – Conseillère en vente GreenNest" loading="lazy">
+          <div class="team-social">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="team-info">
+          <h4>Alice Dupont</h4>
+          <p>Conseillère en vente</p>
+          <span class="team-expertise">Villas · Maisons</span>
+        </div>
       </div>
-      <div class="testimonial-card">
-        <img src="https://i.pravatar.cc/100?img=12" alt="Julien P." loading="lazy">
-        <p>“Service rapide et efficace. Je recommande vivement cette agence !”</p>
-        <h4>Julien P.</h4>
-        <p class="stars">⭐⭐⭐⭐⭐</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ================= Team / Équipe ================= -->
-<section class="team" id="team">
-  <div class="container">
-    <h2>Notre équipe</h2>
-    <div class="team-cards">
-      <div class="team-card">
-        <img src="images/agent1.webp" alt="Alice Dupont" loading="lazy">
-        <h4>Alice Dupont</h4>
-        <p>Conseillère en vente</p>
+      <div class="team-card reveal-up" style="--delay:0.2s">
+        <div class="team-photo">
+          <img src="images/agent2.webp" alt="Marc Lefevre – Expert location GreenNest" loading="lazy">
+          <div class="team-social">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="team-info">
+          <h4>Marc Lefevre</h4>
+          <p>Expert en location</p>
+          <span class="team-expertise">Appartements · Studios</span>
+        </div>
       </div>
-      <div class="team-card">
-        <img src="images/agent2.webp" alt="Marc Lefevre" loading="lazy">
-        <h4>Marc Lefevre</h4>
-        <p>Expert en location</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ================= Section créateur================= -->
-<section class="creator" style="padding: 60px 5%; background: var(--beige); text-align: center;">
-  <h2 style="color: var(--dark-green); margin-bottom: 40px;">Développé par HOUETO Fabrice</h2>
-  
-  <div class="creator-card" style="display: inline-block; background: var(--white); border-radius: 20px; padding: 30px 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); transition: var(--transition);">
-    
-    <div class="creator-photo-wrapper" style="position: relative; width: 180px; height: 180px; margin: 0 auto 20px;">
-      <img src="images/ma_photo.webp" alt="HOUETO Fabrice" loading="lazy" 
-           style="width: 100%; height: 100%; border-radius: 50%; border: 5px solid var(--light-green); object-fit: cover; display: block;">
-      <!-- Halo / overlay lumineux -->
-      <div style="position: absolute; top: -10px; left: -10px; width: 200px; height: 200px; border-radius: 50%; background: var(--light-green); opacity: 0.2; z-index: -1;"></div>
-    </div>
-    
-    <p style="max-width: 320px; margin: 0 auto; color: var(--dark-text); font-size: 1rem; line-height: 1.5;">
-      Passionné par le développement web, j'ai conçu <strong>GreenNest Realty</strong> pour démontrer mes compétences en gestion de données locales et en design UI/UX moderne.
-    </p>
-    
-  </div>
-</section>
+      <div class="team-card reveal-up" style="--delay:0.3s">
+        <div class="team-photo">
+          <img src="images/ma_photo.webp" alt="HOUETO Fabrice – Fondateur GreenNest" loading="lazy">
+          <div class="team-social">
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+          </div>
+        </div>
+        <div class="team-info">
+          <h4>HOUETO Fabrice</h4>
+          <p>Fondateur & Développeur</p>
+          <span class="team-expertise">Tech · Innovation</span>
+        </div>
+      </div>
 
-<!-- ================= Call-To-Action ================= -->
-<section class="cta">
-  <div class="container">
-    <h2>Prêt à trouver votre maison idéale ?</h2>
-    <p>Contactez-nous dès aujourd'hui pour une estimation gratuite ou une visite.</p>
-    <a href="contact.html" class="btn">Contactez-nous</a>
-  </div>
-</section>
-
-<!-- ================= FAQ ================= -->
-<section class="faq" id="faq">
-  <div class="container">
-    <h2>Questions fréquentes</h2>
-    <div class="faq-items">
-      <div class="faq-item">
-        <h4>Comment puis-je acheter une propriété avec GreenNest ?</h4>
-        <p>Vous pouvez nous contacter directement via le formulaire ou prendre rendez-vous avec un de nos agents.</p>
-      </div>
-      <div class="faq-item">
-        <h4>Proposez-vous des propriétés écologiques ?</h4>
-        <p>Oui, toutes nos propriétés sélectionnées respectent des critères de durabilité et d’efficacité énergétique.</p>
-      </div>
-      <div class="faq-item">
-        <h4>Est-ce que vous accompagnez dans le financement ?</h4>
-        <p>Oui, nous vous conseillons sur les meilleures options de financement adaptées à votre projet.</p>
-      </div>
     </div>
   </div>
 </section>
 
-<!-- ================= Footer ================= -->
-<footer>
-  <div class="container footer-container">
-    <div class="footer-section">
-      <h4>GreenNest Realty</h4>
-      <p>Agence immobilière spécialisée dans les biens durables et modernes.</p>
-    </div>
-    <div class="footer-section">
-      <h4>Contact</h4>
-      <p>Email: contact@greennest.com</p>
-      <p>Téléphone: +33 1 23 45 67 89</p>
-      <p>Adresse: 12 Rue Verte, Paris, France</p>
-    </div>
-    <div class="footer-section">
-      <h4>Suivez-nous</h4>
-      <p>
-        <a >Facebook</a>
-        <a >Instagram</a>
-        <a >LinkedIn</a>
-      </p>
+<!-- ===================== FAQ ===================== -->
+<section class="faq-section" id="faq">
+  <div class="section-wrap">
+    <div class="faq-layout">
+
+      <div class="faq-left reveal-left">
+        <p class="section-eyebrow">Questions fréquentes</p>
+        <h2 class="section-title">Vous avez des<br><em>questions ?</em></h2>
+        <p style="color:var(--text-muted); line-height:1.7; margin-bottom:2rem;">Voici les réponses aux questions les plus fréquentes de nos clients. Vous ne trouvez pas votre réponse ?</p>
+        <a href="contact.html" class="btn-primary-green">Contactez-nous</a>
+      </div>
+
+      <div class="faq-right reveal-right">
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+          <div class="faq-q">
+            Comment acheter une propriété avec GreenNest ?
+            <i class="fas fa-plus faq-icon"></i>
+          </div>
+          <div class="faq-a">Contactez-nous via le formulaire ou prenez rendez-vous directement avec l'un de nos agents experts basés à Cotonou. Nous vous guidons à chaque étape.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+          <div class="faq-q">
+            Proposez-vous des propriétés écologiques ?
+            <i class="fas fa-plus faq-icon"></i>
+          </div>
+          <div class="faq-a">Oui, tous nos biens répondent à des critères de durabilité et d'efficacité énergétique. Nous collaborons avec des constructeurs engagés dans l'éco-construction au Bénin.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+          <div class="faq-q">
+            Accompagnez-vous dans le financement ?
+            <i class="fas fa-plus faq-icon"></i>
+          </div>
+          <div class="faq-a">Oui, nos conseillers vous orientent vers les meilleures solutions de financement adaptées à votre profil et à votre projet immobilier.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+          <div class="faq-q">
+            Où sont situées vos propriétés ?
+            <i class="fas fa-plus faq-icon"></i>
+          </div>
+          <div class="faq-a">Principalement à Cotonou et dans les grandes villes du Bénin, mais aussi en Afrique de l'Ouest : Abidjan, Lomé, Dakar, Accra et Lagos.</div>
+        </div>
+      </div>
+
     </div>
   </div>
+</section>
+
+<!-- ===================== CTA FINAL ===================== -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-bg-img">
+      <img src="images/appartement20.webp" alt="" loading="lazy">
+      <div class="cta-bg-overlay"></div>
+    </div>
+    <div class="cta-content reveal-up">
+      <p class="section-eyebrow" style="color:rgba(255,255,255,0.7)">Ne tardez plus</p>
+      <h2>Prêt à trouver votre<br><em>propriété idéale ?</em></h2>
+      <p>Contactez nos experts dès aujourd'hui pour une estimation gratuite ou une visite à Cotonou.</p>
+      <div class="cta-btns">
+        <a href="contact.html" class="btn-cta-white">Contactez-nous</a>
+        <a href="property.html" class="btn-cta-ghost">Voir les biens</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-inner">
+
+      <!-- Colonne 1 : Marque -->
+      <div class="footer-col footer-brand">
+        <div class="footer-logo">
+          <span>🌿</span> GreenNest <strong>Realty</strong>
+        </div>
+        <p>Agence immobilière haut de gamme spécialisée dans les biens durables et modernes à Cotonou, Bénin.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+
+      <!-- Colonne 2 : Liens -->
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="property.html">Propriétés</a></li>
+          <li><a href="property.html?status=acheter">Acheter</a></li>
+          <li><a href="property.html?status=louer">Louer</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 3 : Types de biens -->
+      <div class="footer-col">
+        <h5>Types de biens</h5>
+        <ul>
+          <li><a href="property.html?type=villa">Villas</a></li>
+          <li><a href="property.html?type=appartement">Appartements</a></li>
+          <li><a href="property.html?type=maison">Maisons</a></li>
+          <li><a href="property.html?type=bureau">Bureaux</a></li>
+          <li><a href="property.html?type=terrain">Terrains</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 4 : Contact -->
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <div class="footer-contact-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Rue des Palmiers, Cotonou, Bénin</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-phone"></i>
+          <span>+229 97 00 00 00</span>
+        </div>
+        <div class="footer-contact-item">
+          <i class="fas fa-envelope"></i>
+          <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="284b47465c494b5c684f5a4d4d46464d5b5c055a4d49445c51064a42">[email&#160;protected]</a></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Footer bas -->
   <div class="footer-bottom">
-    <p>&copy; 2026 GreenNest Realty. Tous droits réservés.</p>
+    <p>© 2026 GreenNest Realty – Tous droits réservés · Cotonou, Bénin</p>
+    <p>Développé par <strong>HOUETO Fabrice</strong></p>
   </div>
 </footer>
 
-    
+<!-- ===== TOAST NOTIFICATION ===== -->
+<div id="toast"></div>
 
+<!-- ===== SCRIPTS ===== -->
+<!-- Firebase SDK (nécessaire pour script-auth.js) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+<!-- Config Firebase + gestion état connexion (navbar) -->
 <script type="module" src="firebase-config.js"></script>
 <script type="module" src="script-auth.js"></script>
+
+<!-- Logique UI générale -->
+<script src="script-new.js"></script>
+
+<!-- Logique propriétés / favoris -->
 <script src="script.js"></script>
+
 </body>
 </html>
-

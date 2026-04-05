@@ -1,373 +1,480 @@
-document.addEventListener("DOMContentLoaded", () => {
+/**
+ * script.js — GreenNest Realty | Logique Propriétés & Favoris
+ * Auteur : HOUETO Fabrice | 2026
+ *
+ * Modules :
+ * 1. Génération du catalogue local (localStorage)
+ * 2. Rendu des cartes propriétés
+ * 3. Filtrage en temps réel
+ * 4. Gestion des favoris
+ * 5. Page de détails
+ * 6. Vue grille / liste
+ * 7. Compteurs animés (home)
+ */
 
-  // =========================
-  // TON CODE EXISTANT
-  // =========================
+document.addEventListener('DOMContentLoaded', () => {
 
-  // --- Page Property & Génération ---
-  const cities = ["Cotonou","Abidjan","Dakar","Lomé","Accra","Lagos","Ouagadougou","Casablanca","Rabat","Douala"];
+  /* =====================================================
+     1. DONNÉES DES VILLES (focus Afrique de l'Ouest)
+  ===================================================== */
+  const cities = [
+    "Cotonou", "Abidjan", "Dakar", "Lomé", "Accra",
+    "Lagos", "Ouagadougou", "Casablanca", "Rabat", "Douala"
+  ];
+
+  /* Types de propriétés avec noms authentiques */
   const propertyTypes = {
-    villa:["Villa Moderne","Villa Luxe","Villa avec Piscine","Villa Jardin"],
-    maison:["Maison Familiale","Maison Moderne","Maison de Ville"],
-    appartement:["Appartement Moderne","Appartement Vue Ville","Appartement Terrasse"],
-    studio:["Studio Étudiant","Studio Urbain","Studio Moderne"],
-    duplex:["Duplex Élégant","Duplex Terrasse","Duplex Moderne"],
-    loft:["Loft Industriel","Loft Design","Loft Artistique"],
-    terrain:["Terrain Constructible","Terrain Résidentiel","Terrain Commercial"],
-    bureau:["Bureau Professionnel","Espace de Coworking","Bureau Moderne"],
-    boutique:["Boutique Commerciale","Local Commercial","Magasin Centre Ville"]
-  };
-  let myProperties = JSON.parse(localStorage.getItem("properties"));
-
-if(!myProperties){
-
-  const cities = ["Cotonou","Abidjan","Dakar","Lomé","Accra","Lagos","Ouagadougou","Casablanca","Rabat","Douala"];
-
-  const propertyTypes = {
-    villa:["Villa Moderne","Villa Luxe","Villa avec Piscine","Villa Jardin"],
-    maison:["Maison Familiale","Maison Moderne","Maison de Ville"],
-    appartement:["Appartement Moderne","Appartement Vue Ville","Appartement Terrasse"],
-    studio:["Studio Étudiant","Studio Urbain","Studio Moderne"],
-    duplex:["Duplex Élégant","Duplex Terrasse","Duplex Moderne"],
-    loft:["Loft Industriel","Loft Design","Loft Artistique"],
-    terrain:["Terrain Constructible","Terrain Résidentiel","Terrain Commercial"],
-    bureau:["Bureau Professionnel","Espace de Coworking","Bureau Moderne"],
-    boutique:["Boutique Commerciale","Local Commercial","Magasin Centre Ville"]
+    villa: ["Villa Moderne", "Villa Luxe", "Villa avec Piscine", "Villa Jardin", "Villa Panoramique"],
+    maison: ["Maison Familiale", "Maison Moderne", "Maison de Ville", "Maison de Maître"],
+    appartement: ["Appartement Moderne", "Appartement Vue Ville", "Appartement Terrasse", "Appartement Standing"],
+    studio: ["Studio Étudiant", "Studio Urbain", "Studio Moderne", "Studio Meublé"],
+    duplex: ["Duplex Élégant", "Duplex Terrasse", "Duplex Moderne", "Duplex Design"],
+    loft: ["Loft Industriel", "Loft Design", "Loft Artistique", "Loft Contemporain"],
+    terrain: ["Terrain Constructible", "Terrain Résidentiel", "Terrain Commercial", "Terrain Agricole"],
+    bureau: ["Bureau Professionnel", "Espace de Coworking", "Bureau Moderne", "Open Space"],
+    boutique: ["Boutique Commerciale", "Local Commercial", "Magasin Centre Ville", "Showroom"]
   };
 
-  myProperties = [];
-  let id = 1;
+  /* =====================================================
+     2. INITIALISATION OU RÉCUPÉRATION DU CATALOGUE
+  ===================================================== */
+  let myProperties = JSON.parse(localStorage.getItem("gnr_properties"));
 
-  Object.keys(propertyTypes).forEach(type => {
+  if (!myProperties || myProperties.length === 0) {
+    myProperties = generateCatalog();
+    localStorage.setItem("gnr_properties", JSON.stringify(myProperties));
+    // Nettoyer l'ancienne clé
+    localStorage.removeItem("properties");
+  }
 
-    for(let i=0;i<11;i++){
+  /**
+   * Génère un catalogue de propriétés aléatoires
+   * @returns {Array} tableau de propriétés
+   */
+  function generateCatalog() {
+    const catalog = [];
+    let id = 1;
 
-      const city = cities[Math.floor(Math.random()*cities.length)];
-      const titles = propertyTypes[type];
-      const title = titles[Math.floor(Math.random()*titles.length)];
+    Object.keys(propertyTypes).forEach(type => {
+      for (let i = 0; i < 11; i++) {
+        const city = cities[Math.floor(Math.random() * cities.length)];
+        const titles = propertyTypes[type];
+        const title = titles[Math.floor(Math.random() * titles.length)];
+        const status = Math.random() > 0.5 ? "acheter" : "louer";
 
-      const status = Math.random() > 0.5 ? "acheter" : "louer";
+        // Prix réalistes selon type et statut
+        let price;
+        if (status === "louer") {
+          price = Math.floor(Math.random() * 900 + 100);
+        } else {
+          if (type === "terrain")        price = Math.floor(Math.random() * 70000 + 10000);
+          else if (type === "villa")     price = Math.floor(Math.random() * 800000 + 200000);
+          else if (type === "bureau")    price = Math.floor(Math.random() * 200000 + 50000);
+          else                           price = Math.floor(Math.random() * 300000 + 50000);
+        }
 
-      let price;
+        // Assignation d'image cyclique parmi 29 images disponibles
+        const imageIndex = ((id - 1) % 29) + 1;
 
-      if(status==="louer"){
-        price = Math.floor(Math.random()*900+100);
+        catalog.push({
+          id: id++,
+          title,
+          city,
+          price,
+          type,
+          status,
+          image: `images/appartement${imageIndex}.webp`,
+          rooms: type === "terrain" ? 0 : Math.floor(Math.random() * 6) + 1,
+          surface: Math.floor(Math.random() * 280) + 30
+        });
+      }
+    });
+
+    return catalog;
+  }
+
+  /* =====================================================
+     3. GESTION DES FAVORIS
+  ===================================================== */
+  let favorites = JSON.parse(localStorage.getItem('gnr_favs')) || [];
+
+  /**
+   * Bascule un favori et sauvegarde dans localStorage
+   * @param {number} id - ID de la propriété
+   */
+  window.toggleFavorite = function(id) {
+    const numId = parseInt(id);
+    if (favorites.includes(numId)) {
+      favorites = favorites.filter(favId => favId !== numId);
+      window.showToast?.("Retiré des favoris", "info");
+    } else {
+      favorites.push(numId);
+      window.showToast?.("Ajouté aux favoris ❤️", "success");
+    }
+    localStorage.setItem('gnr_favs', JSON.stringify(favorites));
+
+    // Mise à jour du bouton cœur sans re-render
+    const btn = document.querySelector(`.favorite-heart[data-id="${numId}"]`);
+    if (btn) {
+      const icon = btn.querySelector('i');
+      if (favorites.includes(numId)) {
+        btn.classList.add('active');
+        icon.className = 'fas fa-heart';
+        btn.animate([
+          { transform: 'scale(1)' },
+          { transform: 'scale(1.4)' },
+          { transform: 'scale(1)' }
+        ], { duration: 350, easing: 'ease-out' });
       } else {
+        btn.classList.remove('active');
+        icon.className = 'far fa-heart';
+      }
+    }
+  };
 
-        if(type==="terrain"){
-          price = Math.floor(Math.random()*70000+10000);
-        }
-        else if(type==="villa"){
-          price = Math.floor(Math.random()*800000+200000);
-        }
-        else{
-          price = Math.floor(Math.random()*300000+50000);
-        }
+  /* =====================================================
+     4. RENDU DES CARTES
+  ===================================================== */
+  const grid = document.getElementById('propertiesGrid');
+  const noResults = document.getElementById('noResults');
+  const resultsCount = document.getElementById('resultsCount');
 
+  /**
+   * Affiche les propriétés dans la grille
+   * @param {Array} data - tableau filtré de propriétés
+   */
+  function renderProperties(data) {
+    if (!grid) return;
+
+    // Transition de disparition
+    grid.style.opacity = '0';
+
+    setTimeout(() => {
+      grid.innerHTML = '';
+
+      if (data.length === 0) {
+        noResults && (noResults.style.display = 'block');
+        grid.style.opacity = '1';
+        if (resultsCount) resultsCount.innerHTML = '<strong>0</strong> propriété trouvée';
+        return;
       }
 
-      myProperties.push({
-        id:id++,
-        title:title,
-        city:city,
-        price:price,
-        type:type,
-        status:status,
-        image:`images/appartement${(id%29)+1}.webp`,
-        rooms: Math.floor(Math.random()*5)+1,
-        surface: Math.floor(Math.random()*220)+30
-      });
+      noResults && (noResults.style.display = 'none');
 
-    }
+      // Mise à jour du compteur
+      if (resultsCount) {
+        resultsCount.innerHTML = `<strong>${data.length}</strong> propriété${data.length > 1 ? 's' : ''} trouvée${data.length > 1 ? 's' : ''}`;
+      }
 
-  });
-
-  localStorage.setItem("properties", JSON.stringify(myProperties));
-
-}
-
-  // --- Favoris ---
-  let favorites = JSON.parse(localStorage.getItem('favs')) || [];
-  function toggleFavorite(id){
-    if(favorites.includes(id)){
-      favorites = favorites.filter(favId=>favId!==id);
-    }else{ favorites.push(id);}
-    localStorage.setItem('favs',JSON.stringify(favorites));
-    filterNow();
-  }
-
-  window.toggleFavorite = toggleFavorite;
-
-  // --- Affichage Propriétés ---
-  const grid = document.getElementById('propertiesGrid');
-  function renderProperties(data){
-    if(!grid) return;
-    grid.style.opacity = 0;
-    setTimeout(()=>{
-      grid.innerHTML = '';
-      data.forEach(item=>{
+      // Génération des cartes avec délai d'animation
+      data.forEach((item, index) => {
         const isFav = favorites.includes(item.id);
-        grid.innerHTML += `
-          <div class="property-card">
-            <div class="card-image-container">
-              <img src="${item.image}" alt="${item.title}" loading="lazy">
-              <button class="favorite-heart ${isFav?'active':''}" onclick="toggleFavorite(${item.id})">
-                <i class="${isFav?'fas':'far'} fa-heart"></i>
-              </button>
+        const priceLabel = item.status === 'louer'
+          ? `${item.price.toLocaleString('fr-FR')} €/mois`
+          : `${item.price.toLocaleString('fr-FR')} €`;
+
+        const card = document.createElement('div');
+        card.className = 'property-card';
+        card.style.animationDelay = `${Math.min(index * 0.06, 0.5)}s`;
+
+        card.innerHTML = `
+          <div class="card-image-container">
+            <img src="${item.image}" alt="${item.title} – ${item.city}" loading="lazy">
+            <span class="card-type-badge">${item.type}</span>
+            <button
+              class="favorite-heart ${isFav ? 'active' : ''}"
+              data-id="${item.id}"
+              onclick="toggleFavorite(${item.id})"
+              title="${isFav ? 'Retirer des favoris' : 'Ajouter aux favoris'}"
+              aria-label="Favoris"
+            >
+              <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
+            </button>
+          </div>
+          <div class="card-info">
+            <p class="card-price">${priceLabel}</p>
+            <h3>${item.title}</h3>
+            <p class="card-location">
+              <i class="fas fa-map-marker-alt"></i>
+              ${item.city}
+            </p>
+            ${item.type !== 'terrain' ? `
+            <div class="card-details">
+              <div class="card-detail">
+                <i class="fas fa-bed"></i>
+                <span>${item.rooms} pièce${item.rooms > 1 ? 's' : ''}</span>
+              </div>
+              <div class="card-detail">
+                <i class="fas fa-ruler-combined"></i>
+                <span>${item.surface} m²</span>
+              </div>
+              <div class="card-detail">
+                <i class="fas fa-tag"></i>
+                <span>${item.status === 'louer' ? 'Location' : 'Vente'}</span>
+              </div>
             </div>
-            <div class="card-info">
-              <p class="card-price">${item.price.toLocaleString()} €${item.status==='louer'?'/mois':''}</p>
-              <h3>${item.title}</h3>
-              <p><i class="fas fa-map-marker-alt"></i> ${item.city}</p>
-              <button onclick="window.location.href='property-details.html?id=${item.id}'" class="btn-view" style="width:100%; margin-top:15px; border:none; padding:10px; border-radius:5px; cursor:pointer; background:var(--beige); color:var(--dark-green); font-weight:bold;">
-                Voir Détails
-              </button>
-            </div>
+            ` : ''}
+            <button
+              class="btn-view"
+              onclick="window.location.href='property-details.html?id=${item.id}'"
+            >
+              Voir les détails →
+            </button>
           </div>
         `;
+
+        grid.appendChild(card);
       });
-      grid.style.opacity = 1;
-    },150);
+
+      // Réapparition
+      grid.style.opacity = '1';
+
+    }, 200);
   }
 
-  // --- URL Filters ---
-  function applyUrlFilters(){
-    const hash = window.location.hash.replace('#','');
-    const params = new URLSearchParams(window.location.search);
+  /* =====================================================
+     5. FILTRAGE EN TEMPS RÉEL
+  ===================================================== */
 
-    if(hash==="buy"){ document.getElementById("statusFilter").value="acheter"; }
-    if(hash==="louer"){ document.getElementById("statusFilter").value="louer"; }
-
-    const status = params.get("status");
-    const type = params.get("type");
-    const city = params.get("city");
-    const minPrice = params.get("minPrice");
-    const maxPrice = params.get("maxPrice");
-
-    if(status && document.getElementById("statusFilter")) document.getElementById("statusFilter").value=status;
-    if(type && document.getElementById("typeFilter")) document.getElementById("typeFilter").value=type;
-    if(city && document.getElementById("searchInput")) document.getElementById("searchInput").value=city;
-    if(minPrice && document.getElementById("minPrice")) document.getElementById("minPrice").value=minPrice;
-    if(maxPrice && document.getElementById("maxPrice")) document.getElementById("maxPrice").value=maxPrice;
-  }
-
-  function filterNow(){
-    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase() || '';
+  /**
+   * Lit tous les filtres et retourne les propriétés filtrées
+   */
+  function filterNow() {
+    const searchTerm = document.getElementById('searchInput')?.value.toLowerCase().trim() || '';
     const typeTerm = document.getElementById('typeFilter')?.value || 'all';
     const statusTerm = document.getElementById('statusFilter')?.value || 'all';
-    const minPrice = document.getElementById('minPrice')?.value || '';
-    const maxPrice = document.getElementById('maxPrice')?.value || '';
+    const minPrice = parseFloat(document.getElementById('minPrice')?.value) || 0;
+    const maxPrice = parseFloat(document.getElementById('maxPrice')?.value) || Infinity;
 
-    const filtered = myProperties.filter(p=>{
-      const matchesSearch = p.title.toLowerCase().includes(searchTerm) || p.city.toLowerCase().includes(searchTerm);
-      const matchesType = typeTerm==='all'||p.type===typeTerm;
-      const matchesStatus = statusTerm==='all'||p.status===statusTerm;
-      const matchesMin = !minPrice || p.price>=minPrice;
-      const matchesMax = !maxPrice || p.price<=maxPrice;
-      return matchesSearch && matchesType && matchesStatus && matchesMin && matchesMax;
+    // Afficher/masquer le bouton clear
+    const clearBtn = document.getElementById('clearSearch');
+    if (clearBtn) {
+      clearBtn.style.display = searchTerm ? 'block' : 'none';
+    }
+
+    const filtered = myProperties.filter(p => {
+      const matchSearch = !searchTerm ||
+        p.title.toLowerCase().includes(searchTerm) ||
+        p.city.toLowerCase().includes(searchTerm) ||
+        p.type.toLowerCase().includes(searchTerm);
+      const matchType = typeTerm === 'all' || p.type === typeTerm;
+      const matchStatus = statusTerm === 'all' || p.status === statusTerm;
+      const matchMin = p.price >= minPrice;
+      const matchMax = p.price <= maxPrice;
+
+      return matchSearch && matchType && matchStatus && matchMin && matchMax;
     });
 
     renderProperties(filtered);
   }
 
-  document.getElementById('searchInput')?.addEventListener('input',filterNow);
-  document.getElementById('typeFilter')?.addEventListener('change',filterNow);
-  document.getElementById('statusFilter')?.addEventListener('change',filterNow);
-  document.getElementById('minPrice')?.addEventListener('input',filterNow);
-  document.getElementById('maxPrice')?.addEventListener('input',filterNow);
+  // Écoute de tous les filtres
+  ['searchInput', 'typeFilter', 'statusFilter', 'minPrice', 'maxPrice'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', filterNow);
+    document.getElementById(id)?.addEventListener('change', filterNow);
+  });
 
-  applyUrlFilters();
-  filterNow();
+  // Bouton clear recherche
+  document.getElementById('clearSearch')?.addEventListener('click', () => {
+    const input = document.getElementById('searchInput');
+    if (input) { input.value = ''; filterNow(); input.focus(); }
+  });
 
-  // --- Page détails ---
-  function initDetailsPage(){
+  // Bouton reset tous les filtres
+  document.getElementById('resetFilters')?.addEventListener('click', () => {
+    ['searchInput', 'minPrice', 'maxPrice'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    ['typeFilter', 'statusFilter'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = 'all';
+    });
+    filterNow();
+  });
 
-  const wrapper = document.getElementById("detailsWrapper");
+  /* =====================================================
+     6. FILTRES URL (depuis les liens de navigation)
+  ===================================================== */
+  function applyUrlFilters() {
+    const params = new URLSearchParams(window.location.search);
+    const status = params.get('status');
+    const type = params.get('type');
+    const city = params.get('city');
 
-  if(!wrapper) return;
-
-  const params = new URLSearchParams(window.location.search);
-  const propId = parseInt(params.get("id"));
-
-  const property = myProperties.find(p => p.id === propId);
-
-  if(!property){
-    wrapper.innerHTML="<h2>Propriété introuvable</h2>";
-    return;
+    if (status && document.getElementById('statusFilter')) {
+      document.getElementById('statusFilter').value = status;
+    }
+    if (type && document.getElementById('typeFilter')) {
+      document.getElementById('typeFilter').value = type;
+    }
+    if (city && document.getElementById('searchInput')) {
+      document.getElementById('searchInput').value = city;
+    }
   }
 
-  const isFav = favorites.includes(property.id);
+  applyUrlFilters();
 
-  wrapper.innerHTML = `
-<div class="details-container">
+  // Appel initial (seulement sur la page propriétés)
+  if (grid) { filterNow(); }
 
-  <!-- IMAGE PRINCIPALE AVEC BADGE -->
-  <div class="main-image-container">
-    <img src="${property.image}" alt="${property.title}" class="main-image" id="mainImage">
-    <span class="badge-status">${property.status === "louer" ? "À Louer" : "À Vendre"}</span>
-  </div>
+  /* =====================================================
+     7. VUE GRILLE / LISTE
+  ===================================================== */
+  const viewGrid = document.getElementById('viewGrid');
+  const viewList = document.getElementById('viewList');
 
-  <!-- INFO EN DESSOUS -->
-  <div class="info-card">
-    <h1>${property.title}</h1>
-    <p class="details-price">
-      ${property.price.toLocaleString()} €
-      ${property.status === "louer" ? "/mois" : ""}
-    </p>
-    <p><i class="fas fa-map-marker-alt"></i> ${property.city}</p>
+  viewGrid?.addEventListener('click', () => {
+    grid?.classList.remove('list-view');
+    viewGrid.classList.add('active');
+    viewList?.classList.remove('active');
+  });
 
-    <div class="features-list">
-      <div class="feature-box"><i class="fas fa-bed"></i><span>${property.rooms} Pièces</span></div>
-      <div class="feature-box"><i class="fas fa-ruler-combined"></i><span>${property.surface} m²</span></div>
-      <div class="feature-box"><i class="fas fa-home"></i><span>${property.type}</span></div>
-      <div class="feature-box"><i class="fas fa-dollar-sign"></i><span>${property.status}</span></div>
-    </div>
+  viewList?.addEventListener('click', () => {
+    grid?.classList.add('list-view');
+    viewList.classList.add('active');
+    viewGrid?.classList.remove('active');
+  });
 
-    <div class="btn-group">
-      <button id="btnFav" class="btn-fav-detail ${isFav ? "active" : ""}">
-        <i class="fas fa-heart"></i> Favoris
-      </button>
-      <button class="btn-action-detail btn-visit-main">
-        Contacter l'agent
-      </button>
-    </div>
-  </div>
+  /* =====================================================
+     8. PAGE DÉTAILS PROPRIÉTÉ
+  ===================================================== */
+  function initDetailsPage() {
+    const wrapper = document.getElementById('detailsWrapper');
+    if (!wrapper) return;
 
-</div>
-`;
-// Favoris pop
-const btnFav = document.getElementById("btnFav");
-btnFav?.addEventListener("click", () => {
-    if(favorites.includes(property.id)){
-        favorites = favorites.filter(id => id !== property.id);
-        btnFav.classList.remove("active");
-    } else {
-        favorites.push(property.id);
-        btnFav.classList.add("active");
-        btnFav.animate([
-            { transform: 'scale(1)' },
-            { transform: 'scale(1.3)' },
-            { transform: 'scale(1.1)' }
-        ], { duration: 300 });
+    const params = new URLSearchParams(window.location.search);
+    const propId = parseInt(params.get('id'), 10);
+
+    // Chercher dans le nouveau catalogue ou l'ancien
+    const catalog = JSON.parse(localStorage.getItem('gnr_properties'))
+      || JSON.parse(localStorage.getItem('properties'))
+      || [];
+
+    const property = catalog.find(p => p.id === propId);
+
+    if (!property) {
+      wrapper.innerHTML = `
+        <div style="text-align:center; padding:4rem 2rem;">
+          <div style="font-size:3rem; margin-bottom:1rem;">🏠</div>
+          <h2>Propriété introuvable</h2>
+          <p style="color:var(--text-muted); margin:1rem 0 2rem;">Cette propriété n'est plus disponible ou l'ID est incorrect.</p>
+          <a href="property.html" class="btn-primary-green">Voir le catalogue</a>
+        </div>
+      `;
+      return;
     }
-    localStorage.setItem("favs", JSON.stringify(favorites));
-});
 
-}
+    const isFav = favorites.includes(property.id);
+    const priceLabel = property.status === 'louer'
+      ? `${property.price.toLocaleString('fr-FR')} €/mois`
+      : `${property.price.toLocaleString('fr-FR')} €`;
 
-  if(window.location.pathname.includes('property-details.html')){
+    wrapper.innerHTML = `
+      <div class="details-container">
+
+        <!-- IMAGE PRINCIPALE -->
+        <div class="main-image-container">
+          <img src="${property.image}" alt="${property.title}" id="mainImage">
+          <span class="badge-status ${property.status === 'louer' ? 'badge-rent' : ''}">
+            <i class="fas fa-${property.status === 'louer' ? 'sign' : 'key'}"></i>
+            ${property.status === 'louer' ? 'À Louer' : 'À Vendre'}
+          </span>
+        </div>
+
+        <!-- INFO CARD -->
+        <div class="info-card">
+
+          <div class="info-header">
+            <div>
+              <p class="details-city">
+                <i class="fas fa-map-marker-alt"></i> ${property.city}
+              </p>
+              <h1 class="details-title">${property.title}</h1>
+            </div>
+            <p class="details-price">${priceLabel}</p>
+          </div>
+
+          ${property.type !== 'terrain' ? `
+          <div class="features-list">
+            <div class="feature-box">
+              <i class="fas fa-bed"></i>
+              <span>${property.rooms} Pièce${property.rooms > 1 ? 's' : ''}</span>
+            </div>
+            <div class="feature-box">
+              <i class="fas fa-ruler-combined"></i>
+              <span>${property.surface} m²</span>
+            </div>
+            <div class="feature-box">
+              <i class="fas fa-home"></i>
+              <span>${property.type.charAt(0).toUpperCase() + property.type.slice(1)}</span>
+            </div>
+            <div class="feature-box">
+              <i class="fas fa-leaf"></i>
+              <span>Écologique</span>
+            </div>
+          </div>
+          ` : ''}
+
+          <div class="details-description">
+            <h3>Description</h3>
+            <p>
+              ${property.title} idéalement situé${property.type !== 'terrain' ? 'e' : ''} à ${property.city}.
+              Ce bien de ${property.surface} m²${property.type !== 'terrain' ? ` avec ${property.rooms} pièce${property.rooms > 1 ? 's' : ''}` : ''}
+              vous offre tout le confort moderne dans un cadre respectueux de l'environnement.
+              Propriété sélectionnée et certifiée par GreenNest Realty.
+            </p>
+          </div>
+
+          <div class="btn-group">
+            <button
+              id="btnFav"
+              class="btn-fav-detail ${isFav ? 'active' : ''}"
+              data-id="${property.id}"
+            >
+              <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
+              ${isFav ? 'Dans vos favoris' : 'Ajouter aux favoris'}
+            </button>
+            <a href="contact.html" class="btn-action-detail">
+              <i class="fas fa-phone"></i>
+              Contacter un agent
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+    // Gestion du bouton favoris sur la page détails
+    const btnFav = document.getElementById('btnFav');
+    btnFav?.addEventListener('click', () => {
+      const id = parseInt(btnFav.getAttribute('data-id'));
+      const icon = btnFav.querySelector('i');
+
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(fid => fid !== id);
+        btnFav.classList.remove('active');
+        icon.className = 'far fa-heart';
+        btnFav.innerHTML = `<i class="far fa-heart"></i> Ajouter aux favoris`;
+      } else {
+        favorites.push(id);
+        btnFav.classList.add('active');
+        btnFav.innerHTML = `<i class="fas fa-heart"></i> Dans vos favoris`;
+        btnFav.animate([
+          { transform: 'scale(1)' },
+          { transform: 'scale(1.2)' },
+          { transform: 'scale(1)' }
+        ], { duration: 350, easing: 'ease-out' });
+      }
+
+      localStorage.setItem('gnr_favs', JSON.stringify(favorites));
+    });
+  }
+
+  // Initialiser la page détails si on est dessus
+  if (window.location.pathname.includes('property-details')) {
     initDetailsPage();
   }
 
-  // --- Scroll header ---
-  const header = document.querySelector("header");
-  if(header){
-    window.addEventListener("scroll",()=>{
-      if(window.scrollY>50) header.classList.add("scrolled");
-      else header.classList.remove("scrolled");
-    });
-  }
-
-  // --- Counters ---
-  const counters = document.querySelectorAll(".counter");
-  if(counters.length){
-    const startCounter = (counter)=>{
-      const target = +counter.getAttribute("data-target");
-      let count = 0;
-      const increment = target/200;
-      const update = ()=>{
-        count+=increment;
-        if(count<target){ counter.innerText=Math.ceil(count); requestAnimationFrame(update);}
-        else{ counter.innerText=target+"+"; }
-      };
-      update();
-    };
-    const observer = new IntersectionObserver(entries=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          startCounter(entry.target);
-          observer.unobserve(entry.target);
-        }
-      });
-    });
-    counters.forEach(c=>observer.observe(c));
-  }
-
-  // --- Menu Hamburger ---
-  const hamburger = document.getElementById("hamburger");
-  const navMenu = document.getElementById("nav-menu");
-  const overlay = document.getElementById("overlay");
-  if(hamburger && navMenu){
-    hamburger.addEventListener("click",(e)=>{
-      navMenu.classList.toggle("active");
-      hamburger.innerHTML = navMenu.classList.contains("active") ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-      if(overlay) overlay.classList.toggle("active");
-      e.stopPropagation();
-    });
-    document.addEventListener("click",(e)=>{
-      if(!navMenu.contains(e.target) && !hamburger.contains(e.target)){
-        navMenu.classList.remove("active");
-        hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-        if(overlay) overlay.classList.remove("active");
-      }
-    });
-    overlay?.addEventListener("click",()=>{
-      navMenu.classList.remove("active");
-      overlay.classList.remove("active");
-      hamburger.innerHTML = '<i class="fas fa-bars"></i>';
-    });
-  }
-
-  // --- Scroll fluide ---
-  document.querySelectorAll("nav a").forEach(link=>{
-    link.addEventListener("click",(e)=>{
-      const href = link.getAttribute("href");
-      if(href.startsWith("#")){
-        e.preventDefault();
-        const target = document.querySelector(href);
-        if(target) target.scrollIntoView({behavior:"smooth"});
-        navMenu?.classList.remove("active");
-      }
-    });
-  });
-
-  // --- Page Contact ---
-  const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-      contactForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          alert("Merci ! Votre message a bien été envoyé. Notre équipe vous recontactera sous 24h.");
-          contactForm.reset();
-      });
-  }
-
-  // --- Animation FAQ ---
-  const faqItems = document.querySelectorAll('.faq-item');
-  faqItems.forEach(item => {
-    item.addEventListener('click', () => {
-      item.classList.toggle('active');
-    });
-  });
-
-  const favBtn = document.querySelector(".btn-fav-detail");
-  const propertyId = favBtn?.dataset.id;
-
-  let favoris = JSON.parse(localStorage.getItem("favoris")) || [];
-  if (propertyId && favoris.includes(propertyId)) favBtn.classList.add("active");
-
-  favBtn?.addEventListener("click", () => {
-      if (propertyId) {
-        if (favoris.includes(propertyId)) {
-            favoris = favoris.filter(id => id !== propertyId);
-            favBtn.classList.remove("active");
-        } else {
-            favoris.push(propertyId);
-            favBtn.classList.add("active");
-        }
-        localStorage.setItem("favoris", JSON.stringify(favoris));
-      }
-  });
-
-  
-
-}); // Fin DOMContentLoaded
+});

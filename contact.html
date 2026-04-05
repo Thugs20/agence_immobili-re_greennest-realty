@@ -1,92 +1,375 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contactez-nous | GreenNest Realty</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | GreenNest Realty – Agence Immobilière Cotonou, Bénin</title>
+  <meta name="description" content="Contactez GreenNest Realty pour toute question sur nos propriétés à Cotonou. Estimation gratuite, visite, investissement – nos experts vous répondent rapidement.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style-new.css">
+  <link rel="stylesheet" href="style-contact.css">
+<style>
+/* ===== BANDEAU PORTFOLIO ===== */
+.portfolio-banner{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:99999;
+  background:rgba(13,61,31,0.96);
+  backdrop-filter:blur(10px);
+  color:rgba(255,255,255,0.9);
+  font-size:0.78rem;
+  padding:0.6rem 1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1.5rem;
+  text-align:center;
+  font-family:'DM Sans',system-ui,sans-serif;
+  letter-spacing:0.02em;
+}
+.portfolio-banner strong{color:#4ade80;}
+.portfolio-banner button{
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.25);
+  color:#fff;
+  border-radius:50%;
+  width:22px;
+  height:22px;
+  font-size:0.75rem;
+  cursor:pointer;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background 0.2s;
+}
+.portfolio-banner button:hover{background:rgba(255,255,255,0.3);}
+@media(max-width:600px){
+  .portfolio-banner{flex-direction:column;gap:0.4rem;padding:0.75rem 1rem;}
+}
+</style>
 </head>
-<body class="bg-light">
-
-    <section class="about-header">
-    <div class="about-header-container">
-      <a class="logo">
-        <h2>🌿 GreenNest <span>Realty</span></h2>
-      </a>
-      <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
-    </div>
-  </section>
-
-    <main class="contact-container">
-        <section class="contact-intro">
-            <h1>Parlons de votre projet</h1>
-            <br>
-            <p>Une question sur un bien ou besoin d'une estimation ? Nos experts en immobilier durable vous répondent.</p>
-        </section>
-
-        <div class="contact-grid">
-            <div class="contact-form-card">
-    <form id="contactForm">
-        <div class="input-group">
-            <label>Nom complet</label>
-            <input type="text" placeholder="Votre nom" required>
-        </div>
-        <div class="input-group">
-            <label>Email</label>
-            <input type="email" placeholder="votre@email.com" required>
-        </div>
-        <div class="input-group">
-            <label>Objet</label>
-            <select>
-                <option>Demande d'information</option>
-                <option>Prendre rendez-vous</option>
-                <option>Estimation de bien</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>Message</label>
-            <textarea rows="5" placeholder="Comment pouvons-nous vous aider ?"></textarea>
-        </div>
-        <button type="submit" class="btn-contact">Envoyer le message</button>
-    </form>
+<body class="light-mode">
+<!-- ====================================================
+     BANDEAU PORTFOLIO — Projet de démonstration
+     À retirer si le projet devient un vrai site
+==================================================== -->
+<div class="portfolio-banner" id="portfolioBanner">
+  <span>🎓 Projet de portfolio · Les données (propriétés, prix, agents) sont <strong>entièrement fictives</strong></span>
+  <button onclick="this.parentElement.style.display='none'" aria-label="Fermer">✕</button>
 </div>
 
-            <div class="contact-info-sidebar">
-                <div class="info-item">
-                    <i class="fas fa-phone"></i>
-                    <div>
-                        <h4>Téléphone</h4>
-                        <p>+33 1 23 45 67 89</p>
-                    </div>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <h4>Email</h4>
-                        <p>contact@greennest.realty</p>
-                    </div>
-                </div>
-                
-                <div class="map-container">
-                    <iframe 
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.9916256937595!2d2.2922926156743895!3d48.85837007928746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66e2964e34e2d%3A0x8ddca9ee380ef7e0!2sTour%20Eiffel!5e0!3m2!1sfr!2sfr!4v1647874000000!5m2!1sfr!2sfr" 
-                        width="100%" height="250" style="border:0; border-radius:15px;" allowfullscreen="" loading="lazy">
-                    </iframe>
-                </div>
-            </div>
+
+<script>if(localStorage.getItem('gnr-theme')==='dark'){document.body.classList.add('dark-mode');}</script>
+
+<button class="theme-toggle" id="themeToggle" title="Thème">
+  <i class="fas fa-moon" id="themeIcon"></i>
+</button>
+
+<!-- HEADER -->
+<header id="mainHeader" class="scrolled">
+  <div class="header-inner">
+    <a href="index.html" class="logo-link">
+      <div class="logo">
+        <div class="logo-icon">🌿</div>
+        <div class="logo-text">
+          <span class="logo-main">GreenNest</span>
+          <span class="logo-sub">Realty</span>
         </div>
-    </main>
-
-      <!-- ========================= -->
-  <!-- FOOTER SIMPLE -->
-  <!-- ========================= -->
-  <footer>
-    <div class="footer-container">
-      <p> &nbsp; © 2026 GreenNest Realty. Tous droits réservés.</p>
+      </div>
+    </a>
+    <nav class="nav-desktop">
+      <a href="index.html" class="nav-link">Accueil</a>
+      <a href="property.html" class="nav-link">Propriétés</a>
+      <a href="about.html" class="nav-link">À propos</a>
+      <a href="contact.html" class="nav-link active">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a href="login.html" class="btn-cta">
+        <i class="fas fa-user"></i><span>Connexion</span>
+      </a>
+      <button class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-  </footer>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <nav class="mobile-nav">
+      <a href="index.html" class="mobile-link">Accueil</a>
+      <a href="property.html" class="mobile-link">Propriétés</a>
+      <a href="about.html" class="mobile-link">À propos</a>
+      <a href="contact.html" class="mobile-link">Contact</a>
+      <a href="login.html" class="mobile-link mobile-cta">Connexion</a>
+    </nav>
+  </div>
+</header>
 
-    <script src="script.js"></script>
+<!-- BANNER -->
+<section class="page-banner contact-banner">
+  <div class="page-banner-bg">
+    <img src="images/appartement11.webp" alt="Contactez GreenNest Realty Cotonou" loading="lazy">
+    <div class="page-banner-overlay"></div>
+  </div>
+  <div class="page-banner-content">
+    <nav class="breadcrumb">
+      <a href="index.html">Accueil</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>Contact</span>
+    </nav>
+    <h1>Parlons de votre projet</h1>
+    <p>Une question sur un bien ou besoin d'une estimation ? Nos experts immobiliers à Cotonou vous répondent sous 24h.</p>
+  </div>
+</section>
+
+<!-- CONTACT CARDS RAPIDES -->
+<section class="contact-quick">
+  <div class="contact-quick-inner">
+
+    <a href="tel:+22997000000" class="quick-card">
+      <div class="quick-icon"><i class="fas fa-phone"></i></div>
+      <div>
+        <strong>Téléphone</strong>
+        <span>+229 97 00 00 00</span>
+      </div>
+    </a>
+
+    <a href="/cdn-cgi/l/email-protection#5635393822373522163124333338383325227b2433373a222f78343c" class="quick-card">
+      <div class="quick-icon"><i class="fas fa-envelope"></i></div>
+      <div>
+        <strong>Email</strong>
+        <span><span class="__cf_email__" data-cfemail="ceada1a0baafadba8ea9bcababa0a0abbdbae3bcabafa2bab7e0aca4">[email&#160;protected]</span></span>
+      </div>
+    </a>
+
+    <div class="quick-card">
+      <div class="quick-icon"><i class="fas fa-map-marker-alt"></i></div>
+      <div>
+        <strong>Adresse</strong>
+        <span>Rue des Palmiers, Cotonou, Bénin</span>
+      </div>
+    </div>
+
+    <div class="quick-card">
+      <div class="quick-icon"><i class="fas fa-clock"></i></div>
+      <div>
+        <strong>Horaires</strong>
+        <span>Lun–Sam : 8h–18h</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION PRINCIPALE -->
+<main class="contact-main">
+  <div class="contact-grid-wrap">
+
+    <!-- FORMULAIRE -->
+    <div class="contact-form-col reveal-left">
+
+      <div class="contact-form-card">
+
+        <div class="form-card-header">
+          <p class="section-eyebrow">Formulaire de contact</p>
+          <h2>Envoyez-nous<br>un <em>message</em></h2>
+          <p class="form-subtitle">Nous vous répondons dans les 24 heures ouvrables.</p>
+        </div>
+
+        <form id="contactForm" novalidate>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactName">Nom complet *</label>
+              <input type="text" id="contactName" placeholder="Votre nom" required>
+            </div>
+            <div class="form-group">
+              <label for="contactPhone">Téléphone</label>
+              <input type="tel" id="contactPhone" placeholder="+229 xx xx xx xx">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactEmail">Email *</label>
+            <input type="email" id="contactEmail" placeholder="votre@email.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="contactSubject">Objet</label>
+            <select id="contactSubject">
+              <option value="">Choisir un objet...</option>
+              <option>Demande d'information</option>
+              <option>Prendre rendez-vous</option>
+              <option>Estimation de bien</option>
+              <option>Investissement immobilier</option>
+              <option>Autre</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contactMessage">Message *</label>
+            <textarea id="contactMessage" rows="5" placeholder="Décrivez votre projet ou posez votre question..." required></textarea>
+          </div>
+
+          <!-- Bouton d'envoi -->
+          <button type="submit" class="btn-send" id="sendBtn">
+            <span>Envoyer le message</span>
+            <i class="fas fa-paper-plane"></i>
+          </button>
+
+          <!-- Message de succès (masqué par défaut) -->
+          <div class="form-success" id="formSuccess" style="display:none;">
+            <i class="fas fa-check-circle"></i>
+            <div>
+              <strong>Message envoyé !</strong>
+              <span>Nous vous répondrons dans les 24h. Merci !</span>
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <!-- SIDEBAR INFO -->
+    <div class="contact-info-col reveal-right">
+
+      <!-- Agents -->
+      <div class="agents-card">
+        <p class="section-eyebrow">Votre équipe</p>
+        <h3>Nos agents disponibles</h3>
+
+        <div class="agent-item">
+          <img src="images/agent1.webp" alt="Alice Dupont">
+          <div>
+            <strong>Alice Dupont</strong>
+            <span>Conseillère en vente · Cotonou</span>
+            <a href="tel:+22997000001" class="agent-tel">
+              <i class="fas fa-phone"></i> +229 97 00 00 01
+            </a>
+          </div>
+        </div>
+
+        <div class="agent-item">
+          <img src="images/agent2.webp" alt="Marc Lefevre">
+          <div>
+            <strong>Marc Lefevre</strong>
+            <span>Expert en location · Cotonou</span>
+            <a href="tel:+22997000002" class="agent-tel">
+              <i class="fas fa-phone"></i> +229 97 00 00 02
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Carte Google Maps (Cotonou) -->
+      <div class="map-card">
+        <p class="section-eyebrow">Notre localisation</p>
+        <h3>Cotonou, Bénin</h3>
+        <div class="map-container">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d127019.49999999!2d2.35!3d6.37!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1024a9012b819f05%3A0xd97a9b6e9cda55d2!2sCotonou%2C%20B%C3%A9nin!5e0!3m2!1sfr!2sfr!4v1700000000000!5m2!1sfr!2sfr"
+            width="100%"
+            height="260"
+            style="border:0; border-radius: var(--radius-lg); display:block;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+
+      <!-- Réseaux sociaux -->
+      <div class="social-card">
+        <p class="section-eyebrow">Suivez-nous</p>
+        <div class="social-links">
+          <a href="#" class="social-link-btn">
+            <i class="fab fa-facebook-f"></i>
+            <span>Facebook</span>
+          </a>
+          <a href="#" class="social-link-btn">
+            <i class="fab fa-instagram"></i>
+            <span>Instagram</span>
+          </a>
+          <a href="#" class="social-link-btn">
+            <i class="fab fa-linkedin-in"></i>
+            <span>LinkedIn</span>
+          </a>
+          <a href="#" class="social-link-btn">
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-inner">
+      <div class="footer-col footer-brand">
+        <div class="footer-logo">🌿 GreenNest <strong>Realty</strong></div>
+        <p>Agence immobilière haut de gamme à Cotonou, Bénin.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="property.html">Propriétés</a></li>
+          <li><a href="about.html">À propos</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Cotonou, Bénin</span></div>
+        <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+229 97 00 00 00</span></div>
+        <div class="footer-contact-item"><i class="fas fa-envelope"></i><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="91f2feffe5f0f2e5d1f6e3f4f4fffff4e2e5bce3f4f0fde5e8bff3fb">[email&#160;protected]</a></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 GreenNest Realty – Cotonou, Bénin</p>
+    <p>Développé par <strong>HOUETO Fabrice</strong></p>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="script-new.js"></script>
+<script>
+  /* --- Formulaire contact --- */
+  document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('sendBtn');
+    const success = doc
+
+<div id="toast"></div>
+
+<!-- Firebase SDK compat (pour script-auth.js) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+<!-- Gestion état connexion (affiche nom utilisateur dans la nav) -->
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="script-auth.js"></script>
+
+<!-- Logique UI globale -->
+<script src="script-new.js"></script>
+
 </body>
 </html>

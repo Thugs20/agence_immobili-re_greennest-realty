@@ -1,34 +1,173 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails de la Propriété | GreenNest Realty</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        body { opacity: 0; transition: opacity 0.4s ease-in-out; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détails de la propriété | GreenNest Realty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="style-new.css">
+  <link rel="stylesheet" href="style-details.css">
+<style>
+/* ===== BANDEAU PORTFOLIO ===== */
+.portfolio-banner{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:99999;
+  background:rgba(13,61,31,0.96);
+  backdrop-filter:blur(10px);
+  color:rgba(255,255,255,0.9);
+  font-size:0.78rem;
+  padding:0.6rem 1.5rem;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1.5rem;
+  text-align:center;
+  font-family:'DM Sans',system-ui,sans-serif;
+  letter-spacing:0.02em;
+}
+.portfolio-banner strong{color:#4ade80;}
+.portfolio-banner button{
+  background:rgba(255,255,255,0.15);
+  border:1px solid rgba(255,255,255,0.25);
+  color:#fff;
+  border-radius:50%;
+  width:22px;
+  height:22px;
+  font-size:0.75rem;
+  cursor:pointer;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:background 0.2s;
+}
+.portfolio-banner button:hover{background:rgba(255,255,255,0.3);}
+@media(max-width:600px){
+  .portfolio-banner{flex-direction:column;gap:0.4rem;padding:0.75rem 1rem;}
+}
+</style>
 </head>
-<body class="bg-light">
+<body class="light-mode">
+<!-- ====================================================
+     BANDEAU PORTFOLIO — Projet de démonstration
+     À retirer si le projet devient un vrai site
+==================================================== -->
+<div class="portfolio-banner" id="portfolioBanner">
+  <span>🎓 Projet de portfolio · Les données (propriétés, prix, agents) sont <strong>entièrement fictives</strong></span>
+  <button onclick="this.parentElement.style.display='none'" aria-label="Fermer">✕</button>
+</div>
 
-    <section class="about-header">
-        <div class="about-header-container">
-          <a class="logo">
-            <h2>🌿 GreenNest <span>Realty</span></h2>
-          </a>
-          <a href="index.html" class="btn btn-primary">Retour à l'accueil</a>
+
+<script>if(localStorage.getItem('gnr-theme')==='dark'){document.body.classList.add('dark-mode');}</script>
+
+<button class="theme-toggle" id="themeToggle" title="Thème">
+  <i class="fas fa-moon" id="themeIcon"></i>
+</button>
+
+<!-- HEADER -->
+<header id="mainHeader" class="scrolled">
+  <div class="header-inner">
+    <a href="index.html" class="logo-link">
+      <div class="logo">
+        <div class="logo-icon">🌿</div>
+        <div class="logo-text">
+          <span class="logo-main">GreenNest</span>
+          <span class="logo-sub">Realty</span>
         </div>
-    </section>
+      </div>
+    </a>
+    <nav class="nav-desktop">
+      <a href="index.html" class="nav-link">Accueil</a>
+      <a href="property.html" class="nav-link active">Propriétés</a>
+      <a href="about.html" class="nav-link">À propos</a>
+      <a href="contact.html" class="nav-link">Contact</a>
+    </nav>
+    <div class="header-actions">
+      <a href="login.html" class="btn-cta">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
+      </a>
+      <button class="hamburger" id="hamburger">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <nav class="mobile-nav">
+      <a href="index.html" class="mobile-link">Accueil</a>
+      <a href="property.html" class="mobile-link">Propriétés</a>
+      <a href="about.html" class="mobile-link">À propos</a>
+      <a href="contact.html" class="mobile-link">Contact</a>
+      <a href="login.html" class="mobile-link mobile-cta">Connexion</a>
+    </nav>
+  </div>
+</header>
 
-    <main class="details-container" id="detailsWrapper">
-        </main>
+<!-- BREADCRUMB BAR -->
+<div class="details-breadcrumb-bar">
+  <div class="details-breadcrumb-inner">
+    <nav class="breadcrumb">
+      <a href="index.html">Accueil</a>
+      <i class="fas fa-chevron-right"></i>
+      <a href="property.html">Propriétés</a>
+      <i class="fas fa-chevron-right"></i>
+      <span>Détails</span>
+    </nav>
+    <a href="property.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i>
+      Retour au catalogue
+    </a>
+  </div>
+</div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-    <script type="module" src="firebase-config.js"></script>
-    <script type="module" src="script-auth.js"></script>
-    <script src="script.js"></script>
+<!-- CONTENU DÉTAILS (généré par JS) -->
+<div id="detailsWrapper"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-inner">
+      <div class="footer-col footer-brand">
+        <div class="footer-logo">🌿 GreenNest <strong>Realty</strong></div>
+        <p>Agence immobilière haut de gamme à Cotonou, Bénin.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navigation</h5>
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="property.html">Propriétés</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 GreenNest Realty – Cotonou, Bénin</p>
+    <p>Développé par <strong>HOUETO Fabrice</strong></p>
+  </div>
+</footer>
+
+<div id="toast"></div>
+<script src="script-new.js"></script>
+<script src="script.js"></script>
+
+<!-- Firebase SDK compat (pour script-auth.js) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<!-- Gestion état connexion -->
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="script-auth.js"></script>
+<!-- Logique UI globale -->
+<script src="script-new.js"></script>
+<!-- Logique catalogue -->
+<script src="script.js"></script>
 </body>
 </html>
+

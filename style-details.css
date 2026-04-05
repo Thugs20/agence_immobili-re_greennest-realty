@@ -1,0 +1,240 @@
+/* ================================================================
+   style-details.css — GreenNest Realty | Page Détail Propriété
+================================================================ */
+
+/* Barre breadcrumb en haut */
+.details-breadcrumb-bar {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 0.875rem 0;
+  margin-top: var(--header-h);
+}
+
+.details-breadcrumb-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--jade);
+  transition: gap var(--duration) var(--ease);
+}
+
+.back-btn:hover { gap: 0.75rem; }
+.back-btn i { font-size: 0.75rem; }
+
+/* Container principal détails */
+.details-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem clamp(1.5rem, 4vw, 3rem) 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Image principale */
+.main-image-container {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+}
+
+.main-image-container img {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  transition: transform 0.7s var(--ease-out);
+}
+
+.main-image-container:hover img { transform: scale(1.03); }
+
+.badge-status {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  background: var(--jade);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.badge-rent { background: var(--gold); }
+
+/* Info card */
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+/* Header info */
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.details-city {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.details-city i { color: var(--jade); }
+
+.details-title {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.details-price {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--jade);
+  white-space: nowrap;
+}
+
+/* Features */
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 1rem;
+}
+
+.feature-box {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem;
+  text-align: center;
+  border: 1px solid var(--border-light);
+  transition: all var(--duration) var(--ease);
+}
+
+.feature-box:hover {
+  transform: translateY(-4px);
+  border-color: var(--jade);
+  box-shadow: var(--shadow-md);
+}
+
+.feature-box i {
+  display: block;
+  font-size: 1.25rem;
+  color: var(--jade);
+  margin-bottom: 0.5rem;
+}
+
+.feature-box span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Description */
+.details-description h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.875rem;
+  color: var(--text);
+}
+
+.details-description p {
+  color: var(--text-muted);
+  line-height: 1.8;
+  font-size: 0.95rem;
+}
+
+/* Boutons */
+.btn-group {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-action-detail,
+.btn-fav-detail {
+  flex: 1 1 45%;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all var(--duration) var(--ease);
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.btn-action-detail {
+  background: var(--jade);
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-action-detail:hover {
+  background: var(--emerald);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(34,197,94,0.35);
+}
+
+.btn-fav-detail {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-fav-detail.active {
+  background: rgba(239,68,68,0.08);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.btn-fav-detail:hover:not(.active) {
+  border-color: var(--jade);
+  color: var(--jade);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-image-container img { height: 280px; }
+  .info-card { padding: 1.5rem; }
+  .info-header { flex-direction: column; }
+  .details-price { align-self: flex-start; }
+}
+
+@media (max-width: 480px) {
+  .btn-group { flex-direction: column; }
+  .btn-action-detail, .btn-fav-detail { flex: 1 1 100%; }
+}

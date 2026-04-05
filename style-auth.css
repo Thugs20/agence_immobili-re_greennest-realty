@@ -1,0 +1,430 @@
+/* ================================================================
+   style-auth.css — GreenNest Realty | Pages Auth (Login/Register)
+   Design split-screen immersif avec glassmorphism premium
+================================================================ */
+
+/* Reset body pour la page auth */
+body.auth-page {
+  overflow-x: hidden;
+  background: var(--bg);
+}
+
+/* ================================================================
+   LAYOUT SPLIT SCREEN
+================================================================ */
+.auth-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* ================================================================
+   PANNEAU GAUCHE – VISUEL IMMERSIF
+================================================================ */
+.auth-visual {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-visual img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 20s ease-in-out;
+  animation: visualZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes visualZoom {
+  from { transform: scale(1.1); }
+  to { transform: scale(1); }
+}
+
+.auth-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(13,61,31,0.9) 0%,
+    rgba(26,107,53,0.8) 60%,
+    rgba(13,61,31,0.95) 100%
+  );
+}
+
+.auth-visual-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding: 3rem 3rem 3.5rem;
+}
+
+/* Logo sur le panneau visuel */
+.auth-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.auth-logo:hover { opacity: 0.8; }
+
+.auth-logo span {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.auth-logo div {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.auth-logo strong {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.auth-logo em {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--jade);
+  font-style: normal;
+}
+
+/* Citation témoignage */
+.auth-visual-quote {
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+}
+
+.auth-visual-quote p {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.auth-quote-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.auth-quote-meta img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--jade);
+  object-fit: cover;
+}
+
+.auth-quote-meta span {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+}
+
+/* ================================================================
+   PANNEAU DROIT – FORMULAIRE
+================================================================ */
+.auth-panel {
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem clamp(2rem, 6vw, 5rem);
+  position: relative;
+  overflow-y: auto;
+}
+
+/* Lien retour */
+.auth-back {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  transition: all var(--duration) var(--ease);
+}
+
+.auth-back:hover {
+  color: var(--jade);
+  gap: 0.75rem;
+}
+
+.auth-back i { font-size: 0.75rem; }
+
+/* Carte du formulaire */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Header auth */
+.auth-header { margin-bottom: 0.5rem; }
+
+.auth-header h1 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.auth-header p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* Groupes de formulaire */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.form-group label i {
+  color: var(--jade);
+  font-size: 0.75rem;
+}
+
+.form-group input {
+  padding: 0.875rem 1.25rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text);
+  outline: none;
+  transition: all var(--duration) var(--ease);
+  width: 100%;
+}
+
+.form-group input:focus {
+  border-color: var(--jade);
+  background: var(--bg-card);
+  box-shadow: 0 0 0 4px rgba(34,197,94,0.1);
+}
+
+.form-group input::placeholder { color: var(--text-light); }
+
+/* Label row (avec lien oublié) */
+.label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.forgot-link {
+  font-size: 0.8rem;
+  color: var(--jade);
+  transition: opacity var(--duration);
+}
+
+.forgot-link:hover { opacity: 0.7; }
+
+/* Input mot de passe + bouton toggle */
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input { padding-right: 3.5rem; }
+
+.toggle-password {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  transition: color var(--duration);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.toggle-password:hover { color: var(--jade); }
+
+/* Remember me */
+.form-remember { margin: -0.25rem 0; }
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--jade);
+  cursor: pointer;
+}
+
+/* Bouton principal d'auth */
+.btn-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--jade);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+  margin-top: 0.5rem;
+}
+
+.btn-auth:hover:not(:disabled) {
+  background: var(--emerald);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(34,197,94,0.35);
+}
+
+.btn-auth:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.btn-auth i { font-size: 0.85rem; }
+
+/* Séparateur */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-light);
+  font-size: 0.8rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Bouton Google */
+.btn-google {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 2rem;
+  background: var(--bg-card);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+}
+
+.btn-google:hover:not(:disabled) {
+  border-color: #4285F4;
+  box-shadow: 0 4px 12px rgba(66,133,244,0.15);
+  transform: translateY(-2px);
+}
+
+.btn-google:disabled { opacity: 0.7; cursor: not-allowed; }
+
+/* Footer du formulaire */
+.auth-footer {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+.auth-footer a {
+  color: var(--jade);
+  font-weight: 600;
+  transition: opacity var(--duration);
+}
+
+.auth-footer a:hover { opacity: 0.7; }
+
+/* ================================================================
+   RESPONSIVE AUTH
+================================================================ */
+@media (max-width: 900px) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+    min-height: 100vh;
+  }
+
+  /* Cacher le panneau visuel sur mobile */
+  .auth-visual { display: none; }
+
+  .auth-panel {
+    padding: 5rem 1.5rem 3rem;
+    justify-content: flex-start;
+  }
+
+  .auth-card { max-width: 480px; }
+
+  .auth-back {
+    position: fixed;
+    top: 1.25rem;
+    left: 1.25rem;
+    background: var(--bg-card);
+    padding: 0.6rem 1rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-panel { padding: 5rem 1.25rem 2rem; }
+}
