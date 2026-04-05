@@ -1,97 +1,135 @@
-// script-auth.js
-import { getAuth, onAuthStateChanged, signOut } 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+/**
+ * script-auth.js — GreenNest Realty
+ * Gestion état connexion Firebase sur toutes les pages
+ *
+ * Logique :
+ * - Pages libres : index, about, contact, login, register
+ * - Pages protégées : property.html, property-details.html
+ *   → Si non connecté : redirection IMMÉDIATE vers login.html
+ *   → Les liens vers pages protégées sont aussi interceptés
+ */
 
+import { getAuth, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { app } from "./firebase-config.js";
 
 const auth = getAuth(app);
 
-// === Sélection des éléments ===
-const btnLogin = document.getElementById("btnLogin");
-const protectedLinks = [
-    document.getElementById("navProperties"),
-    document.getElementById("linkBuy"),
-    document.getElementById("linkRent"),
-    document.getElementById("linkVillas"),
-    document.getElementById("heroProperties"),
-    document.getElementById("allPropertiesBtn"),
-];
+/* ─── Pages protégées ─────────────────────────── */
+const PROTECTED_PAGES = ["property.html", "property-details.html"];
 
-// === Fonction toast ===
-function showToast(message, color="#2e7d32"){
-    let toast = document.getElementById("toast");
-    if(!toast){
-        toast = document.createElement("div");
-        toast.id = "toast";
-        toast.style.position = "fixed";
-        toast.style.bottom = "20px";
-        toast.style.left = "50%";
-        toast.style.transform = "translateX(-50%)";
-        toast.style.padding = "12px 25px";
-        toast.style.color = "white";
-        toast.style.borderRadius = "5px";
-        toast.style.zIndex = "9999";
-        toast.style.fontWeight = "bold";
-        toast.style.transition = "opacity 0.3s";
-        document.body.appendChild(toast);
-    }
-    toast.textContent = message;
-    toast.style.background = color;
-    toast.style.opacity = "1";
-    setTimeout(() => toast.style.opacity = "0", 3000);
+const currentPage = window.location.pathname;
+const isProtected = PROTECTED_PAGES.some(p => currentPage.includes(p));
+
+/* ─── Masquer le body immédiatement sur pages protégées ─── */
+if (isProtected) {
+  document.documentElement.style.visibility = "hidden";
 }
 
-// === Vérification de l'état de connexion ===
-onAuthStateChanged(auth, (user) => {
-    const currentPage = window.location.pathname;
-    
-    // On vérifie si on est sur la page propriété OU la page détails
-    const isProtectedPage = currentPage.includes("property.html") || currentPage.includes("details.html");
+/* ─── Toast utilitaire ───────────────────────── */
+function showToast(message, color = "#1a6b35") {
+  let toast = document.getElementById("toast");
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "toast";
+    Object.assign(toast.style, {
+      position: "fixed", bottom: "5.5rem", left: "50%",
+      transform: "translateX(-50%) translateY(0)",
+      background: color, color: "#fff", padding: "0.875rem 1.5rem",
+      borderRadius: "999px", fontSize: "0.875rem", fontWeight: "600",
+      zIndex: "99000", opacity: "0", transition: "opacity 0.3s",
+      whiteSpace: "nowrap", boxShadow: "0 8px 24px rgba(0,0,0,0.2)"
+    });
+    document.body.appendChild(toast);
+  }
+  toast.textContent = message;
+  toast.style.background = color;
+  toast.style.opacity = "1";
+  setTimeout(() => { toast.style.opacity = "0"; }, 3200);
+}
 
+/* ─── Mettre à jour le bouton Connexion/Déconnexion ─── */
+function updateAuthButton(user) {
+  /* Sélectionner tous les boutons #btnLogin sur la page
+     (desktop + mobile peuvent avoir le même ID ou des classes) */
+  const loginBtns = document.querySelectorAll("#btnLogin, .btn-cta[href='login.html'], .mobile-cta[href='login.html']");
+
+  loginBtns.forEach(btn => {
     if (user) {
-        // --- CONNECTÉ : On affiche la page ---
-        document.body.style.opacity = "1";
-
-        if (btnLogin) {
-            btnLogin.textContent = "Déconnexion";
-            btnLogin.href = "#";
-            btnLogin.classList.add("btn-logout");
-            btnLogin.onclick = async (e) => {
-                e.preventDefault();
-                await signOut(auth);
-                showToast("Déconnecté avec succès", "#2e7d32");
-                setTimeout(() => window.location.href = "index.html", 1000);
-            };
+      /* --- Connecté : afficher Déconnexion --- */
+      btn.innerHTML = `<i class="fas fa-sign-out-alt"></i><span>Déconnexion</span>`;
+      btn.href = "#";
+      btn.style.background = "rgba(239,68,68,0.15)";
+      btn.style.color = "var(--text)";
+      btn.style.border = "2px solid rgba(239,68,68,0.3)";
+      btn.onclick = async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          showToast("Déconnecté avec succès 👋");
+          setTimeout(() => window.location.href = "index.html", 1200);
+        } catch (err) {
+          showToast("Erreur lors de la déconnexion", "#dc2626");
         }
-
-        protectedLinks.forEach(link => {
-            if (link) link.onclick = null;
-        });
-
+      };
     } else {
-        // --- NON CONNECTÉ ---
-        if (btnLogin) {
-            btnLogin.textContent = "Connexion";
-            btnLogin.href = "login.html";
-            btnLogin.classList.remove("btn-logout");
-            btnLogin.onclick = null;
-        }
-
-        protectedLinks.forEach(link => {
-            if (!link) return;
-            link.onclick = (e) => {
-                e.preventDefault();
-                showToast("Veuillez vous connecter pour accéder à cette page", "#e53935");
-                setTimeout(() => window.location.href = "login.html", 2000);
-            };
-        });
-
-        // Bloquer l'accès direct aux pages sensibles
-        if (isProtectedPage) {
-            window.location.replace("login.html");
-        } else {
-            // Afficher l'index si on n'est pas connecté
-            document.body.style.opacity = "1";
-        }
+      /* --- Non connecté : afficher Connexion --- */
+      btn.innerHTML = `<i class="fas fa-user"></i><span>Connexion</span>`;
+      btn.href = "login.html";
+      btn.style.background = "";
+      btn.style.color = "";
+      btn.style.border = "";
+      btn.onclick = null;
     }
+  });
+
+  /* Afficher le nom de l'utilisateur si un élément #userName existe */
+  const userNameEl = document.getElementById("userName");
+  if (userNameEl) {
+    userNameEl.textContent = user ? (user.displayName || user.email.split("@")[0]) : "";
+    userNameEl.style.display = user ? "inline" : "none";
+  }
+}
+
+/* ─── Intercepter les liens vers pages protégées ─── */
+function setupProtectedLinks() {
+  /* Tous les liens qui pointent vers property.html (quelle que soit la query string) */
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    const isToProtected = PROTECTED_PAGES.some(p => href.includes(p));
+    if (!isToProtected) return;
+
+    link.addEventListener('click', (e) => {
+      /* Vérifier l'état actuel de l'auth de façon synchrone via currentUser */
+      if (!auth.currentUser) {
+        e.preventDefault();
+        /* Mémoriser la destination pour redirect après login */
+        sessionStorage.setItem('gnr_redirect', link.href);
+        showToast("Connectez-vous pour accéder aux propriétés 🔒", "#dc2626");
+        setTimeout(() => window.location.href = "login.html", 1500);
+      }
+      /* Si connecté, laisser le lien fonctionner normalement */
+    });
+  });
+}
+
+/* ─── Écoute principale de l'état Firebase ─── */
+onAuthStateChanged(auth, (user) => {
+
+  if (isProtected) {
+    if (!user) {
+      /* Non connecté sur page protégée → redirection immédiate sans afficher la page */
+      sessionStorage.setItem('gnr_redirect', window.location.href);
+      window.location.replace("login.html");
+      return; /* Ne pas continuer */
+    }
+    /* Connecté sur page protégée → afficher la page */
+    document.documentElement.style.visibility = "visible";
+  }
+
+  /* Mettre à jour le bouton dans le header */
+  updateAuthButton(user);
+
+  /* Protéger les liens de navigation */
+  setupProtectedLinks();
 });

@@ -238,3 +238,275 @@
   .btn-group { flex-direction: column; }
   .btn-action-detail, .btn-fav-detail { flex: 1 1 100%; }
 }
+
+/* ================================================================
+   BOUTON RENDEZ-VOUS (page détails)
+================================================================ */
+.btn-rdv-detail {
+  flex: 1 1 45%;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  border: 2px solid var(--jade);
+  background: rgba(34,197,94,0.08);
+  color: var(--jade);
+  transition: all var(--duration) var(--ease);
+  width: 100%;
+}
+.btn-rdv-detail:hover {
+  background: var(--jade);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(34,197,94,0.3);
+}
+
+/* ================================================================
+   MODAL KKIAPAY FICTIF
+================================================================ */
+#kkiapay-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.kkia-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(6px);
+}
+
+.kkia-modal {
+  position: relative;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  transform: translateY(30px);
+  opacity: 0;
+  transition: all 0.4s var(--ease-out);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.kkia-modal.open {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.kkia-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--forest), var(--emerald));
+}
+
+.kkia-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.kkia-logo-icon { font-size: 1.5rem; }
+
+.kkia-logo strong {
+  display: block;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.kkia-logo em {
+  display: block;
+  color: rgba(255,255,255,0.65);
+  font-size: 0.7rem;
+  font-style: normal;
+  letter-spacing: 0.05em;
+}
+
+.kkia-close {
+  color: rgba(255,255,255,0.7);
+  font-size: 1rem;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.kkia-close:hover { background: rgba(255,255,255,0.25); color: #fff; }
+
+.kkia-body { padding: 1.5rem; display: flex; flex-direction: column; gap: 1.25rem; }
+
+.kkia-property-recap {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+}
+.kkia-property-recap i { color: var(--jade); font-size: 1.1rem; flex-shrink: 0; }
+.kkia-property-recap strong { display: block; font-size: 0.9rem; color: var(--text); margin-bottom: 0.2rem; }
+.kkia-property-recap span { font-size: 0.78rem; color: var(--text-muted); }
+
+.kkia-amount-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.25rem;
+  background: rgba(34,197,94,0.06);
+  border: 2px solid rgba(34,197,94,0.2);
+  border-radius: var(--radius-md);
+}
+.kkia-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+.kkia-amount { font-family: var(--font-display); font-size: 2rem; font-weight: 700; color: var(--jade); line-height: 1; }
+.kkia-note { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.4rem; font-style: italic; }
+
+.kkia-methods-title { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+
+.kkia-method-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+
+.kkia-method {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0.5rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--surface);
+}
+.kkia-method.active { border-color: var(--jade); color: var(--jade); background: rgba(34,197,94,0.08); }
+.kkia-method:hover:not(.active) { border-color: var(--text-muted); }
+
+.kkia-method-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 1rem;
+}
+
+.kkia-phone-wrap label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.kkia-phone-input {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.kkia-phone-input:focus-within { border-color: var(--jade); }
+
+.kkia-flag {
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-right: 2px solid var(--border);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.kkia-phone-input input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  background: var(--bg-card);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+.kkia-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.kkia-pay-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 1rem;
+  background: var(--jade);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.kkia-pay-btn:hover:not(:disabled) { background: var(--emerald); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(34,197,94,0.3); }
+.kkia-pay-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.kkia-disclaimer {
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+.kkia-disclaimer strong { color: var(--jade); }
+
+.kkia-success {
+  padding: 2.5rem 1.5rem;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+}
+.kkia-success-icon { font-size: 3rem; }
+.kkia-success h3 { font-size: 1.3rem; color: var(--text); }
+.kkia-success p { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
+
+@media (max-width: 480px) {
+  .kkia-modal { max-width: 100%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+  #kkiapay-modal { align-items: flex-end; padding: 0; }
+}

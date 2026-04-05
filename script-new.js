@@ -1,93 +1,121 @@
 /**
- * script-new.js — GreenNest Realty | Logique globale UI
- * Auteur : HOUETO Fabrice | 2026
- * 
- * Modules :
- * 1. Page Loader
- * 2. Curseur personnalisé
- * 3. Header scroll & transparent
- * 4. Menu mobile hamburger
- * 5. Animations au scroll (IntersectionObserver)
- * 6. Compteurs animés
- * 7. Theme toggle (mode sombre / clair)
- * 8. FAQ accordéon
- * 9. Parallaxe hero léger
- * 10. Barre recherche rapide home
+ * script-new.js — GreenNest Realty | Logique UI globale
+ * Auteur : HOUETO Fabrice | 2026 — Version corrigée
+ *
+ * Corrections appliquées :
+ * 1. Curseur custom : utilise pointer-events:none sur le curseur lui-même
+ *    → ne disparaît plus sur les éléments interactifs
+ * 2. FAQ : gestion uniquement via JS (suppression du double onclick HTML)
+ * 3. Hamburger : z-index et backdrop-filter corrigés, fonctionne sur toutes pages
+ * 4. Header transparent : logique robuste multi-pages
+ * 5. Dark mode : appliqué avant render (thème restauré)
+ * 6. Compteurs : déclenchés après loader
  */
 
-/* =====================================================
-   1. ATTENDRE LE DOM
-===================================================== */
 document.addEventListener('DOMContentLoaded', () => {
 
   /* =====================================================
-     2. PAGE LOADER
-     Affiche un loader élégant à l'ouverture de la page
+     1. RESTAURER LE THÈME IMMÉDIATEMENT (évite le flash)
+  ===================================================== */
+  const savedTheme = localStorage.getItem('gnr-theme');
+  const themeIcon  = document.getElementById('themeIcon');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    document.body.classList.remove('light-mode');
+    if (themeIcon) themeIcon.className = 'fas fa-sun';
+  }
+
+  /* =====================================================
+     2. THEME TOGGLE BUTTON
+  ===================================================== */
+  const themeToggle = document.getElementById('themeToggle');
+  themeToggle?.addEventListener('click', () => {
+    const isDark = document.body.classList.contains('dark-mode');
+    if (isDark) {
+      document.body.classList.remove('dark-mode');
+      document.body.classList.add('light-mode');
+      if (themeIcon) themeIcon.className = 'fas fa-moon';
+      localStorage.setItem('gnr-theme', 'light');
+    } else {
+      document.body.classList.add('dark-mode');
+      document.body.classList.remove('light-mode');
+      if (themeIcon) themeIcon.className = 'fas fa-sun';
+      localStorage.setItem('gnr-theme', 'dark');
+    }
+  });
+
+  /* =====================================================
+     3. PAGE LOADER
   ===================================================== */
   const loader = document.getElementById('pageLoader');
   if (loader) {
-    // Masquer le loader après 2 secondes (animation de la barre)
     setTimeout(() => {
       loader.classList.add('hidden');
-      // Déclencher les animations hero une fois le loader parti
       triggerHeroReveal();
+      startCounters(); // Démarrer les compteurs après le loader
     }, 2000);
   } else {
-    // Si pas de loader, déclencher les animations immédiatement
     triggerHeroReveal();
   }
 
   /* =====================================================
-     3. CURSEUR PERSONNALISÉ (desktop uniquement)
+     4. CURSEUR PERSONNALISÉ
+     Fix : pointer-events:none sur les deux éléments
+     → le curseur ne "mange" plus les clics ni ne disparaît
   ===================================================== */
-  const cursor = document.getElementById('cursor');
+  const cursor   = document.getElementById('cursor');
   const follower = document.getElementById('cursorFollower');
 
-  if (cursor && follower) {
+  if (cursor && follower && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    /* S'assurer que pointer-events est désactivé */
+    cursor.style.pointerEvents   = 'none';
+    follower.style.pointerEvents = 'none';
+
     let mouseX = 0, mouseY = 0;
     let followerX = 0, followerY = 0;
 
-    document.addEventListener('mousemove', (e) => {
+    document.addEventListener('mousemove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      // Curseur principal : suit instantanément
       cursor.style.left = mouseX + 'px';
-      cursor.style.top = mouseY + 'px';
+      cursor.style.top  = mouseY + 'px';
     });
 
-    // Le follower suit avec du lag (animation fluide)
-    function animateFollower() {
+    /* Follower avec lag */
+    (function animateFollower() {
       followerX += (mouseX - followerX) * 0.12;
       followerY += (mouseY - followerY) * 0.12;
       follower.style.left = followerX + 'px';
-      follower.style.top = followerY + 'px';
+      follower.style.top  = followerY + 'px';
       requestAnimationFrame(animateFollower);
-    }
-    animateFollower();
+    })();
 
-    // Agrandir le follower sur les éléments interactifs
-    const interactives = document.querySelectorAll('a, button, input, select, .feat-card, .service-card');
-    interactives.forEach(el => {
+    /* Agrandir sur éléments interactifs */
+    document.querySelectorAll('a, button, input, select, textarea, .feat-card, .service-card, .property-card').forEach(el => {
       el.addEventListener('mouseenter', () => {
-        cursor.style.transform = 'translate(-50%, -50%) scale(2.5)';
-        follower.style.transform = 'translate(-50%, -50%) scale(1.5)';
-        follower.style.opacity = '0.2';
+        cursor.style.transform   = 'translate(-50%,-50%) scale(2.5)';
+        follower.style.transform = 'translate(-50%,-50%) scale(1.4)';
+        follower.style.opacity   = '0.3';
       });
       el.addEventListener('mouseleave', () => {
-        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-        follower.style.transform = 'translate(-50%, -50%) scale(1)';
-        follower.style.opacity = '0.5';
+        cursor.style.transform   = 'translate(-50%,-50%) scale(1)';
+        follower.style.transform = 'translate(-50%,-50%) scale(1)';
+        follower.style.opacity   = '0.5';
       });
     });
+  } else {
+    /* Sur mobile ou touch : masquer les curseurs */
+    if (cursor)   cursor.style.display   = 'none';
+    if (follower) follower.style.display = 'none';
   }
 
   /* =====================================================
-     4. HEADER : TRANSPARENT → OPAQUE AU SCROLL
+     5. HEADER : TRANSPARENT → OPAQUE AU SCROLL
   ===================================================== */
   const header = document.getElementById('mainHeader');
   if (header) {
-    // Sur la page d'accueil, le header commence transparent
-    const isHome = window.location.pathname.includes('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+    const path   = window.location.pathname;
+    const isHome = path.endsWith('index.html') || path === '/' || path.endsWith('/');
 
     function updateHeader() {
       if (isHome) {
@@ -99,244 +127,153 @@ document.addEventListener('DOMContentLoaded', () => {
           header.classList.add('transparent');
         }
       } else {
-        // Sur les autres pages : toujours avec fond
         header.classList.add('scrolled');
+        header.classList.remove('transparent');
       }
     }
 
     if (isHome) header.classList.add('transparent');
     window.addEventListener('scroll', updateHeader, { passive: true });
-    updateHeader(); // Appel initial
+    updateHeader();
   }
 
   /* =====================================================
-     5. MENU MOBILE HAMBURGER
+     6. MENU MOBILE HAMBURGER
+     Fix : z-index élevé, pas de backdrop-filter sur le bouton,
+     fonctionne sur toutes les pages
   ===================================================== */
-  const hamburger = document.getElementById('hamburger');
+  const hamburger  = document.getElementById('hamburger');
   const mobileMenu = document.getElementById('mobileMenu');
 
-  // Créer l'overlay dynamiquement
+  /* Créer l'overlay dynamiquement si absent */
   let overlay = document.querySelector('.mobile-overlay');
-  if (!overlay) {
+  if (!overlay && mobileMenu) {
     overlay = document.createElement('div');
     overlay.className = 'mobile-overlay';
     document.body.appendChild(overlay);
   }
 
   function openMenu() {
-    mobileMenu?.classList.add('open');
-    overlay.classList.add('active');
+    if (!mobileMenu) return;
+    mobileMenu.classList.add('open');
+    if (overlay) overlay.classList.add('active');
     hamburger?.classList.add('active');
-    document.body.style.overflow = 'hidden'; // bloquer scroll
+    document.body.style.overflow = 'hidden';
   }
 
   function closeMenu() {
-    mobileMenu?.classList.remove('open');
-    overlay.classList.remove('active');
+    if (!mobileMenu) return;
+    mobileMenu.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
     hamburger?.classList.remove('active');
     document.body.style.overflow = '';
   }
 
-  hamburger?.addEventListener('click', (e) => {
+  hamburger?.addEventListener('click', e => {
     e.stopPropagation();
-    if (mobileMenu?.classList.contains('open')) {
-      closeMenu();
-    } else {
-      openMenu();
-    }
+    mobileMenu?.classList.contains('open') ? closeMenu() : openMenu();
   });
 
-  overlay.addEventListener('click', closeMenu);
+  overlay?.addEventListener('click', closeMenu);
 
-  // Fermer le menu si on clique sur un lien
+  /* Fermer le menu au clic sur un lien mobile */
   document.querySelectorAll('.mobile-link').forEach(link => {
     link.addEventListener('click', closeMenu);
   });
 
+  /* Fermer au resize vers desktop */
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) closeMenu();
+  });
+
   /* =====================================================
-     6. ANIMATIONS AU SCROLL (IntersectionObserver)
-     Déclenche les classes reveal-up, reveal-left, reveal-right
+     7. ANIMATIONS AU SCROLL (IntersectionObserver)
   ===================================================== */
   const revealEls = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
-
-  if (revealEls.length > 0) {
-    const revealObserver = new IntersectionObserver((entries) => {
+  if (revealEls.length) {
+    const obs = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          revealObserver.unobserve(entry.target); // N'observer qu'une fois
+          obs.unobserve(entry.target);
         }
       });
-    }, {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    });
-
-    revealEls.forEach(el => revealObserver.observe(el));
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => obs.observe(el));
   }
 
   /* =====================================================
-     7. COMPTEURS ANIMÉS
-     Anime les chiffres de 0 jusqu'à la valeur cible
+     8. COMPTEURS ANIMÉS
   ===================================================== */
-  const counters = document.querySelectorAll('.counter');
+  function startCounters() {
+    const counters = document.querySelectorAll('.counter');
+    if (!counters.length) return;
 
-  if (counters.length > 0) {
-    const counterObserver = new IntersectionObserver((entries) => {
+    const obs = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           animateCounter(entry.target);
-          counterObserver.unobserve(entry.target);
+          obs.unobserve(entry.target);
         }
       });
     }, { threshold: 0.5 });
 
-    counters.forEach(counter => counterObserver.observe(counter));
+    counters.forEach(c => obs.observe(c));
   }
 
-  /**
-   * Anime un compteur de 0 à sa valeur data-target
-   * @param {HTMLElement} counter
-   */
-  function animateCounter(counter) {
-    const target = parseInt(counter.getAttribute('data-target'), 10);
-    const duration = 1800; // ms
-    const startTime = performance.now();
+  function animateCounter(el) {
+    const target   = parseInt(el.getAttribute('data-target'), 10);
+    const duration = 1800;
+    const start    = performance.now();
 
-    function update(currentTime) {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-
-      // Fonction easing ease-out
-      const eased = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(eased * target);
-
-      counter.textContent = current.toLocaleString('fr-FR');
-
-      if (progress < 1) {
-        requestAnimationFrame(update);
-      } else {
-        counter.textContent = target.toLocaleString('fr-FR');
-      }
+    function update(now) {
+      const p       = Math.min((now - start) / duration, 1);
+      const eased   = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(eased * target).toLocaleString('fr-FR');
+      if (p < 1) requestAnimationFrame(update);
+      else el.textContent = target.toLocaleString('fr-FR');
     }
-
     requestAnimationFrame(update);
   }
 
-  /* =====================================================
-     8. THEME TOGGLE (mode sombre / clair)
-  ===================================================== */
-  const themeToggle = document.getElementById('themeToggle');
-  const themeIcon = document.getElementById('themeIcon');
-  const THEME_KEY = 'gnr-theme'; // clé localStorage
-
-  // Restaurer le thème sauvegardé
-  const savedTheme = localStorage.getItem(THEME_KEY);
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark-mode');
-    document.body.classList.remove('light-mode');
-    if (themeIcon) {
-      themeIcon.className = 'fas fa-sun';
-    }
-  }
-
-  themeToggle?.addEventListener('click', () => {
-    const isDark = document.body.classList.contains('dark-mode');
-
-    if (isDark) {
-      // Passer en mode clair
-      document.body.classList.remove('dark-mode');
-      document.body.classList.add('light-mode');
-      if (themeIcon) themeIcon.className = 'fas fa-moon';
-      localStorage.setItem(THEME_KEY, 'light');
-    } else {
-      // Passer en mode sombre
-      document.body.classList.add('dark-mode');
-      document.body.classList.remove('light-mode');
-      if (themeIcon) themeIcon.className = 'fas fa-sun';
-      localStorage.setItem(THEME_KEY, 'dark');
-    }
-  });
+  /* Démarrer si pas de loader */
+  if (!document.getElementById('pageLoader')) startCounters();
 
   /* =====================================================
      9. FAQ ACCORDÉON
-     Géré en CSS mais on peut aussi le contrôler ici
+     Fix : supprimer les onclick inline du HTML et gérer ici
+     → plus de double déclenchement, plus de conflit
   ===================================================== */
   const faqItems = document.querySelectorAll('.faq-item');
   faqItems.forEach(item => {
+    /* Supprimer le handler inline s'il existe */
+    item.removeAttribute('onclick');
+
     item.addEventListener('click', () => {
-      // Fermer les autres
-      faqItems.forEach(other => {
-        if (other !== item) other.classList.remove('open');
-      });
-      item.classList.toggle('open');
+      const isOpen = item.classList.contains('open');
+      /* Fermer tous les autres */
+      faqItems.forEach(other => other.classList.remove('open'));
+      /* Ouvrir celui-ci seulement s'il était fermé */
+      if (!isOpen) item.classList.add('open');
     });
   });
 
   /* =====================================================
      10. PARALLAXE HERO LÉGER
-     Le fond se déplace doucement pendant le scroll
   ===================================================== */
   const heroBg = document.getElementById('heroBg');
   if (heroBg) {
     window.addEventListener('scroll', () => {
-      const scrolled = window.scrollY;
-      // Effet subtil : se déplace à 40% de la vitesse du scroll
-      heroBg.style.transform = `translateY(${scrolled * 0.4}px)`;
+      heroBg.style.transform = `translateY(${window.scrollY * 0.35}px)`;
     }, { passive: true });
   }
 
   /* =====================================================
-     11. BARRE RECHERCHE RAPIDE (page accueil)
-     Gère les onglets Tous / Acheter / Louer
+     11. SMOOTH SCROLL ANCRES
   ===================================================== */
-  const searchTabs = document.querySelectorAll('.search-tab');
-  const quickSearchBtn = document.getElementById('quickSearchBtn');
-  const quickSearchInput = document.getElementById('quickSearch');
-  const quickTypeSelect = document.getElementById('quickType');
-
-  let activeStatus = 'all'; // statut sélectionné
-
-  searchTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      // Mettre à jour l'onglet actif
-      searchTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      activeStatus = tab.getAttribute('data-status');
-    });
-  });
-
-  // Bouton de recherche : redirige vers property.html avec les paramètres
-  quickSearchBtn?.addEventListener('click', (e) => {
-    const search = quickSearchInput?.value.trim();
-    const type = quickTypeSelect?.value;
-
-    let url = 'property.html?';
-    if (activeStatus !== 'all') url += `status=${activeStatus}&`;
-    if (type && type !== 'all') url += `type=${type}&`;
-    if (search) url += `city=${encodeURIComponent(search)}`;
-
-    window.location.href = url;
-  });
-
-  /* =====================================================
-     12. FONCTION : RÉVÉLER LE CONTENU HERO
-     Déclenché après le loader ou immédiatement
-  ===================================================== */
-  function triggerHeroReveal() {
-    // Animer les éléments .reveal-up dans le hero
-    const heroRevealEls = document.querySelectorAll('.hero .reveal-up');
-    heroRevealEls.forEach((el) => {
-      el.classList.add('visible');
-    });
-  }
-
-  /* =====================================================
-     13. SMOOTH SCROLL POUR LES ANCRES
-  ===================================================== */
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', (e) => {
-      const target = document.querySelector(anchor.getAttribute('href'));
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -345,32 +282,32 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* =====================================================
-     14. TOAST NOTIFICATION UTILITAIRE
-     Usage global : showToast("Votre message", "success")
+     12. TOAST GLOBAL
   ===================================================== */
   window.showToast = function(message, type = 'success') {
-    const toast = document.getElementById('toast');
-    if (!toast) return;
-
-    const colors = {
-      success: '#1a6b35',
-      error: '#dc2626',
-      info: '#2563eb',
-      warning: '#d97706'
-    };
-
-    toast.textContent = message;
-    toast.style.background = colors[type] || colors.success;
-    toast.classList.add('show');
-
-    setTimeout(() => toast.classList.remove('show'), 3500);
+    const t = document.getElementById('toast');
+    if (!t) return;
+    const colors = { success:'#1a6b35', error:'#dc2626', info:'#2563eb', warning:'#d97706' };
+    t.textContent = message;
+    t.style.background = colors[type] || colors.success;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
   };
 
   /* =====================================================
-     15. ANIMATION DES CARTES FEAT-HEART (favoris home)
+     13. TRIGGER HERO REVEAL (appelé après loader)
+  ===================================================== */
+  function triggerHeroReveal() {
+    document.querySelectorAll('.hero .reveal-up').forEach(el => {
+      el.classList.add('visible');
+    });
+  }
+
+  /* =====================================================
+     14. CŒURS FAVORIS SUR LA HOME (feat-heart)
   ===================================================== */
   document.querySelectorAll('.feat-heart').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
       btn.classList.toggle('active');
@@ -378,12 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btn.classList.contains('active')) {
         icon.className = 'fas fa-heart';
         icon.style.color = '#ef4444';
-        // Petite animation
-        btn.animate([
-          { transform: 'scale(1)' },
-          { transform: 'scale(1.3)' },
-          { transform: 'scale(1)' }
-        ], { duration: 300, easing: 'ease-out' });
+        btn.animate([{ transform:'scale(1)' },{ transform:'scale(1.3)' },{ transform:'scale(1)' }], { duration:300 });
       } else {
         icon.className = 'far fa-heart';
         icon.style.color = '';
@@ -391,4 +323,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-}); // Fin DOMContentLoaded
+  /* =====================================================
+     15. ONGLETS BARRE RECHERCHE RAPIDE (home uniquement)
+  ===================================================== */
+  const searchTabs = document.querySelectorAll('.search-tab');
+  let activeStatus = 'all';
+
+  searchTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      searchTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      activeStatus = tab.getAttribute('data-status');
+    });
+  });
+
+  const quickSearchBtn = document.getElementById('quickSearchBtn');
+  quickSearchBtn?.addEventListener('click', () => {
+    const search = document.getElementById('quickSearch')?.value.trim();
+    const type   = document.getElementById('quickType')?.value;
+    let url = 'property.html?';
+    if (activeStatus !== 'all') url += `status=${activeStatus}&`;
+    if (type && type !== 'all') url += `type=${type}&`;
+    if (search) url += `city=${encodeURIComponent(search)}`;
+    window.location.href = url;
+  });
+
+}); // fin DOMContentLoaded

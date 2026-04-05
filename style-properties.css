@@ -84,8 +84,8 @@
   background: var(--bg-card);
   border-bottom: 1px solid var(--border);
   padding: 1.5rem 0;
-  position: sticky;
-  top: var(--header-h);
+  /* Desktop : pas sticky — évite que les cartes scrollent SOUS la barre */
+  position: relative;
   z-index: 100;
   box-shadow: var(--shadow-sm);
 }
@@ -499,7 +499,7 @@
   .page-banner { height: 260px; }
   .page-banner-content h1 { font-size: 2rem; }
 
-  .filters-section { position: relative; top: 0; }
+  /* .filters-section reste en position:relative sur mobile aussi */
 
   .filters-row {
     overflow-x: auto;

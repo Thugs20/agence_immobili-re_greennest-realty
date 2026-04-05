@@ -424,6 +424,8 @@ p { font-weight: 300; }
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+  /* Isolation : évite que le backdrop-filter du header flou ses enfants */
+  isolation: isolate;
 }
 
 /* --- Logo --- */
@@ -529,7 +531,12 @@ p { font-weight: 300; }
   gap: 5px;
   padding: 8px;
   border-radius: var(--radius-sm);
-  z-index: 5100;
+  /* z-index AU-DESSUS du menu (5050) et de l'overlay (5040) */
+  z-index: 5200;
+  /* Isolation : empêche le backdrop-filter du menu de l'affecter */
+  isolation: isolate;
+  position: relative;
+  background: transparent;
 }
 
 .hamburger span {
@@ -573,7 +580,7 @@ p { font-weight: 300; }
   opacity: 0;
   pointer-events: none;
   transition: opacity var(--duration) var(--ease);
-  backdrop-filter: blur(4px);
+  /* backdrop-filter retiré : causait le flou sur le bouton hamburger */
 }
 
 .mobile-overlay.active {

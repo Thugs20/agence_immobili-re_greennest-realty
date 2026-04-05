@@ -71,7 +71,7 @@
 </style>
 </head>
 
-<body class="light-mode">
+<body class="light-mode" style="opacity:0;transition:opacity 0.3s ease;">
 <!-- ====================================================
      BANDEAU PORTFOLIO — Projet de démonstration
      À retirer si le projet devient un vrai site
@@ -118,10 +118,10 @@
     <!-- NAVIGATION DESKTOP -->
     <nav class="nav-desktop" id="navDesktop">
       <a href="index.html" class="nav-link active">Accueil</a>
-      <a href="property.html" class="nav-link">Propriétés</a>
-      <a href="property.html?status=acheter" class="nav-link">Acheter</a>
-      <a href="property.html?status=louer" class="nav-link">Louer</a>
-      <a href="property.html?type=villa" class="nav-link">Villas</a>
+      <a href="property.html" class="nav-link" id="navProperties">Propriétés</a>
+      <a href="property.html?status=acheter" class="nav-link" id="linkBuy">Acheter</a>
+      <a href="property.html?status=louer" class="nav-link" id="linkRent">Louer</a>
+      <a href="property.html?type=villa" class="nav-link" id="linkVillas">Villas</a>
       <a href="about.html" class="nav-link">À propos</a>
       <a href="contact.html" class="nav-link">Contact</a>
     </nav>
@@ -195,7 +195,7 @@
 
     <!-- Boutons CTA -->
     <div class="hero-cta reveal-up" style="--delay:0.45s">
-      <a href="property.html" class="btn-hero-primary">
+      <a href="property.html" class="btn-hero-primary" id="heroProperties">
         <i class="fas fa-search"></i>
         Explorer les propriétés
       </a>
@@ -235,37 +235,6 @@
 
 </section>
 
-<!-- ===================== BARRE DE RECHERCHE RAPIDE ===================== -->
-<section class="search-bar-section">
-  <div class="search-bar-card">
-    <div class="search-tabs">
-      <button class="search-tab active" data-status="all">Tous</button>
-      <button class="search-tab" data-status="acheter">Acheter</button>
-      <button class="search-tab" data-status="louer">Louer</button>
-    </div>
-    <div class="search-fields">
-      <div class="search-field">
-        <i class="fas fa-map-marker-alt"></i>
-        <input type="text" placeholder="Cotonou, Abidjan, Lomé..." id="quickSearch">
-      </div>
-      <div class="search-field">
-        <i class="fas fa-home"></i>
-        <select id="quickType">
-          <option value="all">Type de bien</option>
-          <option value="villa">Villa</option>
-          <option value="appartement">Appartement</option>
-          <option value="maison">Maison</option>
-          <option value="studio">Studio</option>
-          <option value="bureau">Bureau</option>
-        </select>
-      </div>
-      <a href="property.html" class="search-btn" id="quickSearchBtn">
-        <i class="fas fa-search"></i>
-        <span>Rechercher</span>
-      </a>
-    </div>
-  </div>
-</section>
 
 <!-- ===================== SERVICES ===================== -->
 <section class="services-section" id="services">
@@ -327,7 +296,7 @@
         <p class="section-eyebrow">Sélection exclusive</p>
         <h2 class="section-title">Propriétés en <em>vedette</em></h2>
       </div>
-      <a href="property.html" class="btn-outline">Voir tout <i class="fas fa-arrow-right"></i></a>
+      <a href="property.html" class="btn-outline" id="allPropertiesBtn">Voir tout <i class="fas fa-arrow-right"></i></a>
     </div>
 
     <!-- Grille de propriétés -->
@@ -621,28 +590,28 @@
       </div>
 
       <div class="faq-right reveal-right">
-        <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-item">
           <div class="faq-q">
             Comment acheter une propriété avec GreenNest ?
             <i class="fas fa-plus faq-icon"></i>
           </div>
           <div class="faq-a">Contactez-nous via le formulaire ou prenez rendez-vous directement avec l'un de nos agents experts basés à Cotonou. Nous vous guidons à chaque étape.</div>
         </div>
-        <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-item">
           <div class="faq-q">
             Proposez-vous des propriétés écologiques ?
             <i class="fas fa-plus faq-icon"></i>
           </div>
           <div class="faq-a">Oui, tous nos biens répondent à des critères de durabilité et d'efficacité énergétique. Nous collaborons avec des constructeurs engagés dans l'éco-construction au Bénin.</div>
         </div>
-        <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-item">
           <div class="faq-q">
             Accompagnez-vous dans le financement ?
             <i class="fas fa-plus faq-icon"></i>
           </div>
           <div class="faq-a">Oui, nos conseillers vous orientent vers les meilleures solutions de financement adaptées à votre profil et à votre projet immobilier.</div>
         </div>
-        <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-item">
           <div class="faq-q">
             Où sont situées vos propriétés ?
             <i class="fas fa-plus faq-icon"></i>
@@ -758,6 +727,10 @@
 <script type="module" src="script-auth.js"></script>
 
 <!-- Logique UI générale -->
+<script>
+  /* Rendre la page visible immédiatement (page libre, pas protégée) */
+  document.body.style.opacity = "1";
+</script>
 <script src="script-new.js"></script>
 
 <!-- Logique propriétés / favoris -->

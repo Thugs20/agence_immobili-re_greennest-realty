@@ -86,10 +86,266 @@ document.addEventListener('DOMContentLoaded', () => {
           image: `images/appartement${imageIndex}.webp`,
           rooms: type === "terrain" ? 0 : Math.floor(Math.random() * 6) + 1,
           surface: Math.floor(Math.random() * 280) + 30
-        });
-      }
+          /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
     });
 
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded      }
+      /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
     return catalog;
   }
 
@@ -124,8 +380,136 @@ document.addEventListener('DOMContentLoaded', () => {
           { transform: 'scale(1)' },
           { transform: 'scale(1.4)' },
           { transform: 'scale(1)' }
-        ], { duration: 350, easing: 'ease-out' });
-      } else {
+        ], { duration: 350, easing: 'ease-out'   /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded      } else {
         btn.classList.remove('active');
         icon.className = 'far fa-heart';
       }
@@ -224,8 +608,136 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         grid.appendChild(card);
-      });
+        /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
 
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
       // Réapparition
       grid.style.opacity = '1';
 
@@ -263,8 +775,136 @@ document.addEventListener('DOMContentLoaded', () => {
       const matchMax = p.price <= maxPrice;
 
       return matchSearch && matchType && matchStatus && matchMin && matchMax;
+      /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
     });
 
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
     renderProperties(filtered);
   }
 
@@ -272,27 +912,667 @@ document.addEventListener('DOMContentLoaded', () => {
   ['searchInput', 'typeFilter', 'statusFilter', 'minPrice', 'maxPrice'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', filterNow);
     document.getElementById(id)?.addEventListener('change', filterNow);
-  });
+    /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
 
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
   // Bouton clear recherche
   document.getElementById('clearSearch')?.addEventListener('click', () => {
     const input = document.getElementById('searchInput');
     if (input) { input.value = ''; filterNow(); input.focus(); }
-  });
+    /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
 
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
   // Bouton reset tous les filtres
   document.getElementById('resetFilters')?.addEventListener('click', () => {
     ['searchInput', 'minPrice', 'maxPrice'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = '';
+      /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
     });
-    ['typeFilter', 'statusFilter'].forEach(id => {
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded    ['typeFilter', 'statusFilter'].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = 'all';
-    });
-    filterNow();
-  });
+      /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
 
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded    filterNow();
+    /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
   /* =====================================================
      6. FILTRES URL (depuis les liens de navigation)
   ===================================================== */
@@ -328,14 +1608,270 @@ document.addEventListener('DOMContentLoaded', () => {
     grid?.classList.remove('list-view');
     viewGrid.classList.add('active');
     viewList?.classList.remove('active');
-  });
+    /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
 
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
   viewList?.addEventListener('click', () => {
     grid?.classList.add('list-view');
     viewList.classList.add('active');
     viewGrid?.classList.remove('active');
-  });
+    /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
 
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
   /* =====================================================
      8. PAGE DÉTAILS PROPRIÉTÉ
   ===================================================== */
@@ -435,10 +1971,25 @@ document.addEventListener('DOMContentLoaded', () => {
               <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
               ${isFav ? 'Dans vos favoris' : 'Ajouter aux favoris'}
             </button>
-            <a href="contact.html" class="btn-action-detail">
+            <a
+              href="contact.html?prop=${encodeURIComponent(property.title)}&ville=${encodeURIComponent(property.city)}&prix=${encodeURIComponent(priceLabel)}&type=${encodeURIComponent(property.type)}&id=${property.id}"
+              class="btn-action-detail"
+            >
               <i class="fas fa-phone"></i>
               Contacter un agent
             </a>
+
+            <!-- Bouton Prendre rendez-vous avec paiement fictif KKiaPay -->
+            <button
+              class="btn-rdv-detail"
+              id="btnRdv"
+              data-title="${property.title}"
+              data-ville="${property.city}"
+              data-prix="${priceLabel}"
+            >
+              <i class="fas fa-calendar-check"></i>
+              Prendre rendez-vous (visite)
+            </button>
           </div>
 
         </div>
@@ -446,6 +1997,272 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     `;
 
+    // ── Bouton Prendre rendez-vous + paiement fictif KKiaPay ──
+    const btnRdv = document.getElementById('btnRdv');
+    btnRdv?.addEventListener('click', () => {
+      openKkiaPayModal({
+        title: btnRdv.getAttribute('data-title'),
+        ville: btnRdv.getAttribute('data-ville'),
+        prix:  btnRdv.getAttribute('data-prix'),
+        /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded      /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
     // Gestion du bouton favoris sur la page détails
     const btnFav = document.getElementById('btnFav');
     btnFav?.addEventListener('click', () => {
@@ -465,16 +2282,401 @@ document.addEventListener('DOMContentLoaded', () => {
           { transform: 'scale(1)' },
           { transform: 'scale(1.2)' },
           { transform: 'scale(1)' }
-        ], { duration: 350, easing: 'ease-out' });
+        ], { duration: 350, easing: 'ease-out'   /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
       }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded      }
 
       localStorage.setItem('gnr_favs', JSON.stringify(favorites));
+      /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
     });
-  }
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded  }
 
   // Initialiser la page détails si on est dessus
   if (window.location.pathname.includes('property-details')) {
     initDetailsPage();
   }
 
-});
+  /* =====================================================
+     FONCTION : Modal paiement fictif KKiaPay
+     Simule une interface de paiement mobile money pour
+     démontrer l'intégration d'un prestataire de paiement.
+     ⚠️ FICTIF — aucune transaction réelle n'est effectuée.
+  ===================================================== */
+  window.openKkiaPayModal = function({ title, ville, prix }) {
+    // Supprimer un modal existant
+    document.getElementById('kkiapay-modal')?.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'kkiapay-modal';
+    modal.innerHTML = `
+      <div class="kkia-backdrop" id="kkiaBackdrop"></div>
+      <div class="kkia-modal">
+        <div class="kkia-header">
+          <div class="kkia-logo">
+            <span class="kkia-logo-icon">💳</span>
+            <div>
+              <strong>KKiaPay</strong>
+              <em>Paiement Mobile Money</em>
+            </div>
+          </div>
+          <button class="kkia-close" id="kkiaClose">✕</button>
+        </div>
+
+        <div class="kkia-body">
+          <div class="kkia-property-recap">
+            <i class="fas fa-home"></i>
+            <div>
+              <strong>${title}</strong>
+              <span>${ville}</span>
+            </div>
+          </div>
+
+          <div class="kkia-amount-box">
+            <span class="kkia-label">Frais de visite</span>
+            <span class="kkia-amount">5 000 FCFA</span>
+            <span class="kkia-note">Remboursable si vous achetez</span>
+          </div>
+
+          <div class="kkia-methods">
+            <p class="kkia-methods-title">Choisissez votre opérateur</p>
+            <div class="kkia-method-grid">
+              <button class="kkia-method active" data-op="MTN">
+                <span class="kkia-method-icon" style="background:#ffd000;color:#000;">M</span>
+                MTN MoMo
+              </button>
+              <button class="kkia-method" data-op="Moov">
+                <span class="kkia-method-icon" style="background:#0062ae;color:#fff;">F</span>
+                Flooz
+              </button>
+              <button class="kkia-method" data-op="Wave">
+                <span class="kkia-method-icon" style="background:#1dc5f0;color:#fff;">W</span>
+                Wave
+              </button>
+            </div>
+          </div>
+
+          <div class="kkia-phone-wrap">
+            <label>Numéro de téléphone</label>
+            <div class="kkia-phone-input">
+              <span class="kkia-flag">🇧🇯 +229</span>
+              <input type="tel" id="kkiaPhone" placeholder="97 00 00 00" maxlength="8">
+            </div>
+          </div>
+        </div>
+
+        <div class="kkia-footer">
+          <button class="kkia-pay-btn" id="kkiaPayBtn">
+            <i class="fas fa-lock"></i>
+            Payer 5 000 FCFA
+          </button>
+          <p class="kkia-disclaimer">
+            🎓 <strong>Démo portfolio</strong> — Aucun paiement réel ne sera effectué
+          </p>
+        </div>
+
+        <!-- Écran de succès (masqué) -->
+        <div class="kkia-success" id="kkiaSuccess" style="display:none;">
+          <div class="kkia-success-icon">✅</div>
+          <h3>Paiement confirmé !</h3>
+          <p>Votre rendez-vous pour la visite de <strong>${title}</strong> est confirmé.</p>
+          <p>Un agent vous contactera sous 24h pour confirmer la date.</p>
+          <button class="kkia-pay-btn" onclick="document.getElementById('kkiapay-modal').remove()">
+            Fermer
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    // Forcer un reflow pour déclencher l'animation
+    requestAnimationFrame(() => modal.querySelector('.kkia-modal').classList.add('open'));
+
+    // Sélection opérateur
+    modal.querySelectorAll('.kkia-method').forEach(btn => {
+      btn.addEventListener('click', () => {
+        modal.querySelectorAll('.kkia-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Fermer modal
+    const closeModal = () => modal.remove();
+    document.getElementById('kkiaClose').addEventListener('click', closeModal);
+    document.getElementById('kkiaBackdrop').addEventListener('click', closeModal);
+
+    // Simuler le paiement
+    document.getElementById('kkiaPayBtn').addEventListener('click', () => {
+      const phone = document.getElementById('kkiaPhone').value.replace(/\s/g, '');
+      if (phone.length < 8) {
+        document.getElementById('kkiaPhone').style.borderColor = '#dc2626';
+        document.getElementById('kkiaPhone').focus();
+        return;
+      }
+      const btn = document.getElementById('kkiaPayBtn');
+      btn.innerHTML = '<span class="spinner"></span> Traitement en cours...';
+      btn.disabled = true;
+
+      // Simulation 2.5 secondes
+      setTimeout(() => {
+        document.querySelector('.kkia-body').style.display = 'none';
+        document.querySelector('.kkia-footer').style.display = 'none';
+        document.getElementById('kkiaSuccess').style.display = 'flex';
+      }, 2500);
+    });
+  };
+
+}); // fin DOMContentLoaded
