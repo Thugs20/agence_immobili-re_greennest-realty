@@ -278,10 +278,12 @@ p { font-weight: 300; }
     background: var(--jade);
     border-radius: 50%;
     pointer-events: none;
-    z-index: 99999;
+    /* z-index max pour être toujours au-dessus de tout */
+    z-index: 999999;
     transform: translate(-50%, -50%);
-    transition: transform 0.1s, opacity 0.3s;
-    mix-blend-mode: multiply;
+    transition: transform 0.15s, opacity 0.3s;
+    /* PAS de mix-blend-mode : cause la disparition sur certains fonds */
+    will-change: transform;
   }
 
   .cursor-follower {
@@ -291,13 +293,14 @@ p { font-weight: 300; }
     border: 2px solid var(--jade);
     border-radius: 50%;
     pointer-events: none;
-    z-index: 99998;
+    z-index: 999998;
     transform: translate(-50%, -50%);
     transition: transform 0.25s var(--ease-out), width 0.3s, height 0.3s, opacity 0.3s;
     opacity: 0.5;
+    will-change: transform;
   }
 
-  a:hover ~ #cursor, button:hover ~ #cursor { transform: translate(-50%, -50%) scale(2); }
+  /* Scale du curseur géré uniquement en JS (la règle CSS ~ ne fonctionne pas ici) */
 }
 
 /* ================================================================
@@ -524,6 +527,33 @@ p { font-weight: 300; }
   box-shadow: 0 8px 20px rgba(34,197,94,0.35);
 }
 
+/* Bouton déconnexion — style distinct, sans glassmorphism */
+.btn-logout-clean {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  background: rgba(239,68,68,0.12);
+  color: #ef4444;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: var(--radius-full);
+  border: 1.5px solid rgba(239,68,68,0.35);
+  transition: all var(--duration) var(--ease);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.btn-logout-clean:hover {
+  background: #ef4444;
+  color: #fff;
+  border-color: #ef4444;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(239,68,68,0.3);
+}
+
+
 /* --- Hamburger --- */
 .hamburger {
   display: none;
@@ -531,12 +561,14 @@ p { font-weight: 300; }
   gap: 5px;
   padding: 8px;
   border-radius: var(--radius-sm);
-  /* z-index AU-DESSUS du menu (5050) et de l'overlay (5040) */
   z-index: 5200;
-  /* Isolation : empêche le backdrop-filter du menu de l'affecter */
-  isolation: isolate;
   position: relative;
   background: transparent;
+  /* will-change:transform crée un nouveau stacking context
+     => le bouton échappe au backdrop-filter blur du header parent
+     => plus de flou sur le hamburger */
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .hamburger span {

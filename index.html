@@ -714,27 +714,12 @@
   </div>
 </footer>
 
-<!-- ===== TOAST NOTIFICATION ===== -->
 <div id="toast"></div>
 
-<!-- ===== SCRIPTS ===== -->
-<!-- Firebase SDK (nécessaire pour script-auth.js) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<!-- Config Firebase + gestion état connexion (navbar) -->
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="script-auth.js"></script>
-
-<!-- Logique UI générale -->
-<script>
-  /* Rendre la page visible immédiatement (page libre, pas protégée) */
-  document.body.style.opacity = "1";
-</script>
+<script>document.body.style.opacity="1";</script>
 <script src="script-new.js"></script>
-
-<!-- Logique propriétés / favoris -->
 <script src="script.js"></script>
+<script type="module" src="script-auth.js"></script>
 
 </body>
 </html>

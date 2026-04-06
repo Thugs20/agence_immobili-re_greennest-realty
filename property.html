@@ -5,76 +5,37 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nos Propriétés | GreenNest Realty – Cotonou, Bénin</title>
-  <meta name="description" content="Parcourez notre catalogue exclusif de villas, appartements et maisons à Cotonou et en Afrique de l'Ouest. GreenNest Realty – immobilier haut de gamme au Bénin.">
+  <meta name="description" content="Parcourez notre catalogue exclusif de villas, appartements et maisons à Cotonou. GreenNest Realty – immobilier haut de gamme au Bénin.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style-new.css">
   <link rel="stylesheet" href="style-properties.css">
-<style>
-/* ===== BANDEAU PORTFOLIO ===== */
-.portfolio-banner{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  z-index:99999;
-  background:rgba(13,61,31,0.96);
-  backdrop-filter:blur(10px);
-  color:rgba(255,255,255,0.9);
-  font-size:0.78rem;
-  padding:0.6rem 1.5rem;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:1.5rem;
-  text-align:center;
-  font-family:'DM Sans',system-ui,sans-serif;
-  letter-spacing:0.02em;
-}
-.portfolio-banner strong{color:#4ade80;}
-.portfolio-banner button{
-  background:rgba(255,255,255,0.15);
-  border:1px solid rgba(255,255,255,0.25);
-  color:#fff;
-  border-radius:50%;
-  width:22px;
-  height:22px;
-  font-size:0.75rem;
-  cursor:pointer;
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:background 0.2s;
-}
-.portfolio-banner button:hover{background:rgba(255,255,255,0.3);}
-@media(max-width:600px){
-  .portfolio-banner{flex-direction:column;gap:0.4rem;padding:0.75rem 1rem;}
-}
-</style>
+  <style>
+  .portfolio-banner{position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(13,61,31,0.96);backdrop-filter:blur(10px);color:rgba(255,255,255,0.9);font-size:0.78rem;padding:0.6rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:1.5rem;text-align:center;font-family:'DM Sans',system-ui,sans-serif;}
+  .portfolio-banner strong{color:#4ade80;}
+  .portfolio-banner button{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.75rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  @media(max-width:600px){.portfolio-banner{flex-direction:column;gap:0.4rem;padding:0.75rem 1rem;}}
+  </style>
 </head>
 <body class="light-mode" style="opacity:0;transition:opacity 0.3s ease;">
-<!-- ====================================================
-     BANDEAU PORTFOLIO — Projet de démonstration
-     À retirer si le projet devient un vrai site
-==================================================== -->
-<div class="portfolio-banner" id="portfolioBanner">
-  <span>🎓 Projet de portfolio · Les données (propriétés, prix, agents) sont <strong>entièrement fictives</strong></span>
-  <button onclick="this.parentElement.style.display='none'" aria-label="Fermer">✕</button>
-</div>
 
-
-<!-- Appliquer thème sauvegardé avant render -->
+<!-- Restaurer thème avant render -->
 <script>if(localStorage.getItem('gnr-theme')==='dark'){document.body.classList.add('dark-mode');}</script>
 
-<!-- ===== THEME TOGGLE ===== -->
+<!-- Bandeau portfolio -->
+<div class="portfolio-banner">
+  <span>🎓 Projet de portfolio · Les données sont <strong>entièrement fictives</strong></span>
+  <button onclick="this.parentElement.style.display='none'">✕</button>
+</div>
+
+<!-- Theme toggle -->
 <button class="theme-toggle" id="themeToggle" title="Changer le thème">
   <i class="fas fa-moon" id="themeIcon"></i>
 </button>
 
-<!-- ===== HEADER COMPACT ===== -->
+<!-- HEADER -->
 <header id="mainHeader" class="scrolled">
   <div class="header-inner">
     <a href="index.html" class="logo-link">
@@ -88,9 +49,10 @@
     </a>
     <nav class="nav-desktop">
       <a href="index.html" class="nav-link">Accueil</a>
-      <a href="property.html" class="nav-link active">Propriétés</a>
-      <a href="property.html?status=acheter" class="nav-link">Acheter</a>
-      <a href="property.html?status=louer" class="nav-link">Louer</a>
+      <a href="property.html" class="nav-link active" id="navProperties">Propriétés</a>
+      <a href="property.html?status=acheter" class="nav-link" id="linkBuy">Acheter</a>
+      <a href="property.html?status=louer" class="nav-link" id="linkRent">Louer</a>
+      <a href="property.html?type=villa" class="nav-link" id="linkVillas">Villas</a>
       <a href="about.html" class="nav-link">À propos</a>
       <a href="contact.html" class="nav-link">Contact</a>
     </nav>
@@ -104,23 +66,25 @@
       </button>
     </div>
   </div>
+  <!-- Menu mobile -->
   <div class="mobile-menu" id="mobileMenu">
     <nav class="mobile-nav">
       <a href="index.html" class="mobile-link">Accueil</a>
       <a href="property.html" class="mobile-link">Propriétés</a>
       <a href="property.html?status=acheter" class="mobile-link">Acheter</a>
       <a href="property.html?status=louer" class="mobile-link">Louer</a>
+      <a href="property.html?type=villa" class="mobile-link">Villas</a>
       <a href="about.html" class="mobile-link">À propos</a>
       <a href="contact.html" class="mobile-link">Contact</a>
-      <a href="login.html" class="mobile-link mobile-cta">Connexion</a>
+      <a href="login.html" class="mobile-link mobile-cta" id="btnLoginMobile">Connexion</a>
     </nav>
   </div>
 </header>
 
-<!-- ===== PAGE HERO BANNER ===== -->
+<!-- BANNER -->
 <section class="page-banner">
   <div class="page-banner-bg">
-    <img src="images/appartement20.webp" alt="Catalogue immobilier GreenNest" loading="lazy">
+    <img src="images/appartement20.webp" alt="Catalogue immobilier GreenNest Cotonou" loading="lazy">
     <div class="page-banner-overlay"></div>
   </div>
   <div class="page-banner-content">
@@ -134,11 +98,10 @@
   </div>
 </section>
 
-<!-- ===== FILTRES ===== -->
+<!-- FILTRES -->
 <section class="filters-section">
   <div class="filters-wrap">
 
-    <!-- Barre de recherche principale -->
     <div class="filters-search">
       <div class="search-input-wrap">
         <i class="fas fa-search"></i>
@@ -149,9 +112,7 @@
       </div>
     </div>
 
-    <!-- Filtres en ligne -->
     <div class="filters-row">
-
       <div class="filter-group">
         <label>Type de bien</label>
         <select id="typeFilter">
@@ -167,7 +128,6 @@
           <option value="boutique">Boutique</option>
         </select>
       </div>
-
       <div class="filter-group">
         <label>Statut</label>
         <select id="statusFilter">
@@ -176,25 +136,19 @@
           <option value="louer">À Louer</option>
         </select>
       </div>
-
       <div class="filter-group">
         <label>Prix min</label>
         <input type="number" id="minPrice" placeholder="0">
       </div>
-
       <div class="filter-group">
         <label>Prix max</label>
         <input type="number" id="maxPrice" placeholder="Illimité">
       </div>
-
       <button class="filter-reset" id="resetFilters">
-        <i class="fas fa-undo"></i>
-        Réinitialiser
+        <i class="fas fa-undo"></i> Réinitialiser
       </button>
-
     </div>
 
-    <!-- Compteur de résultats + tri -->
     <div class="filters-meta">
       <span id="resultsCount" class="results-count">Chargement...</span>
       <div class="view-toggle">
@@ -210,14 +164,10 @@
   </div>
 </section>
 
-<!-- ===== GRILLE PROPRIÉTÉS ===== -->
+<!-- GRILLE PROPRIÉTÉS -->
 <main class="properties-main">
   <div class="properties-wrap">
-    <div class="properties-grid" id="propertiesGrid">
-      <!-- Les cartes sont générées par JavaScript -->
-    </div>
-
-    <!-- Message vide -->
+    <div class="properties-grid" id="propertiesGrid"></div>
     <div class="no-results" id="noResults" style="display:none;">
       <div class="no-results-icon"><i class="fas fa-search"></i></div>
       <h3>Aucune propriété trouvée</h3>
@@ -229,7 +179,7 @@
   </div>
 </main>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-top">
     <div class="footer-inner">
@@ -256,30 +206,22 @@
         <h5>Contact</h5>
         <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Cotonou, Bénin</span></div>
         <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+229 97 00 00 00</span></div>
-        <div class="footer-contact-item"><i class="fas fa-envelope"></i><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="55363a3b2134362115322730303b3b3026217827303439212c7b373f">[email&#160;protected]</a></span></div>
+        <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>contact@greennest-realty.bj</span></div>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
     <p>© 2026 GreenNest Realty – Cotonou, Bénin</p>
     <p>Développé par <strong>HOUETO Fabrice</strong></p>
-  <
+  </div>
+</footer>
 
 <div id="toast"></div>
 
-<!-- Firebase SDK compat (pour script-auth.js) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<!-- Gestion état connexion -->
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="script-auth.js"></script>
-
-<!-- Logique UI globale -->
+<!-- Scripts : UI → Données → Auth (en dernier pour gérer opacity) -->
 <script src="script-new.js"></script>
-
-<!-- Logique catalogue + filtres + favoris -->
 <script src="script.js"></script>
+<script type="module" src="script-auth.js"></script>
 
 </body>
 </html>

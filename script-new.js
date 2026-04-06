@@ -67,21 +67,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const follower = document.getElementById('cursorFollower');
 
   if (cursor && follower && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    /* S'assurer que pointer-events est désactivé */
+    /* Désactiver pointer-events : le curseur ne bloque JAMAIS les clics */
     cursor.style.pointerEvents   = 'none';
     follower.style.pointerEvents = 'none';
+    /* Couleur de fond solide — pas de mix-blend-mode qui fait disparaître le curseur */
+    cursor.style.background = 'var(--jade, #22c55e)';
+    cursor.style.opacity = '1';
 
     let mouseX = 0, mouseY = 0;
     let followerX = 0, followerY = 0;
+    let isOverInteractive = false;
 
     document.addEventListener('mousemove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
+      /* Position directe sans transition pour le point principal */
       cursor.style.left = mouseX + 'px';
       cursor.style.top  = mouseY + 'px';
     });
 
-    /* Follower avec lag */
+    /* Follower avec lag fluide */
     (function animateFollower() {
       followerX += (mouseX - followerX) * 0.12;
       followerY += (mouseY - followerY) * 0.12;
@@ -90,22 +95,45 @@ document.addEventListener('DOMContentLoaded', () => {
       requestAnimationFrame(animateFollower);
     })();
 
-    /* Agrandir sur éléments interactifs */
-    document.querySelectorAll('a, button, input, select, textarea, .feat-card, .service-card, .property-card').forEach(el => {
+    /* Scale au hover sur éléments interactifs — géré en JS car CSS ~ ne fonctionne pas */
+    function addHoverEffect(el) {
       el.addEventListener('mouseenter', () => {
-        cursor.style.transform   = 'translate(-50%,-50%) scale(2.5)';
-        follower.style.transform = 'translate(-50%,-50%) scale(1.4)';
-        follower.style.opacity   = '0.3';
+        cursor.style.transform   = 'translate(-50%,-50%) scale(2)';
+        follower.style.transform = 'translate(-50%,-50%) scale(1.5)';
+        follower.style.opacity   = '0.25';
       });
       el.addEventListener('mouseleave', () => {
         cursor.style.transform   = 'translate(-50%,-50%) scale(1)';
         follower.style.transform = 'translate(-50%,-50%) scale(1)';
         follower.style.opacity   = '0.5';
       });
+    }
+
+    /* Appliquer sur les éléments existants */
+    document.querySelectorAll('a, button, input, select, textarea, [role="button"]').forEach(addHoverEffect);
+
+    /* Observer les éléments ajoutés dynamiquement (cartes propriétés) */
+    new MutationObserver(mutations => {
+      mutations.forEach(m => m.addedNodes.forEach(node => {
+        if (node.nodeType !== 1) return;
+        node.querySelectorAll?.('a, button, [role="button"]').forEach(addHoverEffect);
+        if (['A','BUTTON'].includes(node.tagName)) addHoverEffect(node);
+      }));
+    }).observe(document.body, { childList: true, subtree: true });
+
+    /* Masquer le curseur quand la souris quitte la fenêtre */
+    document.addEventListener('mouseleave', () => {
+      cursor.style.opacity   = '0';
+      follower.style.opacity = '0';
     });
+    document.addEventListener('mouseenter', () => {
+      cursor.style.opacity   = '1';
+      follower.style.opacity = '0.5';
+    });
+
   } else {
-    /* Sur mobile ou touch : masquer les curseurs */
-    if (cursor)   cursor.style.display   = 'none';
+    /* Touch / mobile : masquer complètement les curseurs custom */
+    if (cursor)   cursor.style.display = 'none';
     if (follower) follower.style.display = 'none';
   }
 

@@ -2,134 +2,161 @@
  * script-auth.js — GreenNest Realty
  * Gestion état connexion Firebase sur toutes les pages
  *
- * Logique :
- * - Pages libres : index, about, contact, login, register
- * - Pages protégées : property.html, property-details.html
- *   → Si non connecté : redirection IMMÉDIATE vers login.html
- *   → Les liens vers pages protégées sont aussi interceptés
+ * VERSION AUTONOME : contient sa propre initialisation Firebase
+ * => fonctionne en local (file://) ET en ligne sans dépendre de firebase-config.js
+ * => timeout de sécurité : si Firebase ne répond pas en 4s, la page s'affiche quand même
  */
 
+import { initializeApp, getApps }
+  from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { app } from "./firebase-config.js";
 
+/* ─── Config Firebase ─────────────────────────── */
+const firebaseConfig = {
+  apiKey:            "AIzaSyDb7y807LAXmV2ST_EdA_L-LdBcbc6SKN8",
+  authDomain:        "green-nest-realty-immobilier.firebaseapp.com",
+  projectId:         "green-nest-realty-immobilier",
+  storageBucket:     "green-nest-realty-immobilier.firebasestorage.app",
+  messagingSenderId: "1037762102556",
+  appId:             "1:1037762102556:web:f78e8d720783bbbdf426d9"
+};
+
+/* Initialiser Firebase seulement si pas déjà fait */
+const app  = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 /* ─── Pages protégées ─────────────────────────── */
-const PROTECTED_PAGES = ["property.html", "property-details.html"];
+const PROTECTED = ["property.html", "property-details.html"];
+const path      = window.location.pathname;
+const isProtected = PROTECTED.some(p => path.includes(p));
 
-const currentPage = window.location.pathname;
-const isProtected = PROTECTED_PAGES.some(p => currentPage.includes(p));
-
-/* ─── Masquer le body immédiatement sur pages protégées ─── */
+/* ─── Rendre la page invisible immédiatement sur pages protégées ─── */
 if (isProtected) {
-  document.documentElement.style.visibility = "hidden";
+  document.body.style.opacity    = "0";
+  document.body.style.visibility = "hidden";
+}
+
+/* ─── Timeout de sécurité : afficher la page après 4s max ─── */
+/* (au cas où Firebase ne répond pas — évite l'écran blanc permanent) */
+let authResolved = false;
+const safetyTimeout = setTimeout(() => {
+  if (!authResolved) {
+    console.warn("GreenNest: Firebase auth timeout - affichage de la page par sécurité");
+    if (isProtected) {
+      /* Si la page est protégée et Firebase ne répond pas, rediriger quand même */
+      sessionStorage.setItem("gnr_redirect", window.location.href);
+      window.location.replace("login.html");
+    } else {
+      showPage();
+    }
+  }
+}, 4000);
+
+/* ─── Afficher la page ────────────────────────── */
+function showPage() {
+  document.body.style.opacity    = "1";
+  document.body.style.visibility = "visible";
 }
 
 /* ─── Toast utilitaire ───────────────────────── */
-function showToast(message, color = "#1a6b35") {
+function showToast(message, color) {
   let toast = document.getElementById("toast");
   if (!toast) {
     toast = document.createElement("div");
     toast.id = "toast";
-    Object.assign(toast.style, {
-      position: "fixed", bottom: "5.5rem", left: "50%",
-      transform: "translateX(-50%) translateY(0)",
-      background: color, color: "#fff", padding: "0.875rem 1.5rem",
-      borderRadius: "999px", fontSize: "0.875rem", fontWeight: "600",
-      zIndex: "99000", opacity: "0", transition: "opacity 0.3s",
-      whiteSpace: "nowrap", boxShadow: "0 8px 24px rgba(0,0,0,0.2)"
-    });
     document.body.appendChild(toast);
   }
   toast.textContent = message;
-  toast.style.background = color;
-  toast.style.opacity = "1";
+  toast.style.cssText = `
+    position:fixed; bottom:5.5rem; left:50%;
+    transform:translateX(-50%);
+    background:${color || "#1a6b35"}; color:#fff;
+    padding:.875rem 1.5rem; border-radius:999px;
+    font-size:.875rem; font-weight:600;
+    z-index:99000; opacity:1; transition:opacity .3s;
+    white-space:nowrap; box-shadow:0 8px 24px rgba(0,0,0,.25);
+    font-family:'DM Sans',system-ui,sans-serif;
+  `;
   setTimeout(() => { toast.style.opacity = "0"; }, 3200);
 }
 
-/* ─── Mettre à jour le bouton Connexion/Déconnexion ─── */
-function updateAuthButton(user) {
-  /* Sélectionner tous les boutons #btnLogin sur la page
-     (desktop + mobile peuvent avoir le même ID ou des classes) */
-  const loginBtns = document.querySelectorAll("#btnLogin, .btn-cta[href='login.html'], .mobile-cta[href='login.html']");
+/* ─── Mettre à jour tous les boutons Connexion/Déconnexion ─── */
+function updateAuthButtons(user) {
+  /* Sélectionner tous les boutons d'auth sur la page */
+  const btns = document.querySelectorAll(
+    "#btnLogin, a.btn-cta[href='login.html'], a.mobile-cta[href='login.html']"
+  );
 
-  loginBtns.forEach(btn => {
+  btns.forEach(btn => {
     if (user) {
-      /* --- Connecté : afficher Déconnexion --- */
+      /* Connecté → bouton Déconnexion propre sans style flou */
       btn.innerHTML = `<i class="fas fa-sign-out-alt"></i><span>Déconnexion</span>`;
-      btn.href = "#";
-      btn.style.background = "rgba(239,68,68,0.15)";
-      btn.style.color = "var(--text)";
-      btn.style.border = "2px solid rgba(239,68,68,0.3)";
+      btn.setAttribute("href", "#");
+      btn.classList.remove("btn-cta");
+      btn.classList.add("btn-logout-clean");
       btn.onclick = async (e) => {
         e.preventDefault();
         try {
           await signOut(auth);
           showToast("Déconnecté avec succès 👋");
           setTimeout(() => window.location.href = "index.html", 1200);
-        } catch (err) {
+        } catch {
           showToast("Erreur lors de la déconnexion", "#dc2626");
         }
       };
     } else {
-      /* --- Non connecté : afficher Connexion --- */
+      /* Non connecté → bouton Connexion */
       btn.innerHTML = `<i class="fas fa-user"></i><span>Connexion</span>`;
-      btn.href = "login.html";
-      btn.style.background = "";
-      btn.style.color = "";
-      btn.style.border = "";
+      btn.setAttribute("href", "login.html");
+      btn.classList.add("btn-cta");
+      btn.classList.remove("btn-logout-clean");
       btn.onclick = null;
     }
   });
-
-  /* Afficher le nom de l'utilisateur si un élément #userName existe */
-  const userNameEl = document.getElementById("userName");
-  if (userNameEl) {
-    userNameEl.textContent = user ? (user.displayName || user.email.split("@")[0]) : "";
-    userNameEl.style.display = user ? "inline" : "none";
-  }
 }
 
-/* ─── Intercepter les liens vers pages protégées ─── */
+/* ─── Intercepter les clics vers pages protégées ─── */
 function setupProtectedLinks() {
-  /* Tous les liens qui pointent vers property.html (quelle que soit la query string) */
-  document.querySelectorAll('a[href]').forEach(link => {
-    const href = link.getAttribute('href') || '';
-    const isToProtected = PROTECTED_PAGES.some(p => href.includes(p));
-    if (!isToProtected) return;
+  document.querySelectorAll("a[href]").forEach(link => {
+    const href = link.getAttribute("href") || "";
+    const goesToProtected = PROTECTED.some(p => href.includes(p));
+    if (!goesToProtected) return;
 
-    link.addEventListener('click', (e) => {
-      /* Vérifier l'état actuel de l'auth de façon synchrone via currentUser */
+    /* Ajouter l'intercepteur une seule fois */
+    if (link.dataset.authGuarded) return;
+    link.dataset.authGuarded = "1";
+
+    link.addEventListener("click", (e) => {
       if (!auth.currentUser) {
         e.preventDefault();
-        /* Mémoriser la destination pour redirect après login */
-        sessionStorage.setItem('gnr_redirect', link.href);
+        sessionStorage.setItem("gnr_redirect", link.href);
         showToast("Connectez-vous pour accéder aux propriétés 🔒", "#dc2626");
-        setTimeout(() => window.location.href = "login.html", 1500);
+        setTimeout(() => window.location.href = "login.html", 1400);
       }
-      /* Si connecté, laisser le lien fonctionner normalement */
     });
   });
 }
 
-/* ─── Écoute principale de l'état Firebase ─── */
+/* ─── Écoute principale Firebase Auth ────────── */
 onAuthStateChanged(auth, (user) => {
+  authResolved = true;
+  clearTimeout(safetyTimeout);
 
   if (isProtected) {
     if (!user) {
-      /* Non connecté sur page protégée → redirection immédiate sans afficher la page */
-      sessionStorage.setItem('gnr_redirect', window.location.href);
+      /* Non connecté sur page protégée → redirection immédiate */
+      sessionStorage.setItem("gnr_redirect", window.location.href);
       window.location.replace("login.html");
-      return; /* Ne pas continuer */
+      return;
     }
-    /* Connecté sur page protégée → afficher la page */
-    document.documentElement.style.visibility = "visible";
+    /* Connecté → afficher la page */
+    showPage();
+  } else {
+    /* Page libre → toujours visible */
+    showPage();
   }
 
-  /* Mettre à jour le bouton dans le header */
-  updateAuthButton(user);
-
-  /* Protéger les liens de navigation */
+  updateAuthButtons(user);
   setupProtectedLinks();
 });

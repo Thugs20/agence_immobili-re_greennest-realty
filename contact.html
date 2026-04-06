@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="style-new.css">
+  <link rel="stylesheet" href="style-properties.css">
   <link rel="stylesheet" href="style-contact.css">
 <style>
 /* ===== BANDEAU PORTFOLIO ===== */
@@ -369,7 +370,7 @@
   if (prop) {
     // Sélectionner "Demande d'information" dans le select Objet
     const subjectEl = document.getElementById('contactSubject');
-    if (subjectEl) subjectEl.value = 'Demande d'information';
+    if (subjectEl) subjectEl.value = 'Demande d\'information';
 
     // Pré-remplir le message avec les infos de la propriété
     const msgEl = document.getElementById('contactMessage');
@@ -449,10 +450,6 @@ document.getElementById('contactForm')?.addEventListener('submit', function(e) {
 });
 </script>
 
-<!-- Firebase SDK compat (pour script-auth.js) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script type="module" src="firebase-config.js"></script>
 <script type="module" src="script-auth.js"></script>
 
 </body>

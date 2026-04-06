@@ -5,68 +5,32 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>À propos | GreenNest Realty – Agence Immobilière Durable Cotonou, Bénin</title>
-  <meta name="description" content="GreenNest Realty est votre agence immobilière haut de gamme à Cotonou, spécialisée dans l'immobilier durable. 15 ans d'expérience, 500+ propriétés, 1200+ clients.">
+  <meta name="description" content="GreenNest Realty est votre agence immobilière haut de gamme à Cotonou, spécialisée dans l'immobilier durable. 15 ans d'expérience, 500+ propriétés.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- style-new : base globale (header, footer, variables) -->
   <link rel="stylesheet" href="style-new.css">
+  <!-- style-home : team-card, team-grid, cta-section définis ici -->
+  <link rel="stylesheet" href="style-home.css">
+  <!-- style-about : sections spécifiques à cette page -->
   <link rel="stylesheet" href="style-about.css">
-<style>
-/* ===== BANDEAU PORTFOLIO ===== */
-.portfolio-banner{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  z-index:99999;
-  background:rgba(13,61,31,0.96);
-  backdrop-filter:blur(10px);
-  color:rgba(255,255,255,0.9);
-  font-size:0.78rem;
-  padding:0.6rem 1.5rem;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:1.5rem;
-  text-align:center;
-  font-family:'DM Sans',system-ui,sans-serif;
-  letter-spacing:0.02em;
-}
-.portfolio-banner strong{color:#4ade80;}
-.portfolio-banner button{
-  background:rgba(255,255,255,0.15);
-  border:1px solid rgba(255,255,255,0.25);
-  color:#fff;
-  border-radius:50%;
-  width:22px;
-  height:22px;
-  font-size:0.75rem;
-  cursor:pointer;
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:background 0.2s;
-}
-.portfolio-banner button:hover{background:rgba(255,255,255,0.3);}
-@media(max-width:600px){
-  .portfolio-banner{flex-direction:column;gap:0.4rem;padding:0.75rem 1rem;}
-}
-</style>
+  <style>
+  .portfolio-banner{position:fixed;bottom:0;left:0;right:0;z-index:99999;background:rgba(13,61,31,0.96);backdrop-filter:blur(10px);color:rgba(255,255,255,0.9);font-size:0.78rem;padding:0.6rem 1.5rem;display:flex;align-items:center;justify-content:center;gap:1.5rem;text-align:center;font-family:'DM Sans',system-ui,sans-serif;}
+  .portfolio-banner strong{color:#4ade80;}
+  .portfolio-banner button{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.75rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  @media(max-width:600px){.portfolio-banner{flex-direction:column;gap:0.4rem;padding:0.75rem 1rem;}}
+  </style>
 </head>
 <body class="light-mode" style="opacity:0;transition:opacity 0.3s ease;">
-<!-- ====================================================
-     BANDEAU PORTFOLIO — Projet de démonstration
-     À retirer si le projet devient un vrai site
-==================================================== -->
-<div class="portfolio-banner" id="portfolioBanner">
-  <span>🎓 Projet de portfolio · Les données (propriétés, prix, agents) sont <strong>entièrement fictives</strong></span>
-  <button onclick="this.parentElement.style.display='none'" aria-label="Fermer">✕</button>
-</div>
-
 
 <script>if(localStorage.getItem('gnr-theme')==='dark'){document.body.classList.add('dark-mode');}</script>
+
+<div class="portfolio-banner">
+  <span>🎓 Projet de portfolio · Les données sont <strong>entièrement fictives</strong></span>
+  <button onclick="this.parentElement.style.display='none'">✕</button>
+</div>
 
 <button class="theme-toggle" id="themeToggle" title="Thème">
   <i class="fas fa-moon" id="themeIcon"></i>
@@ -86,15 +50,18 @@
     </a>
     <nav class="nav-desktop">
       <a href="index.html" class="nav-link">Accueil</a>
-      <a href="property.html" class="nav-link">Propriétés</a>
+      <a href="property.html" class="nav-link" id="navProperties">Propriétés</a>
+      <a href="property.html?status=acheter" class="nav-link" id="linkBuy">Acheter</a>
+      <a href="property.html?status=louer" class="nav-link" id="linkRent">Louer</a>
       <a href="about.html" class="nav-link active">À propos</a>
       <a href="contact.html" class="nav-link">Contact</a>
     </nav>
     <div class="header-actions">
-      <a href="login.html" class="btn-cta">
-        <i class="fas fa-user"></i><span>Connexion</span>
+      <a href="login.html" class="btn-cta" id="btnLogin">
+        <i class="fas fa-user"></i>
+        <span>Connexion</span>
       </a>
-      <button class="hamburger" id="hamburger">
+      <button class="hamburger" id="hamburger" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -105,7 +72,7 @@
       <a href="property.html" class="mobile-link">Propriétés</a>
       <a href="about.html" class="mobile-link">À propos</a>
       <a href="contact.html" class="mobile-link">Contact</a>
-      <a href="login.html" class="mobile-link mobile-cta">Connexion</a>
+      <a href="login.html" class="mobile-link mobile-cta" id="btnLoginMobile">Connexion</a>
     </nav>
   </div>
 </header>
@@ -125,28 +92,18 @@
     <h1>L'immobilier durable,<br><em>c'est notre ADN</em></h1>
     <p>Depuis 2009, GreenNest Realty redéfinit les standards de l'immobilier haut de gamme à Cotonou et en Afrique de l'Ouest.</p>
   </div>
-  <!-- Stats rapides flottantes -->
   <div class="about-hero-stats">
-    <div class="hero-stat-pill">
-      <strong>500+</strong><span>Propriétés</span>
-    </div>
-    <div class="hero-stat-pill">
-      <strong>1 200+</strong><span>Familles logées</span>
-    </div>
-    <div class="hero-stat-pill">
-      <strong>15 ans</strong><span>D'expérience</span>
-    </div>
-    <div class="hero-stat-pill">
-      <strong>98%</strong><span>Satisfaction client</span>
-    </div>
+    <div class="hero-stat-pill"><strong>500+</strong><span>Propriétés</span></div>
+    <div class="hero-stat-pill"><strong>1 200+</strong><span>Familles logées</span></div>
+    <div class="hero-stat-pill"><strong>15 ans</strong><span>D'expérience</span></div>
+    <div class="hero-stat-pill"><strong>98%</strong><span>Satisfaction</span></div>
   </div>
 </section>
 
-<!-- SECTION HISTOIRE -->
+<!-- HISTOIRE -->
 <section class="about-story">
   <div class="section-wrap">
     <div class="story-grid">
-
       <div class="story-img reveal-left">
         <img src="images/appartement20.webp" alt="GreenNest Realty histoire Cotonou" loading="lazy">
         <div class="story-img-badge">
@@ -157,93 +114,71 @@
           </div>
         </div>
       </div>
-
       <div class="story-text reveal-right">
         <p class="section-eyebrow">Notre histoire</p>
         <h2 class="section-title">Une vision née à <em>Cotonou</em></h2>
         <p>GreenNest Realty est née d'une conviction simple : l'immobilier peut être à la fois luxueux et responsable. Fondée en 2009 au cœur de Cotonou, notre agence a grandi avec la ville, accompagnant des centaines de familles et d'investisseurs dans leurs projets immobiliers les plus importants.</p>
         <p>Aujourd'hui, nous sommes fiers d'être une référence incontournable de l'immobilier haut de gamme au Bénin, avec une présence étendue à travers toute l'Afrique de l'Ouest.</p>
-
-        <!-- Timeline -->
         <div class="story-timeline">
           <div class="timeline-item">
             <div class="timeline-dot"></div>
-            <div>
-              <strong>2009</strong>
-              <span>Fondation de GreenNest Realty à Cotonou</span>
-            </div>
+            <div><strong>2009</strong><span>Fondation de GreenNest Realty à Cotonou</span></div>
           </div>
           <div class="timeline-item">
             <div class="timeline-dot"></div>
-            <div>
-              <strong>2014</strong>
-              <span>Expansion vers l'Afrique de l'Ouest (Lomé, Abidjan)</span>
-            </div>
+            <div><strong>2014</strong><span>Expansion vers l'Afrique de l'Ouest (Lomé, Abidjan)</span></div>
           </div>
           <div class="timeline-item">
             <div class="timeline-dot"></div>
-            <div>
-              <strong>2019</strong>
-              <span>Lancement de la plateforme digitale immobilière</span>
-            </div>
+            <div><strong>2019</strong><span>Lancement de la plateforme digitale immobilière</span></div>
           </div>
           <div class="timeline-item">
             <div class="timeline-dot"></div>
-            <div>
-              <strong>2024</strong>
-              <span>500+ propriétés · 1 200+ familles logées</span>
-            </div>
+            <div><strong>2024</strong><span>500+ propriétés · 1 200+ familles logées</span></div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- SECTION VALEURS -->
+<!-- VALEURS -->
 <section class="values-section">
   <div class="section-wrap">
     <div class="section-header reveal-up">
       <p class="section-eyebrow">Ce qui nous différencie</p>
       <h2 class="section-title">Nos <em>valeurs</em> fondamentales</h2>
     </div>
-
     <div class="values-grid">
-
       <div class="value-card reveal-up" style="--delay:0.1s">
         <div class="value-number">01</div>
         <div class="value-icon"><i class="fas fa-leaf"></i></div>
         <h3>Durabilité</h3>
-        <p>Chaque propriété de notre catalogue répond à des critères écologiques stricts. Nous privilégions les constructions durables et les matériaux respectueux de l'environnement.</p>
+        <p>Chaque propriété répond à des critères écologiques stricts. Nous privilégions les constructions durables et les matériaux respectueux de l'environnement.</p>
       </div>
-
       <div class="value-card reveal-up" style="--delay:0.2s">
         <div class="value-number">02</div>
         <div class="value-icon"><i class="fas fa-star"></i></div>
         <h3>Excellence</h3>
-        <p>Notre sélection est rigoureuse. Seulement les meilleures propriétés intègrent notre catalogue, garantissant qualité et standing à chacun de nos clients.</p>
+        <p>Notre sélection est rigoureuse. Seulement les meilleures propriétés intègrent notre catalogue, garantissant qualité et standing.</p>
       </div>
-
       <div class="value-card reveal-up" style="--delay:0.3s">
         <div class="value-number">03</div>
         <div class="value-icon"><i class="fas fa-handshake"></i></div>
         <h3>Confiance</h3>
         <p>La transparence est au cœur de chaque transaction. Nos conseillers vous accompagnent avec honnêteté et intégrité, de la recherche à la signature.</p>
       </div>
-
       <div class="value-card reveal-up" style="--delay:0.4s">
         <div class="value-number">04</div>
         <div class="value-icon"><i class="fas fa-rocket"></i></div>
         <h3>Innovation</h3>
         <p>Nous adoptons les meilleures technologies pour simplifier votre recherche et vous offrir une expérience immobilière moderne et efficace.</p>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- SECTION ÉQUIPE COMPLÈTE -->
+<!-- ÉQUIPE -->
 <section class="team-full-section">
   <div class="section-wrap">
     <div class="section-header reveal-up">
@@ -255,10 +190,10 @@
 
       <div class="team-card reveal-up" style="--delay:0.1s">
         <div class="team-photo">
-          <img src="images/agent1.webp" alt="Alice Dupont">
+          <img src="images/agent1.webp" alt="Alice Dupont – Directrice Commerciale GreenNest Realty">
           <div class="team-social">
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="LinkedIn Alice"><i class="fab fa-linkedin"></i></a>
+            <a href="#" aria-label="Instagram Alice"><i class="fab fa-instagram"></i></a>
           </div>
         </div>
         <div class="team-info">
@@ -270,37 +205,37 @@
 
       <div class="team-card reveal-up" style="--delay:0.2s">
         <div class="team-photo">
-          <img src="images/agent2.webp" alt="Marc Lefevre">
+          <img src="images/agent2.webp" alt="Marc Lefevre – Expert Location GreenNest Realty">
           <div class="team-social">
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="LinkedIn Marc"><i class="fab fa-linkedin"></i></a>
+            <a href="#" aria-label="Twitter Marc"><i class="fab fa-twitter"></i></a>
           </div>
         </div>
         <div class="team-info">
           <h4>Marc Lefevre</h4>
-          <p>Expert Location</p>
+          <p>Expert en Location</p>
           <span class="team-expertise">Location · Appartements</span>
         </div>
       </div>
 
       <div class="team-card reveal-up" style="--delay:0.3s">
         <div class="team-photo">
-          <img src="images/ma_photo.webp" alt="HOUETO Fabrice">
+          <img src="images/ma_photo.webp" alt="HOUETO Fabrice – Fondateur GreenNest Realty">
           <div class="team-social">
-            <a href="#"><i class="fab fa-github"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#" aria-label="GitHub Fabrice"><i class="fab fa-github"></i></a>
+            <a href="#" aria-label="LinkedIn Fabrice"><i class="fab fa-linkedin"></i></a>
           </div>
         </div>
         <div class="team-info">
           <h4>HOUETO Fabrice</h4>
-          <p>Fondateur & CTO</p>
+          <p>Fondateur &amp; CTO</p>
           <span class="team-expertise">Tech · Design · Innovation</span>
         </div>
       </div>
 
     </div>
 
-    <!-- Note du développeur -->
+    <!-- Note développeur -->
     <div class="developer-note reveal-up" style="--delay:0.4s">
       <div class="dev-note-inner">
         <div class="dev-avatar">
@@ -328,7 +263,7 @@
       <h2>Trouvez votre propriété<br><em>idéale dès aujourd'hui</em></h2>
       <p>Parcourez notre catalogue et contactez nos experts à Cotonou.</p>
       <div class="cta-btns">
-        <a href="property.html" class="btn-cta-white">Voir les propriétés</a>
+        <a href="property.html" class="btn-cta-white" id="heroProperties">Voir les propriétés</a>
         <a href="contact.html" class="btn-cta-ghost">Nous contacter</a>
       </div>
     </div>
@@ -362,27 +297,20 @@
         <h5>Contact</h5>
         <div class="footer-contact-item"><i class="fas fa-map-marker-alt"></i><span>Cotonou, Bénin</span></div>
         <div class="footer-contact-item"><i class="fas fa-phone"></i><span>+229 97 00 00 00</span></div>
-        <div class="footer-contact-item"><i class="fas fa-envelope"></i><span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="187b77766c797b6c587f6a7d7d76767d6b6c356a7d79746c61367a72">[email&#160;protected]</a></span></div>
+        <div class="footer-contact-item"><i class="fas fa-envelope"></i><span>contact@greennest-realty.bj</span></div>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
     <p>© 2026 GreenNest Realty – Cotonou, Bénin</p>
-    <p>Développé par <str
+    <p>Développé par <strong>HOUETO Fabrice</strong></p>
+  </div>
+</footer>
 
 <div id="toast"></div>
 
-<!-- Firebase SDK compat (pour script-auth.js) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<!-- Gestion état connexion (affiche nom utilisateur dans la nav) -->
-<script type="module" src="firebase-config.js"></script>
-<script type="module" src="script-auth.js"></script>
-
-<!-- Logique UI globale -->
-<script>document.body.style.opacity="1";</script>
 <script src="script-new.js"></script>
+<script type="module" src="script-auth.js"></script>
 
 </body>
 </html>
