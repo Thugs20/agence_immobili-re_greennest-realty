@@ -275,27 +275,28 @@ p { font-weight: 300; }
     position: fixed;
     width: 10px;
     height: 10px;
-    background: var(--jade);
+    background: #22c55e;
     border-radius: 50%;
     pointer-events: none;
-    /* z-index max pour être toujours au-dessus de tout */
     z-index: 999999;
     transform: translate(-50%, -50%);
     transition: transform 0.15s, opacity 0.3s;
-    /* PAS de mix-blend-mode : cause la disparition sur certains fonds */
     will-change: transform;
+    /* Outline blanc : visible sur fonds sombres ET clairs */
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.8), 0 0 8px rgba(34,197,94,0.4);
   }
 
   .cursor-follower {
     position: fixed;
     width: 36px;
     height: 36px;
-    border: 2px solid var(--jade);
+    border: 2px solid #22c55e;
     border-radius: 50%;
     pointer-events: none;
     z-index: 999998;
     transform: translate(-50%, -50%);
-    transition: transform 0.25s var(--ease-out), width 0.3s, height 0.3s, opacity 0.3s;
+    /* transition sur transform uniquement pour fluidité */
+    transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.3s;
     opacity: 0.5;
     will-change: transform;
   }
@@ -857,29 +858,28 @@ p { font-weight: 300; }
 @media (max-width: 768px) {
   /* Cacher nav desktop, afficher hamburger */
   .nav-desktop { display: none; }
-  .hamburger { display: flex; }
+  .hamburger   { display: flex; }
 
-  /* Ajuster header height */
+  /* Hauteur header réduite */
   :root { --header-h: 64px; }
 
-  .footer-inner {
-    grid-template-columns: 1fr;
+  /* Footer en colonne */
+  .footer-inner        { grid-template-columns: 1fr; }
+  .footer-brand        { grid-column: span 1; }
+  .footer-bottom       { flex-direction: column; text-align: center; }
+  .section-header-row  { flex-direction: column; align-items: flex-start; }
+
+  /* Curseur custom désactivé sur mobile/touch */
+  .cursor, .cursor-follower { display: none !important; }
+  /* Rétablir le curseur normal sur touch */
+  body { cursor: auto !important; }
+
+  /* Bouton connexion dans le header : garder visible mais compact */
+  .btn-cta {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
+    gap: 0.4rem;
   }
-
-  .footer-brand { grid-column: span 1; }
-
-  .footer-bottom {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .section-header-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  /* Cache le curseur custom sur touch */
-  .cursor, .cursor-follower { display: none; }
 
   .theme-toggle { bottom: 1.25rem; right: 1.25rem; }
 }
@@ -887,5 +887,8 @@ p { font-weight: 300; }
 @media (max-width: 480px) {
   h1 { font-size: 2rem; }
   h2 { font-size: 1.6rem; }
-  .btn-cta span { display: none; }
+  /* Sur très petit écran : garder juste l'icône dans le header
+     Le texte complet est dans le menu mobile */
+  .header-actions .btn-cta span { display: none; }
+  .header-actions .btn-cta      { padding: 0.5rem 0.7rem; min-width: 38px; justify-content: center; }
 }

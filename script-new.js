@@ -70,9 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
     /* Désactiver pointer-events : le curseur ne bloque JAMAIS les clics */
     cursor.style.pointerEvents   = 'none';
     follower.style.pointerEvents = 'none';
-    /* Couleur de fond solide — pas de mix-blend-mode qui fait disparaître le curseur */
-    cursor.style.background = 'var(--jade, #22c55e)';
-    cursor.style.opacity = '1';
+    /* Couleur fixe (pas de variable CSS qui peut ne pas se résoudre) */
+    cursor.style.background = '#22c55e';
+    cursor.style.opacity    = '1';
+    /* Outline blanc pour rester visible sur fonds sombres ET clairs */
+    cursor.style.boxShadow  = '0 0 0 2px rgba(255,255,255,0.8), 0 0 8px rgba(34,197,94,0.5)';
 
     let mouseX = 0, mouseY = 0;
     let followerX = 0, followerY = 0;
@@ -98,14 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
     /* Scale au hover sur éléments interactifs — géré en JS car CSS ~ ne fonctionne pas */
     function addHoverEffect(el) {
       el.addEventListener('mouseenter', () => {
-        cursor.style.transform   = 'translate(-50%,-50%) scale(2)';
-        follower.style.transform = 'translate(-50%,-50%) scale(1.5)';
-        follower.style.opacity   = '0.25';
+        /* Agrandir uniquement le follower - le point reste visible */
+        follower.style.transform = 'translate(-50%,-50%) scale(1.8)';
+        follower.style.opacity   = '0.4';
+        follower.style.borderColor = '#22c55e';
       });
       el.addEventListener('mouseleave', () => {
-        cursor.style.transform   = 'translate(-50%,-50%) scale(1)';
+        /* Toujours remettre les valeurs par défaut */
         follower.style.transform = 'translate(-50%,-50%) scale(1)';
         follower.style.opacity   = '0.5';
+        follower.style.borderColor = '#22c55e';
+        /* S'assurer que le curseur principal reste visible */
+        cursor.style.opacity = '1';
       });
     }
 
@@ -122,11 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }).observe(document.body, { childList: true, subtree: true });
 
     /* Masquer le curseur quand la souris quitte la fenêtre */
-    document.addEventListener('mouseleave', () => {
+    /* Masquer proprement quand la souris quitte la fenêtre */
+    document.documentElement.addEventListener('mouseleave', () => {
       cursor.style.opacity   = '0';
       follower.style.opacity = '0';
     });
-    document.addEventListener('mouseenter', () => {
+    document.documentElement.addEventListener('mouseenter', () => {
       cursor.style.opacity   = '1';
       follower.style.opacity = '0.5';
     });
